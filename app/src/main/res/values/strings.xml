@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--App values-->
+    <string name="app_name">Task06_Networking_3rd_Party_Libraries</string>
+
+    <!--Activities labels-->
+    <string name="activity_main_label">Repositories search</string>
+
+    <!--Menu actions labels-->
+    <string name="menu_search">Search</string>
+
+</resources>
