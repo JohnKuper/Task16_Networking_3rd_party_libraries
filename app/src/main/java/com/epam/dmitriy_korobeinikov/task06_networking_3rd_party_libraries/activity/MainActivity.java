@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoListFragment;
@@ -30,9 +31,6 @@ public class MainActivity extends ActionBarActivity {
             manager.beginTransaction().add(R.id.repoListContainer, fragment).commit();
         }
     }
-
-
-
 
 
 }

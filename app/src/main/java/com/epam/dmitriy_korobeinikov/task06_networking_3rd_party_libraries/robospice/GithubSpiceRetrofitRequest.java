@@ -42,7 +42,6 @@ public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<Genera
         return "repositories." + keyword;
     }
 
-
 }
 
 

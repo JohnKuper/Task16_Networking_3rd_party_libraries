@@ -1,11 +1,14 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoListAdapter;
@@ -32,15 +36,15 @@ import com.octo.android.robospice.request.listener.RequestListener;
  */
 public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
+    private static final String TAG = "Task06";
+
     private ListView mRepoList;
     private RepoListAdapter mAdapter;
-    private Button mSendRequest;
-    private EditText mEditRequest;
     private String mLastRequestCacheKey;
+    private ActionBarActivity mActivity;
 
-    private static final String TAG = "Task06";
-    protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
     private GithubSpiceRetrofitRequest mGithubRequest;
+    protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
 
     protected SpiceManager getSpiceManager() {
         return spiceManager;
@@ -62,8 +66,15 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        mActivity = (ActionBarActivity) activity;
+        super.onAttach(activity);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
         super.onCreate(savedInstanceState);
     }
 
@@ -71,21 +82,11 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_repo_list, container, false);
 
-        mSendRequest = (Button) v.findViewById(R.id.requestBtn);
-        mSendRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mEditRequest.getText().toString().length() > 0) {
-                    String request = mEditRequest.getText().toString();
-                    mGithubRequest = new GithubSpiceRetrofitRequest(GeneralData.class, request);
-                    mLastRequestCacheKey = mGithubRequest.createCacheKey();
 
-                    spiceManager.execute(mGithubRequest, mLastRequestCacheKey, DurationInMillis.ONE_DAY, new GeneralDataRequestListener());
-
-                }
-            }
-        });
-        mEditRequest = (EditText) v.findViewById(R.id.requestEdit);
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            mActivity.setSupportActionBar(toolbar);
+        }
 
         mRepoList = (ListView) v.findViewById(R.id.repoList);
 
@@ -110,6 +111,9 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
                 mAdapter = new RepoListAdapter(getActivity(), generalData.getItems());
                 mRepoList.setAdapter(mAdapter);
             }
+            if (generalData.getItems().size() == 0) {
+                Toast.makeText(getActivity(), "Search is complete. There are no results to display", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -132,47 +136,19 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public boolean onQueryTextSubmit(String s) {
-        return false;
+        if (s.length() > 0) {
+            mGithubRequest = new GithubSpiceRetrofitRequest(GeneralData.class, s);
+            mLastRequestCacheKey = mGithubRequest.createCacheKey();
+
+            spiceManager.execute(mGithubRequest, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());
+
+        }
+        return true;
     }
 
     @Override
     public boolean onQueryTextChange(String s) {
         return false;
     }
-
-//    private class RetroFitRequest extends AsyncTask<String, Void, Void> {
-//
-//        @Override
-//        protected Void doInBackground(String... params) {
-//            RestAdapter restAdapter = new RestAdapter.Builder()
-//                    .setEndpoint(GITHUB_API_URL)
-//                    .setLogLevel(RestAdapter.LogLevel.FULL)
-//                    .setConverter(new JacksonConverter(new ObjectMapper()))
-//                    .build();
-//            GitHub gitHub = restAdapter.create(GitHub.class);
-//            gitHub.getRepos(params[0], "stars", 30, new Callback<GeneralData>() {
-//                @Override
-//                public void success(GeneralData generalData, Response response) {
-//                    Log.d(TAG, "SUCCESS >>>>>> " + generalData);
-//                    if (mAdapter != null) {
-//                        mAdapter.setRepoListItems(generalData.getItems());
-//                        mAdapter.notifyDataSetChanged();
-//                    }
-//                    if (mAdapter == null) {
-//                        mAdapter = new RepoListAdapter(getActivity(), generalData.getItems());
-//                        mRepoList.setAdapter(mAdapter);
-//                    }
-//                }
-//
-//                @Override
-//                public void failure(RetrofitError error) {
-//                    Log.d(TAG, error.toString());
-//                }
-//            });
-//            return null;
-//        }
-//
-//    }
-
 
 }
