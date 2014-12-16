@@ -2,11 +2,15 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.mode
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.parceler.Parcel;
+
+import java.util.Date;
 
 /**
  * Created by Dmitriy_Korobeinikov on 12/15/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Parcel
 public class ItemsData {
 
     private int id;
@@ -16,7 +20,7 @@ public class ItemsData {
     @JsonProperty("private")
     private boolean mPrivate;
     private String description;
-    private String created_at;
+    private Date created_at;
     private int stargazers_count;
 
     @Override
@@ -81,11 +85,11 @@ public class ItemsData {
         this.description = description;
     }
 
-    public String getCreated_at() {
+    public Date getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(String created_at) {
+    public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
 
@@ -96,4 +100,5 @@ public class ItemsData {
     public void setStargazers_count(int stargazers_count) {
         this.stargazers_count = stargazers_count;
     }
+
 }

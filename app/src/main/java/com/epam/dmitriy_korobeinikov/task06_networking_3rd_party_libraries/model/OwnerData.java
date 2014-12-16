@@ -1,11 +1,13 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.parceler.Parcel;
 
 /**
  * Created by Dmitriy_Korobeinikov on 12/15/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Parcel
 public class OwnerData {
 
     private String login;

@@ -41,9 +41,9 @@ android {
         compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
         compile 'com.octo.android.robospice:robospice:1.4.14'
         compile 'com.octo.android.robospice:robospice-spring-android:1.4.14'
-
-
-
-
+        compile 'com.squareup.okhttp:okhttp:2.1.0'
+        compile 'com.squareup.okhttp:okhttp-urlconnection:2.1.0'
+        compile 'org.parceler:parceler-api:0.2.15'
+        provided 'org.parceler:parceler:0.2.15'
     }
 }

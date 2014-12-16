@@ -12,6 +12,8 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.ItemsData;
 import com.squareup.picasso.Picasso;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -50,10 +52,15 @@ public class RepoListAdapter extends ArrayAdapter<ItemsData> {
         ItemsData itemData = getItem(position);
         holder.repoName.setText(itemData.getName());
         holder.repoDescription.setText(itemData.getDescription());
-        holder.repoCreateDate.setText(itemData.getCreated_at());
+
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        String formatDate = formatter.format(itemData.getCreated_at());
+        holder.repoCreateDate.setText(formatDate);
         holder.repoStars.setText(String.valueOf(itemData.getStargazers_count()));
 
+        Picasso.with(getContext()).setIndicatorsEnabled(true);
         Picasso.with(getContext()).load(itemData.getOwner().getAvatar_url()).into(holder.repoImage);
+
 
         return convertView;
     }

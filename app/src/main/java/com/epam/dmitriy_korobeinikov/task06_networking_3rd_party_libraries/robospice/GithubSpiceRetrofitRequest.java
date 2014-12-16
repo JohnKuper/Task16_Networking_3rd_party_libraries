@@ -10,6 +10,7 @@ import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceReques
 import org.codehaus.jackson.map.ObjectMapper;
 
 import retrofit.RestAdapter;
+import retrofit.android.AndroidLog;
 
 /**
  * Created by Dmitriy_Korobeinikov on 12/15/2014.
@@ -30,6 +31,7 @@ public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<Genera
         Log.d(TAG, "Call web service");
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(GITHUB_API_URL)
+                .setLog(new AndroidLog(TAG))
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setConverter(new JacksonConverter(new ObjectMapper()))
                 .build();

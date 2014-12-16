@@ -1,7 +1,9 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -16,20 +18,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoListAdapter;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.GeneralData;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice.GithubSpiceRetrofitRequest;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.exception.CacheCreationException;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Dmitriy_Korobeinikov on 12/12/2014.
@@ -42,9 +47,13 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     private RepoListAdapter mAdapter;
     private String mLastRequestCacheKey;
     private ActionBarActivity mActivity;
+    private ProgressDialog mDialog;
+    private long mLastClickTime;
 
     private GithubSpiceRetrofitRequest mGithubRequest;
+    private RepoSelectedListener mRepoSelectedListener;
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
+
 
     protected SpiceManager getSpiceManager() {
         return spiceManager;
@@ -68,7 +77,14 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     @Override
     public void onAttach(Activity activity) {
         mActivity = (ActionBarActivity) activity;
+        mRepoSelectedListener = (RepoSelectedListener) activity;
         super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+        mRepoSelectedListener = null;
+        super.onDetach();
     }
 
     @Override
@@ -89,6 +105,12 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         }
 
         mRepoList = (ListView) v.findViewById(R.id.repoList);
+        mRepoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mRepoSelectedListener.onRepoSelected(mAdapter.getItem(position));
+            }
+        });
 
         return v;
     }
@@ -102,7 +124,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
         @Override
         public void onRequestSuccess(GeneralData generalData) {
-            Log.d(TAG, "SUCCESS >>>>>> " + generalData);
+            Log.d(TAG, "<<<<<< SUCCESS >>>>>> ");
             if (mAdapter != null) {
                 mAdapter.setRepoListItems(generalData.getItems());
                 mAdapter.notifyDataSetChanged();
@@ -110,6 +132,9 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
             if (mAdapter == null) {
                 mAdapter = new RepoListAdapter(getActivity(), generalData.getItems());
                 mRepoList.setAdapter(mAdapter);
+            }
+            if (mDialog != null && mDialog.isShowing()) {
+                mDialog.dismiss();
             }
             if (generalData.getItems().size() == 0) {
                 Toast.makeText(getActivity(), "Search is complete. There are no results to display", Toast.LENGTH_SHORT).show();
@@ -136,11 +161,28 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public boolean onQueryTextSubmit(String s) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 200) {
+            return false;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
         if (s.length() > 0) {
             mGithubRequest = new GithubSpiceRetrofitRequest(GeneralData.class, s);
             mLastRequestCacheKey = mGithubRequest.createCacheKey();
-
+            try {
+                if (!spiceManager.isDataInCache(GeneralData.class, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE).get()) {
+                    mDialog = new ProgressDialog(getActivity());
+                    mDialog.setMessage("Search in progress. Please wait...");
+                    mDialog.show();
+                }
+            } catch (CacheCreationException e) {
+                Log.e(TAG, e.toString());
+            } catch (InterruptedException e) {
+                Log.e(TAG, e.toString());
+            } catch (ExecutionException e) {
+                Log.e(TAG, e.toString());
+            }
             spiceManager.execute(mGithubRequest, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());
+
 
         }
         return true;
