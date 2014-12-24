@@ -3,7 +3,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robo
 import android.util.Log;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.converter.JacksonConverter;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.GeneralData;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.GitHub;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
@@ -15,19 +15,19 @@ import retrofit.android.AndroidLog;
 /**
  * Created by Dmitriy_Korobeinikov on 12/15/2014.
  */
-public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<GeneralData> {
+public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<SearchResult> {
 
     private String keyword;
     private static final String TAG = "Task06";
     private static final String GITHUB_API_URL = "https://api.github.com";
 
-    public GithubSpiceRetrofitRequest(Class<GeneralData> clazz, String keyword) {
+    public GithubSpiceRetrofitRequest(Class<SearchResult> clazz, String keyword) {
         super(clazz);
         this.keyword = keyword;
     }
 
     @Override
-    public GeneralData loadDataFromNetwork() throws Exception {
+    public SearchResult loadDataFromNetwork() throws Exception {
         Log.d(TAG, "Call web service");
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(GITHUB_API_URL)
@@ -36,8 +36,8 @@ public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<Genera
                 .setConverter(new JacksonConverter(new ObjectMapper()))
                 .build();
         GitHub gitHub = restAdapter.create(GitHub.class);
-        GeneralData generalData = gitHub.getRepos(keyword, "stars", 30);
-        return generalData;
+        SearchResult searchResult = gitHub.getRepos(keyword, "stars", 30);
+        return searchResult;
     }
 
     public String createCacheKey() {

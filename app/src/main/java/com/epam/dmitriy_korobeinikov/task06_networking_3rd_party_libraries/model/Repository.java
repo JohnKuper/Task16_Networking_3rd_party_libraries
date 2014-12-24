@@ -1,5 +1,13 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model;
 
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.MyContract;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.parceler.Parcel;
@@ -9,19 +17,29 @@ import java.util.Date;
 /**
  * Created by Dmitriy_Korobeinikov on 12/15/2014.
  */
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Parcel
-public class ItemsData {
+@Contract
+@DatabaseTable(tableName = "repositories")
+@DefaultContentUri(authority = MyContract.AUTHORITY, path = MyContract.Repository.REPOSITORY_URI_PATH)
+@DefaultContentMimeTypeVnd(name = MyContract.MIMETYPE_NAME, type = MyContract.Repository.MIMETYPE_TYPE)
+public class Repository {
 
-    private int id;
+    @DatabaseField(columnName = MyContract.SearchResult._ID, generatedId = true)
+    private int id = 0;
+
+    @JsonProperty("id")
+    @DatabaseField(columnName = "repository_id")
+    private int repositoryId;
     private String name;
     private String full_name;
-    private OwnerData owner;
     @JsonProperty("private")
     private boolean mPrivate;
     private String description;
     private Date created_at;
     private int stargazers_count;
+    private Owner owner;
 
     @Override
     public String toString() {
@@ -61,11 +79,11 @@ public class ItemsData {
         this.full_name = full_name;
     }
 
-    public OwnerData getOwner() {
+    public Owner getOwner() {
         return owner;
     }
 
-    public void setOwner(OwnerData owner) {
+    public void setOwner(Owner owner) {
         this.owner = owner;
     }
 

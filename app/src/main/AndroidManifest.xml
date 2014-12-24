@@ -25,6 +25,10 @@
         <service
             android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
             android:exported="false"/>
+        <provider
+            android:name=".provider.GitHubContentProvider"
+            android:authorities="com.johnkuper.epam.ormlitecontentprovider"
+            android:exported="false"/>
     </application>
 
 

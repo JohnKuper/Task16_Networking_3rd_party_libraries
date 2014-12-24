@@ -1,6 +1,6 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.GeneralData;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -12,7 +12,7 @@ import retrofit.http.Query;
 public interface GitHub {
 
     @GET("/search/repositories")
-    GeneralData getRepos(@Query("q") String keyword,
+    SearchResult getRepos(@Query("q") String keyword,
                   @Query("sort") String stars,
                   @Query("per_page") int resultOnPage);
 

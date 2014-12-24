@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoListAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.GeneralData;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice.GithubSpiceRetrofitRequest;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
@@ -115,7 +115,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         return v;
     }
 
-    private class GeneralDataRequestListener implements RequestListener<GeneralData> {
+    private class GeneralDataRequestListener implements RequestListener<SearchResult> {
 
         @Override
         public void onRequestFailure(SpiceException e) {
@@ -123,20 +123,20 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         }
 
         @Override
-        public void onRequestSuccess(GeneralData generalData) {
+        public void onRequestSuccess(SearchResult searchResult) {
             Log.d(TAG, "<<<<<< SUCCESS >>>>>> ");
             if (mAdapter != null) {
-                mAdapter.setRepoListItems(generalData.getItems());
+                mAdapter.setRepoListItems(searchResult.getItems());
                 mAdapter.notifyDataSetChanged();
             }
             if (mAdapter == null) {
-                mAdapter = new RepoListAdapter(getActivity(), generalData.getItems());
+                mAdapter = new RepoListAdapter(getActivity(), searchResult.getItems());
                 mRepoList.setAdapter(mAdapter);
             }
             if (mDialog != null && mDialog.isShowing()) {
                 mDialog.dismiss();
             }
-            if (generalData.getItems().size() == 0) {
+            if (searchResult.getItems().size() == 0) {
                 Toast.makeText(getActivity(), "Search is complete. There are no results to display", Toast.LENGTH_SHORT).show();
             }
         }
@@ -166,10 +166,10 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         }
         mLastClickTime = SystemClock.elapsedRealtime();
         if (s.length() > 0) {
-            mGithubRequest = new GithubSpiceRetrofitRequest(GeneralData.class, s);
+            mGithubRequest = new GithubSpiceRetrofitRequest(SearchResult.class, s);
             mLastRequestCacheKey = mGithubRequest.createCacheKey();
             try {
-                if (!spiceManager.isDataInCache(GeneralData.class, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE).get()) {
+                if (!spiceManager.isDataInCache(SearchResult.class, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE).get()) {
                     mDialog = new ProgressDialog(getActivity());
                     mDialog.setMessage("Search in progress. Please wait...");
                     mDialog.show();

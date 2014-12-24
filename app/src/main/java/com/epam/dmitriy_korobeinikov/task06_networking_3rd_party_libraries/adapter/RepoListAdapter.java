@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.ItemsData;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.squareup.picasso.Picasso;
 
 import java.text.Format;
@@ -20,12 +20,12 @@ import java.util.ArrayList;
  * Created by Dmitriy_Korobeinikov on 12/12/2014.
  * Fills in the data list of repositories preview.
  */
-public class RepoListAdapter extends ArrayAdapter<ItemsData> {
+public class RepoListAdapter extends ArrayAdapter<Repository> {
 
     private LayoutInflater mInflater;
-    private ArrayList<ItemsData> mRepoListItems;
+    private ArrayList<Repository> mRepoListItems;
 
-    public RepoListAdapter(Context context, ArrayList<ItemsData> repositories) {
+    public RepoListAdapter(Context context, ArrayList<Repository> repositories) {
         super(context, android.R.layout.simple_list_item_1, repositories);
         mInflater = LayoutInflater.from(context);
         this.mRepoListItems = repositories;
@@ -49,7 +49,7 @@ public class RepoListAdapter extends ArrayAdapter<ItemsData> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        ItemsData itemData = getItem(position);
+        Repository itemData = getItem(position);
         holder.repoName.setText(itemData.getName());
         holder.repoDescription.setText(itemData.getDescription());
 
@@ -70,7 +70,7 @@ public class RepoListAdapter extends ArrayAdapter<ItemsData> {
         public TextView repoName, repoDescription, repoCreateDate, repoStars;
     }
 
-    public void setRepoListItems(ArrayList<ItemsData> repoListItems) {
+    public void setRepoListItems(ArrayList<Repository> repoListItems) {
         mRepoListItems = repoListItems;
     }
 
@@ -80,7 +80,7 @@ public class RepoListAdapter extends ArrayAdapter<ItemsData> {
     }
 
     @Override
-    public ItemsData getItem(int position) {
+    public Repository getItem(int position) {
         return mRepoListItems.get(position);
     }
 

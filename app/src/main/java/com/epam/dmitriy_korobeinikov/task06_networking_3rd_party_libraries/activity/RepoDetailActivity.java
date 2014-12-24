@@ -7,7 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoDetailFragment;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.ItemsData;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 
 import org.parceler.Parcels;
 
@@ -16,20 +16,20 @@ import org.parceler.Parcels;
  */
 public class RepoDetailActivity extends ActionBarActivity {
 
-    private ItemsData mItemsData;
+    private Repository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo_detail);
 
-        mItemsData = Parcels.unwrap(getIntent().getParcelableExtra(RepoDetailFragment.REPO_DATA));
+        mRepository = Parcels.unwrap(getIntent().getParcelableExtra(RepoDetailFragment.REPO_DATA));
 
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentById(R.id.repo_detail_container);
 
         if (fragment == null) {
-            fragment = RepoDetailFragment.newInstance(mItemsData);
+            fragment = RepoDetailFragment.newInstance(mRepository);
             manager.beginTransaction().add(R.id.repo_detail_container, fragment).commit();
         }
 

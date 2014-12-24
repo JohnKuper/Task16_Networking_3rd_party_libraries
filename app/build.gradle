@@ -45,5 +45,6 @@ android {
         compile 'com.squareup.okhttp:okhttp-urlconnection:2.1.0'
         compile 'org.parceler:parceler-api:0.2.15'
         provided 'org.parceler:parceler:0.2.15'
+        compile "com.tojc.ormlite.android:ormlite-content-provider-library:1.0.4"
     }
 }

@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.ItemsData;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.OwnerData;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Owner;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -26,7 +26,7 @@ public class RepoDetailFragment extends Fragment {
 
     private ImageView mAvatarImage;
     private TextView mRepoName, mRepoStars, mRepoDescription, mRepoId, mRepoFullName, mRepoOwnerLogin, mRepoOwnerId, mRepoOwnerAvatarUrl, mRepoOwnerType, mRepoOwnerSiteAdmin, mPrivate, mCreatedAt;
-    private ItemsData mItemsData;
+    private Repository mRepository;
 
     private static final String OWNER_LOGIN_PREFIX = "Login: ";
     private static final String OWNER_ID_PREFIX = "ID: ";
@@ -37,9 +37,9 @@ public class RepoDetailFragment extends Fragment {
     private static final String OTHER_DETAIL_CREATED_AT_PREFIX = "Created at: ";
     public static final String REPO_DATA = "REPO_DATA";
 
-    public static RepoDetailFragment newInstance(ItemsData itemsData) {
+    public static RepoDetailFragment newInstance(Repository repository) {
         Bundle args = new Bundle();
-        args.putParcelable(REPO_DATA, Parcels.wrap(itemsData));
+        args.putParcelable(REPO_DATA, Parcels.wrap(repository));
 
         RepoDetailFragment fragment = new RepoDetailFragment();
         fragment.setArguments(args);
@@ -51,7 +51,7 @@ public class RepoDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItemsData = Parcels.unwrap(getArguments().getParcelable(REPO_DATA));
+        mRepository = Parcels.unwrap(getArguments().getParcelable(REPO_DATA));
 
     }
 
@@ -60,46 +60,46 @@ public class RepoDetailFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_repo_details, container, false);
 
         mAvatarImage = (ImageView) v.findViewById(R.id.detail_repo_image);
-        Picasso.with(getActivity()).load(mItemsData.getOwner().getAvatar_url()).into(mAvatarImage);
+        Picasso.with(getActivity()).load(mRepository.getOwner().getAvatar_url()).into(mAvatarImage);
 
         mRepoName = (TextView) v.findViewById(R.id.detail_repo_name);
-        mRepoName.setText(mItemsData.getName());
+        mRepoName.setText(mRepository.getName());
 
         mRepoStars = (TextView) v.findViewById(R.id.detail_repo_stars);
-        mRepoStars.setText(String.valueOf(mItemsData.getStargazers_count()));
+        mRepoStars.setText(String.valueOf(mRepository.getStargazers_count()));
 
         mRepoDescription = (TextView) v.findViewById(R.id.detail_repo_discription);
-        mRepoDescription.setText(mItemsData.getDescription());
+        mRepoDescription.setText(mRepository.getDescription());
 
         mRepoId = (TextView) v.findViewById(R.id.detail_repo_id);
-        mRepoId.setText(String.valueOf(mItemsData.getId()));
+        mRepoId.setText(String.valueOf(mRepository.getId()));
 
         mRepoFullName = (TextView) v.findViewById(R.id.detail_repo_full_name);
-        mRepoFullName.setText(mItemsData.getFull_name());
+        mRepoFullName.setText(mRepository.getFull_name());
 
-        OwnerData ownerData = mItemsData.getOwner();
+        Owner owner = mRepository.getOwner();
 
         mRepoOwnerLogin = (TextView) v.findViewById(R.id.detail_owner_login);
-        mRepoOwnerLogin.setText(OWNER_LOGIN_PREFIX + ownerData.getLogin());
+        mRepoOwnerLogin.setText(OWNER_LOGIN_PREFIX + owner.getLogin());
 
         mRepoOwnerId = (TextView) v.findViewById(R.id.detail_owner_id);
-        mRepoOwnerId.setText(OWNER_ID_PREFIX + String.valueOf(ownerData.getId()));
+        mRepoOwnerId.setText(OWNER_ID_PREFIX + String.valueOf(owner.getId()));
 
         mRepoOwnerAvatarUrl = (TextView) v.findViewById(R.id.detail_owner_avatar_url);
-        mRepoOwnerAvatarUrl.setText(OWNER_AVATAR_URL_PREFIX + ownerData.getAvatar_url());
+        mRepoOwnerAvatarUrl.setText(OWNER_AVATAR_URL_PREFIX + owner.getAvatar_url());
 
         mRepoOwnerType = (TextView) v.findViewById(R.id.detail_owner_type);
-        mRepoOwnerType.setText(OWNER_TYPE_PREFIX + ownerData.getType());
+        mRepoOwnerType.setText(OWNER_TYPE_PREFIX + owner.getType());
 
         mRepoOwnerSiteAdmin = (TextView) v.findViewById(R.id.detail_owner_site_admin);
-        mRepoOwnerSiteAdmin.setText(OWNER_SITE_ADMIN_PREFIX + String.valueOf(ownerData.isSite_admin()));
+        mRepoOwnerSiteAdmin.setText(OWNER_SITE_ADMIN_PREFIX + String.valueOf(owner.isSite_admin()));
 
         mPrivate = (TextView) v.findViewById(R.id.detail_private);
-        mPrivate.setText(OTHER_DETAIL_PRIVATE_PREFIX + String.valueOf(mItemsData.isPrivate()));
+        mPrivate.setText(OTHER_DETAIL_PRIVATE_PREFIX + String.valueOf(mRepository.isPrivate()));
 
         mCreatedAt = (TextView) v.findViewById(R.id.detail_created_at);
         Format formatter = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
-        String formatDate = formatter.format(mItemsData.getCreated_at());
+        String formatDate = formatter.format(mRepository.getCreated_at());
         mCreatedAt.setText(OTHER_DETAIL_CREATED_AT_PREFIX + formatDate);
 
 

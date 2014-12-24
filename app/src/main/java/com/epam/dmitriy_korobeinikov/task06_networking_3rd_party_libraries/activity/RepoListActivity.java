@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoDetailFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoListFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.ItemsData;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 
 import org.parceler.Parcels;
 
@@ -46,10 +45,10 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
 
 
     @Override
-    public void onRepoSelected(ItemsData itemsData) {
+    public void onRepoSelected(Repository repository) {
         if (isSinglePaneMode()) {
             Intent i = new Intent(this, RepoDetailActivity.class);
-            i.putExtra(RepoDetailFragment.REPO_DATA, Parcels.wrap(itemsData));
+            i.putExtra(RepoDetailFragment.REPO_DATA, Parcels.wrap(repository));
             startActivity(i);
         }
 

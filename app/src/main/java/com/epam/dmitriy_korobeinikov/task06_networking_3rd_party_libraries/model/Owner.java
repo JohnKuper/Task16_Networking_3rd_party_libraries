@@ -8,10 +8,10 @@ import org.parceler.Parcel;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Parcel
-public class OwnerData {
+public class Owner {
 
     private String login;
-    private int id;
+    private int owner_id;
     private String avatar_url;
     private String type;
     private boolean site_admin;
@@ -20,7 +20,7 @@ public class OwnerData {
     public String toString() {
         final StringBuilder sb = new StringBuilder("OwnerData{");
         sb.append("login='").append(login).append('\'');
-        sb.append(", id=").append(id);
+        sb.append(", id=").append(owner_id);
         sb.append(", avatar_url='").append(avatar_url).append('\'');
         sb.append(", type='").append(type).append('\'');
         sb.append(", site_admin=").append(site_admin);
@@ -37,11 +37,11 @@ public class OwnerData {
     }
 
     public int getId() {
-        return id;
+        return owner_id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.owner_id = id;
     }
 
     public String getAvatar_url() {

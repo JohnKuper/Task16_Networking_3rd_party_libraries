@@ -83,11 +83,13 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="ormlite-android-4.48" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.2" level="project" />
     <orderEntry type="library" exported="" name="okio-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="retrofit-1.8.0" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.3.3" level="project" />
     <orderEntry type="library" exported="" name="robospice-spring-android-1.4.14" level="project" />
+    <orderEntry type="library" exported="" name="ormlite-content-provider-library-1.0.4" level="project" />
     <orderEntry type="library" exported="" name="commons-lang3-3.3.2" level="project" />
     <orderEntry type="library" exported="" name="robospice-cache-1.4.14" level="project" />
     <orderEntry type="library" exported="" name="spring-android-rest-template-1.0.1.RELEASE" level="project" />
@@ -95,6 +97,7 @@
     <orderEntry type="library" exported="" name="parceler-0.2.15" level="project" />
     <orderEntry type="library" exported="" name="okhttp-urlconnection-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.2" level="project" />
+    <orderEntry type="library" exported="" name="ormlite-core-4.48" level="project" />
     <orderEntry type="library" exported="" name="jackson-mapper-asl-1.9.13" level="project" />
     <orderEntry type="library" exported="" name="spring-android-core-1.0.1.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="parceler-api-0.2.15" level="project" />
