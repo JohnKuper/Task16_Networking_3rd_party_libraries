@@ -174,11 +174,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
                     mDialog.setMessage("Search in progress. Please wait...");
                     mDialog.show();
                 }
-            } catch (CacheCreationException e) {
-                Log.e(TAG, e.toString());
-            } catch (InterruptedException e) {
-                Log.e(TAG, e.toString());
-            } catch (ExecutionException e) {
+            } catch (CacheCreationException | InterruptedException | ExecutionException e) {
                 Log.e(TAG, e.toString());
             }
             spiceManager.execute(mGithubRequest, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());
