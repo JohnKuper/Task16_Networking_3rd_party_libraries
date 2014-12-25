@@ -18,9 +18,6 @@ public class MyContract {
     public MyContract() {
     }
 
-    public static final String DATABASE_NAME = "Repositories";
-    public static final int DATABASE_VERSION = 1;
-
     public static final String AUTHORITY = "com.johnkuper.epam.ormlitecontentprovider";
 
     // content uri pattern code
