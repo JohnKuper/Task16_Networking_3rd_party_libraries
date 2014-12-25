@@ -15,6 +15,9 @@ import java.util.Date;
  */
 public class MyContract {
 
+    public MyContract() {
+    }
+
     public static final String DATABASE_NAME = "Repositories";
     public static final int DATABASE_VERSION = 1;
 
@@ -35,11 +38,12 @@ public class MyContract {
 
         public static final String MIMETYPE_TYPE = TABLE_NAME;
 
-        public static final String ID = "id";
+        public static final String OWNER_ID = "owner_id";
         public static final String LOGIN = "login";
         public static final String AVATAR_URL = "avatar_url";
         public static final String TYPE = "type";
         public static final String SITE_ADMIN = "site_admin";
+        public static final String REPOSITORY_ID = "repository_id";
 
         public static final Uri OWNERS_URI = new Uri.Builder()
                 .scheme(ContentResolver.SCHEME_CONTENT)
@@ -55,14 +59,14 @@ public class MyContract {
 
         public static final String MIMETYPE_TYPE = TABLE_NAME;
 
-        private static final String ID = "id";
-        private static final String NAME = "name";
-        private static final String FULL_NAME = "full_name";
-        private static final String PRIVATE = "private";
-        private static final String DESCRIPTION = "description";
-        private static final String CREATED_AT = "created_at";
-        private static final String STARGAZERS_COUNT = "stargazers_count";
-        private static final String OWNER_ID = "owner_id";
+        public static final String REPO_ID = "repo_id";
+        public static final String NAME = "name";
+        public static final String FULL_NAME = "full_name";
+        public static final String PRIVATE = "private";
+        public static final String DESCRIPTION = "description";
+        public static final String CREATED_AT = "created_at";
+        public static final String STARGAZERS_COUNT = "stargazers_count";
+        public static final String OWNER_ID = "owner_id";
 
         public static final Uri REPOSITORY_URI = new Uri.Builder()
                 .scheme(ContentResolver.SCHEME_CONTENT)
@@ -78,9 +82,9 @@ public class MyContract {
 
         public static final String MIMETYPE_TYPE = TABLE_NAME;
 
-        private static final String ID = "total_count";
-        private static final String INCOMPLETE_RESULTS = "incomplete_results";
-        private static final String REPOSITORY_ID = "repository_id";
+        public static final String TOTAL_COUNT = "total_count";
+        public static final String INCOMPLETE_RESULTS = "incomplete_results";
+        public static final String REPOSITORY_ID = "repository_id";
 
         public static final Uri RESULTS_URI = new Uri.Builder()
                 .scheme(ContentResolver.SCHEME_CONTENT)

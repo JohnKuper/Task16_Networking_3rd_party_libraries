@@ -3,7 +3,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.prov
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.User;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Owner;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -22,7 +22,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
-            TableUtils.createTableIfNotExists(connectionSource, User.class);
+            TableUtils.createTableIfNotExists(connectionSource, Owner.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -31,8 +31,8 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
-            TableUtils.dropTable(connectionSource, User.class, true);
-            TableUtils.createTable(connectionSource, User.class);
+            TableUtils.dropTable(connectionSource, Owner.class, true);
+            TableUtils.createTable(connectionSource, Owner.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

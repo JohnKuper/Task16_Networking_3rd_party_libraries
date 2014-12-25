@@ -46,5 +46,7 @@ android {
         compile 'org.parceler:parceler-api:0.2.15'
         provided 'org.parceler:parceler:0.2.15'
         compile "com.tojc.ormlite.android:ormlite-content-provider-library:1.0.4"
+        compile 'com.octo.android.robospice:robospice-ormlite:1.4.14'
+
     }
 }

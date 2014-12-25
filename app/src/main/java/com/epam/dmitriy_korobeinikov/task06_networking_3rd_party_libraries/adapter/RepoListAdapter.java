@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dmitriy_Korobeinikov on 12/12/2014.
@@ -54,12 +55,12 @@ public class RepoListAdapter extends ArrayAdapter<Repository> {
         holder.repoDescription.setText(itemData.getDescription());
 
         Format formatter = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
-        String formatDate = formatter.format(itemData.getCreated_at());
+        String formatDate = formatter.format(itemData.getCreatedAt());
         holder.repoCreateDate.setText(formatDate);
-        holder.repoStars.setText(String.valueOf(itemData.getStargazers_count()));
+        holder.repoStars.setText(String.valueOf(itemData.getStargazersCount()));
 
         Picasso.with(getContext()).setIndicatorsEnabled(true);
-        Picasso.with(getContext()).load(itemData.getOwner().getAvatar_url()).into(holder.repoImage);
+        Picasso.with(getContext()).load(itemData.getOwner().getAvatarUrl()).into(holder.repoImage);
 
 
         return convertView;

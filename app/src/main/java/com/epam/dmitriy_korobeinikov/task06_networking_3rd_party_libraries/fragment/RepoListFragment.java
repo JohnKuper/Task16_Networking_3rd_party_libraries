@@ -26,6 +26,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoListAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice.DBCacheSpiceService;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice.GithubSpiceRetrofitRequest;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
@@ -52,7 +53,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     private GithubSpiceRetrofitRequest mGithubRequest;
     private RepoSelectedListener mRepoSelectedListener;
-    protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
+    protected SpiceManager spiceManager = new SpiceManager(DBCacheSpiceService.class);
 
 
     protected SpiceManager getSpiceManager() {
@@ -126,11 +127,11 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         public void onRequestSuccess(SearchResult searchResult) {
             Log.d(TAG, "<<<<<< SUCCESS >>>>>> ");
             if (mAdapter != null) {
-                mAdapter.setRepoListItems(searchResult.getItems());
+                mAdapter.setRepoListItems(searchResult.getItemsAsList());
                 mAdapter.notifyDataSetChanged();
             }
             if (mAdapter == null) {
-                mAdapter = new RepoListAdapter(getActivity(), searchResult.getItems());
+                mAdapter = new RepoListAdapter(getActivity(), searchResult.getItemsAsList());
                 mRepoList.setAdapter(mAdapter);
             }
             if (mDialog != null && mDialog.isShowing()) {
@@ -161,26 +162,26 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public boolean onQueryTextSubmit(String s) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 200) {
-            return false;
-        }
-        mLastClickTime = SystemClock.elapsedRealtime();
-        if (s.length() > 0) {
+//        if (SystemClock.elapsedRealtime() - mLastClickTime < 200) {
+//            return false;
+//        }
+//        mLastClickTime = SystemClock.elapsedRealtime();
+//        if (s.length() > 0) {
             mGithubRequest = new GithubSpiceRetrofitRequest(SearchResult.class, s);
             mLastRequestCacheKey = mGithubRequest.createCacheKey();
-            try {
-                if (!spiceManager.isDataInCache(SearchResult.class, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE).get()) {
-                    mDialog = new ProgressDialog(getActivity());
-                    mDialog.setMessage("Search in progress. Please wait...");
-                    mDialog.show();
-                }
-            } catch (CacheCreationException | InterruptedException | ExecutionException e) {
-                Log.e(TAG, e.toString());
-            }
+//            try {
+//                if (!spiceManager.isDataInCache(SearchResult.class, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE).get()) {
+//                    mDialog = new ProgressDialog(getActivity());
+//                    mDialog.setMessage("Search in progress. Please wait...");
+//                    mDialog.show();
+//                }
+//            } catch (CacheCreationException | InterruptedException | ExecutionException e) {
+//                Log.e(TAG, e.toString());
+//            }
             spiceManager.execute(mGithubRequest, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());
 
 
-        }
+
         return true;
     }
 

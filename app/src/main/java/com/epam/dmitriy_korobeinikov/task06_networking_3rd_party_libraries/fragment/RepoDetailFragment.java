@@ -60,13 +60,13 @@ public class RepoDetailFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_repo_details, container, false);
 
         mAvatarImage = (ImageView) v.findViewById(R.id.detail_repo_image);
-        Picasso.with(getActivity()).load(mRepository.getOwner().getAvatar_url()).into(mAvatarImage);
+        Picasso.with(getActivity()).load(mRepository.getOwner().getAvatarUrl()).into(mAvatarImage);
 
         mRepoName = (TextView) v.findViewById(R.id.detail_repo_name);
         mRepoName.setText(mRepository.getName());
 
         mRepoStars = (TextView) v.findViewById(R.id.detail_repo_stars);
-        mRepoStars.setText(String.valueOf(mRepository.getStargazers_count()));
+        mRepoStars.setText(String.valueOf(mRepository.getStargazersCount()));
 
         mRepoDescription = (TextView) v.findViewById(R.id.detail_repo_discription);
         mRepoDescription.setText(mRepository.getDescription());
@@ -75,7 +75,7 @@ public class RepoDetailFragment extends Fragment {
         mRepoId.setText(String.valueOf(mRepository.getId()));
 
         mRepoFullName = (TextView) v.findViewById(R.id.detail_repo_full_name);
-        mRepoFullName.setText(mRepository.getFull_name());
+        mRepoFullName.setText(mRepository.getFullName());
 
         Owner owner = mRepository.getOwner();
 
@@ -86,20 +86,20 @@ public class RepoDetailFragment extends Fragment {
         mRepoOwnerId.setText(OWNER_ID_PREFIX + String.valueOf(owner.getId()));
 
         mRepoOwnerAvatarUrl = (TextView) v.findViewById(R.id.detail_owner_avatar_url);
-        mRepoOwnerAvatarUrl.setText(OWNER_AVATAR_URL_PREFIX + owner.getAvatar_url());
+        mRepoOwnerAvatarUrl.setText(OWNER_AVATAR_URL_PREFIX + owner.getAvatarUrl());
 
         mRepoOwnerType = (TextView) v.findViewById(R.id.detail_owner_type);
         mRepoOwnerType.setText(OWNER_TYPE_PREFIX + owner.getType());
 
         mRepoOwnerSiteAdmin = (TextView) v.findViewById(R.id.detail_owner_site_admin);
-        mRepoOwnerSiteAdmin.setText(OWNER_SITE_ADMIN_PREFIX + String.valueOf(owner.isSite_admin()));
+        mRepoOwnerSiteAdmin.setText(OWNER_SITE_ADMIN_PREFIX + String.valueOf(owner.isSiteAdmin()));
 
         mPrivate = (TextView) v.findViewById(R.id.detail_private);
         mPrivate.setText(OTHER_DETAIL_PRIVATE_PREFIX + String.valueOf(mRepository.isPrivate()));
 
         mCreatedAt = (TextView) v.findViewById(R.id.detail_created_at);
         Format formatter = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
-        String formatDate = formatter.format(mRepository.getCreated_at());
+        String formatDate = formatter.format(mRepository.getCreatedAt());
         mCreatedAt.setText(OTHER_DETAIL_CREATED_AT_PREFIX + formatDate);
 
 

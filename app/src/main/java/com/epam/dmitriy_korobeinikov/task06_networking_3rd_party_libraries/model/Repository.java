@@ -3,14 +3,15 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.mode
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.MyContract;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.parceler.Parcel;
+import org.parceler.Transient;
 
 import java.util.Date;
 
@@ -26,34 +27,45 @@ import java.util.Date;
 @DefaultContentMimeTypeVnd(name = MyContract.MIMETYPE_NAME, type = MyContract.Repository.MIMETYPE_TYPE)
 public class Repository {
 
-    @DatabaseField(columnName = MyContract.SearchResult._ID, generatedId = true)
-    private int id = 0;
+    @JsonIgnore
+    @DatabaseField(columnName = MyContract.Repository._ID, generatedId = true)
+    public int id = 0;
 
     @JsonProperty("id")
-    @DatabaseField(columnName = "repository_id")
-    private int repositoryId;
-    private String name;
-    private String full_name;
-    @JsonProperty("private")
-    private boolean mPrivate;
-    private String description;
-    private Date created_at;
-    private int stargazers_count;
-    private Owner owner;
+    @DatabaseField(columnName = MyContract.Repository.REPO_ID)
+    public int repositoryId;
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("ItemsData{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", full_name='").append(full_name).append('\'');
-        sb.append(", owner=").append(owner);
-        sb.append(", mPrivate=").append(mPrivate);
-        sb.append(", created_at='").append(created_at).append('\'');
-        sb.append(", stargazers_count=").append(stargazers_count);
-        sb.append('}');
-        return sb.toString();
-    }
+    @JsonProperty("name")
+    @DatabaseField(columnName = MyContract.Repository.NAME)
+    public String name;
+
+    @JsonProperty("full_name")
+    @DatabaseField(columnName = MyContract.Repository.FULL_NAME)
+    public String fullName;
+
+    @JsonProperty("private")
+    @DatabaseField(columnName = MyContract.Repository.PRIVATE)
+    public boolean mPrivate;
+
+    @JsonProperty("description")
+    @DatabaseField(columnName = MyContract.Repository.DESCRIPTION)
+    public String description;
+
+    @JsonProperty("created_at")
+    @DatabaseField(columnName = MyContract.Repository.CREATED_AT)
+    public Date createdAt;
+
+    @JsonProperty("stargazers_count")
+    @DatabaseField(columnName = MyContract.Repository.STARGAZERS_COUNT)
+    public int stargazersCount;
+
+    @JsonProperty("owner")
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
+    public Owner owner;
+
+    @Transient
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
+    public SearchResult result;
 
     public int getId() {
         return id;
@@ -61,6 +73,14 @@ public class Repository {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getRepositoryId() {
+        return repositoryId;
+    }
+
+    public void setRepositoryId(int repositoryId) {
+        this.repositoryId = repositoryId;
     }
 
     public String getName() {
@@ -71,28 +91,20 @@ public class Repository {
         this.name = name;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
-    }
-
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public boolean isPrivate() {
         return mPrivate;
     }
 
-    public void setPrivate(boolean aPrivate) {
-        mPrivate = aPrivate;
+    public void setpublic(boolean Isprivate) {
+        mPrivate = Isprivate;
     }
 
     public String getDescription() {
@@ -103,20 +115,35 @@ public class Repository {
         this.description = description;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Date created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public int getStargazers_count() {
-        return stargazers_count;
+    public int getStargazersCount() {
+        return stargazersCount;
     }
 
-    public void setStargazers_count(int stargazers_count) {
-        this.stargazers_count = stargazers_count;
+    public void setStargazersCount(int stargazersCount) {
+        this.stargazersCount = stargazersCount;
     }
 
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public SearchResult getResult() {
+        return result;
+    }
+
+    public void setResult(SearchResult result) {
+        this.result = result;
+    }
 }

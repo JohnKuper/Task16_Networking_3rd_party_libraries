@@ -1,5 +1,8 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider;
 
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Owner;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.tojc.ormlite.android.OrmLiteSimpleContentProvider;
 import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.MimeTypeVnd;
@@ -16,10 +19,17 @@ public class GitHubContentProvider extends OrmLiteSimpleContentProvider<DBHelper
 
     @Override
     public boolean onCreate() {
-//        setMatcherController(new MatcherController()
-//                        .add(User.class, MimeTypeVnd.SubType.DIRECTORY, "", MyContract.User.CONTENT_URI_PATTERN_MANY)
-//                        .add(User.class, MimeTypeVnd.SubType.ITEM, "#", MyContract.User.CONTENT_URI_PATTERN_ONE)
-//        );
+        setMatcherController(new MatcherController()
+                        .add(Owner.class)
+                            .add(MimeTypeVnd.SubType.DIRECTORY, "", MyContract.CONTENT_URI_PATTERN_MANY)
+                            .add(MimeTypeVnd.SubType.ITEM, "#", MyContract.CONTENT_URI_PATTERN_ONE)
+                        .add(Repository.class)
+                            .add(MimeTypeVnd.SubType.DIRECTORY, "", MyContract.CONTENT_URI_PATTERN_MANY)
+                            .add(MimeTypeVnd.SubType.ITEM, "#", MyContract.CONTENT_URI_PATTERN_ONE)
+                        .add(SearchResult.class)
+                            .add(MimeTypeVnd.SubType.DIRECTORY, "", MyContract.CONTENT_URI_PATTERN_MANY)
+                            .add(MimeTypeVnd.SubType.ITEM, "#", MyContract.CONTENT_URI_PATTERN_ONE)
+        );
         return true;
     }
 }
