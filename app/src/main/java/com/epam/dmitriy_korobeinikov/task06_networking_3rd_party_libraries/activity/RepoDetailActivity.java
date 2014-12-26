@@ -13,23 +13,22 @@ import org.parceler.Parcels;
 
 /**
  * Created by Dmitriy_Korobeinikov on 12/16/2014.
+ * Displays detail information about the repository.
  */
 public class RepoDetailActivity extends ActionBarActivity {
-
-    private Repository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo_detail);
 
-        mRepository = Parcels.unwrap(getIntent().getParcelableExtra(RepoDetailFragment.REPO_DATA));
+        Repository repository = Parcels.unwrap(getIntent().getParcelableExtra(RepoDetailFragment.REPO_DATA));
 
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentById(R.id.repo_detail_container);
 
         if (fragment == null) {
-            fragment = RepoDetailFragment.newInstance(mRepository);
+            fragment = RepoDetailFragment.newInstance(repository);
             manager.beginTransaction().add(R.id.repo_detail_container, fragment).commit();
         }
 

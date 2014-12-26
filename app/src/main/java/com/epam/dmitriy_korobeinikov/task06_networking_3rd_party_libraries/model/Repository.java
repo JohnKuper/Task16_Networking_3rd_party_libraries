@@ -1,11 +1,8 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.MyContract;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -17,46 +14,44 @@ import java.util.Date;
 
 /**
  * Created by Dmitriy_Korobeinikov on 12/15/2014.
+ * Contains repository data from JSON and describes database table's fields.
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Parcel
-@Contract
-@DatabaseTable(tableName = "repositories")
-@DefaultContentUri(authority = MyContract.AUTHORITY, path = MyContract.Repository.REPOSITORY_URI_PATH)
-@DefaultContentMimeTypeVnd(name = MyContract.MIMETYPE_NAME, type = MyContract.Repository.MIMETYPE_TYPE)
+@DatabaseTable(tableName = RepositoryContent.TABLE_NAME)
 public class Repository {
 
     @JsonIgnore
-    @DatabaseField(columnName = MyContract.Repository._ID, generatedId = true)
+    @DatabaseField(columnName = RepositoryContent._ID, generatedId = true)
     public int id = 0;
 
     @JsonProperty("id")
-    @DatabaseField(columnName = MyContract.Repository.REPO_ID)
+    @DatabaseField(columnName = RepositoryContent.REPO_ID)
     public int repositoryId;
 
     @JsonProperty("name")
-    @DatabaseField(columnName = MyContract.Repository.NAME)
+    @DatabaseField(columnName = RepositoryContent.NAME)
     public String name;
 
     @JsonProperty("full_name")
-    @DatabaseField(columnName = MyContract.Repository.FULL_NAME)
+    @DatabaseField(columnName = RepositoryContent.FULL_NAME)
     public String fullName;
 
     @JsonProperty("private")
-    @DatabaseField(columnName = MyContract.Repository.PRIVATE)
+    @DatabaseField(columnName = RepositoryContent.PRIVATE)
     public boolean mPrivate;
 
     @JsonProperty("description")
-    @DatabaseField(columnName = MyContract.Repository.DESCRIPTION)
+    @DatabaseField(columnName = RepositoryContent.DESCRIPTION)
     public String description;
 
     @JsonProperty("created_at")
-    @DatabaseField(columnName = MyContract.Repository.CREATED_AT)
+    @DatabaseField(columnName = RepositoryContent.CREATED_AT)
     public Date createdAt;
 
     @JsonProperty("stargazers_count")
-    @DatabaseField(columnName = MyContract.Repository.STARGAZERS_COUNT)
+    @DatabaseField(columnName = RepositoryContent.STARGAZERS_COUNT)
     public int stargazersCount;
 
     @JsonProperty("owner")
