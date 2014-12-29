@@ -44,7 +44,6 @@ public class RepoListAdapter extends ArrayAdapter<Repository> {
             holder.repoDescription = (TextView) convertView.findViewById(R.id.repo_discription);
             holder.repoCreateDate = (TextView) convertView.findViewById(R.id.repo_create_date);
             holder.repoStars = (TextView) convertView.findViewById(R.id.repo_stars);
-            holder.rightArrow = (ImageView) convertView.findViewById(R.id.arrow_image);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -67,7 +66,7 @@ public class RepoListAdapter extends ArrayAdapter<Repository> {
     }
 
     public static class ViewHolder {
-        public ImageView repoImage, rightArrow;
+        public ImageView repoImage;
         public TextView repoName, repoDescription, repoCreateDate, repoStars;
     }
 

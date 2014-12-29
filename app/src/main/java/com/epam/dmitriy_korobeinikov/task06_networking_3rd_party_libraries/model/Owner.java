@@ -27,10 +27,6 @@ public class Owner {
     @DatabaseField(columnName = OwnerContent.LOGIN)
     public String login;
 
-    @JsonProperty("id")
-    @DatabaseField(columnName = OwnerContent.OWNER_ID)
-    public int ownerId;
-
     @JsonProperty("avatar_url")
     @DatabaseField(columnName = OwnerContent.AVATAR_URL)
     public String avatarUrl;
@@ -61,14 +57,6 @@ public class Owner {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public int getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
     }
 
     public String getAvatarUrl() {

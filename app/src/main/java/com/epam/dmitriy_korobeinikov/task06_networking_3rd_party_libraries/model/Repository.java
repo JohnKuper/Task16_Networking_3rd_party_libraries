@@ -31,7 +31,7 @@ public class Repository {
     public int repositoryId;
 
     @JsonProperty("name")
-    @DatabaseField(columnName = RepositoryContent.NAME)
+    @DatabaseField(columnName = RepositoryContent.NAME, unique = true)
     public String name;
 
     @JsonProperty("full_name")
@@ -55,7 +55,7 @@ public class Repository {
     public int stargazersCount;
 
     @JsonProperty("owner")
-    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, columnName = RepositoryContent.OWNER_ID)
     public Owner owner;
 
     @Transient

@@ -2,10 +2,13 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.frag
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Loader;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
@@ -23,19 +26,20 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoListAdapter;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.OwnerContent;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice.DBCacheSpiceService;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice.GithubSpiceRetrofitRequest;
-import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.CacheCreationException;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Dmitriy_Korobeinikov on 12/12/2014.
@@ -43,6 +47,7 @@ import java.util.concurrent.ExecutionException;
 public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     private static final String TAG = "Task06";
+    public static final int REPOSITORIES_LOADER = 1;
 
     private ListView mRepoList;
     private RepoListAdapter mAdapter;
@@ -50,6 +55,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     private ActionBarActivity mActivity;
     private ProgressDialog mDialog;
     private long mLastClickTime;
+    private RepoCursorAdapter mRepoCursorAdapter;
 
     private GithubSpiceRetrofitRequest mGithubRequest;
     private RepoSelectedListener mRepoSelectedListener;
@@ -105,11 +111,16 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
             mActivity.setSupportActionBar(toolbar);
         }
 
+        mRepoCursorAdapter = new RepoCursorAdapter(getActivity(), null, REPOSITORIES_LOADER);
+
         mRepoList = (ListView) v.findViewById(R.id.repoList);
+        mRepoList.setAdapter(mRepoCursorAdapter);
         mRepoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mRepoSelectedListener.onRepoSelected(mAdapter.getItem(position));
+                //mRepoSelectedListener.onRepoSelected(mAdapter.getItem(position));
+                RepositoryCursorItem cursorItem = new RepositoryCursorItem();
+                cursorItem.parseDataFromCursor((Cursor) mRepoCursorAdapter.getItem(position));
             }
         });
 
@@ -126,14 +137,17 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         @Override
         public void onRequestSuccess(SearchResult searchResult) {
             Log.d(TAG, "<<<<<< SUCCESS >>>>>> ");
-            if (mAdapter != null) {
-                mAdapter.setRepoListItems(searchResult.getItemsAsList());
-                mAdapter.notifyDataSetChanged();
-            }
-            if (mAdapter == null) {
-                mAdapter = new RepoListAdapter(getActivity(), searchResult.getItemsAsList());
-                mRepoList.setAdapter(mAdapter);
-            }
+//            if (mAdapter != null) {
+//                mAdapter.setRepoListItems(searchResult.getItemsAsList());
+//                mAdapter.notifyDataSetChanged();
+//            }
+//            if (mAdapter == null) {
+//                mAdapter = new RepoListAdapter(getActivity(), searchResult.getItemsAsList());
+//                mRepoList.setAdapter(mAdapter);
+//            }
+
+            getLoaderManager().initLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener(getActivity(), mRepoCursorAdapter, null));
+
             if (mDialog != null && mDialog.isShowing()) {
                 mDialog.dismiss();
             }
@@ -167,8 +181,8 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 //        }
 //        mLastClickTime = SystemClock.elapsedRealtime();
 //        if (s.length() > 0) {
-            mGithubRequest = new GithubSpiceRetrofitRequest(SearchResult.class, s);
-            mLastRequestCacheKey = mGithubRequest.createCacheKey();
+        mGithubRequest = new GithubSpiceRetrofitRequest(SearchResult.class, s);
+        mLastRequestCacheKey = mGithubRequest.createCacheKey();
 //            try {
 //                if (!spiceManager.isDataInCache(SearchResult.class, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE).get()) {
 //                    mDialog = new ProgressDialog(getActivity());
@@ -178,8 +192,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 //            } catch (CacheCreationException | InterruptedException | ExecutionException e) {
 //                Log.e(TAG, e.toString());
 //            }
-            spiceManager.execute(mGithubRequest, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());
-
+        spiceManager.execute(mGithubRequest, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());
 
 
         return true;

@@ -61,7 +61,8 @@ public class RepositoriesContentProvider extends ContentProvider {
                 throw new IllegalStateException("URI is not supported: " + uri);
         }
         mSQLiteDatabase = mDBHelper.getWritableDatabase();
-        Cursor cursor = mSQLiteDatabase.query(RepositoryContent.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+        String tables = "repositories as r join owners as o on r.owner_id=o._id";
+        Cursor cursor = mSQLiteDatabase.query(tables, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), RepositoryContent.REPOSITORIES_URI);
         return cursor;
     }

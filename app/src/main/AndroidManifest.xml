@@ -25,10 +25,10 @@
         <service
             android:name=".robospice.DBCacheSpiceService"
             android:exported="false"/>
-        <!--<provider-->
-            <!--android:name=".provider.GitHubContentProvider"-->
-            <!--android:authorities="com.johnkuper.epam.ormlitecontentprovider"-->
-            <!--android:exported="false"/>-->
+        <provider
+            android:name=".provider.RepositoriesContentProvider"
+            android:authorities="com.johnkuper.epam.githubcontentprovider"
+            android:exported="false"/>
     </application>
 
 

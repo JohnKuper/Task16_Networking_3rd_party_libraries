@@ -11,7 +11,6 @@ public class OwnerContent implements BaseColumns {
     public static final String TABLE_NAME = "owners";
 
     //Table columns
-    public static final String OWNER_ID = "owner_id";
     public static final String LOGIN = "login";
     public static final String AVATAR_URL = "avatar_url";
     public static final String TYPE = "type";
