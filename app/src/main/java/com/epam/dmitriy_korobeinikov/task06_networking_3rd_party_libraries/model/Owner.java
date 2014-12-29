@@ -7,11 +7,14 @@ import com.j256.ormlite.table.DatabaseTable;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.parceler.Parcel;
+import org.parceler.Transient;
 
 /**
  * Created by Dmitriy_Korobeinikov on 12/15/2014.
  * Contains owner data from JSON and describes database table's fields.
  */
+@Parcel
 @JsonIgnoreProperties(ignoreUnknown = true)
 @DatabaseTable(tableName = OwnerContent.TABLE_NAME)
 public class Owner {
@@ -40,7 +43,8 @@ public class Owner {
     @DatabaseField(columnName = OwnerContent.SITE_ADMIN)
     public boolean siteAdmin;
 
-    @DatabaseField(foreign = true, columnName = OwnerContent.REPOSITORY_ID)
+    @Transient
+    @DatabaseField(foreign = true, columnName = OwnerContent.REPOSITORY_ID, foreignAutoCreate = true, foreignAutoRefresh = true)
     public Repository repository;
 
     public int getId() {

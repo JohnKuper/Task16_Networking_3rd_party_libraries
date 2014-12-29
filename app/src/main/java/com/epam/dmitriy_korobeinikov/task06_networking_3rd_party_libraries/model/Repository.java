@@ -17,8 +17,8 @@ import java.util.Date;
  * Contains repository data from JSON and describes database table's fields.
  */
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Parcel
+@JsonIgnoreProperties(ignoreUnknown = true)
 @DatabaseTable(tableName = RepositoryContent.TABLE_NAME)
 public class Repository {
 
