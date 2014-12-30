@@ -11,6 +11,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragm
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoListFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 
 import org.parceler.Parcels;
 
@@ -45,7 +46,7 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
 
 
     @Override
-    public void onRepoSelected(Repository repository) {
+    public void onRepoSelected(RepositoryCursorItem repository) {
         if (isSinglePaneMode()) {
             Intent i = new Intent(this, RepoDetailActivity.class);
             i.putExtra(RepoDetailFragment.REPO_DATA, Parcels.wrap(repository));

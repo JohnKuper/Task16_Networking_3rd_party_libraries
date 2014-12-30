@@ -18,17 +18,18 @@ public class CursorLoaderListener implements LoaderManager.LoaderCallbacks<Curso
 
     private Context mContext;
     private RepoCursorAdapter mRepoCursorAdapter;
-    private String mSelection;
+    private String mKeyword;
 
     public CursorLoaderListener(Context context, RepoCursorAdapter repoCursorAdapter, String selection) {
         mContext = context;
         mRepoCursorAdapter = repoCursorAdapter;
-        mSelection = selection;
+        mKeyword = selection;
     }
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(mContext, RepositoryContent.REPOSITORIES_URI, null, mSelection, null, null);
+        String selection = RepositoryContent.DESCRIPTION + " LIKE '%" + mKeyword + "%'";
+        return new CursorLoader(mContext, RepositoryContent.REPOSITORIES_URI, null, selection, null, null);
     }
 
     @Override

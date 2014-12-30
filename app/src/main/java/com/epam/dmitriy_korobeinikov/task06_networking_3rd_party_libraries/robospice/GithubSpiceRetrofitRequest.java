@@ -36,7 +36,7 @@ public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<Search
                 .setConverter(new JacksonConverter(new ObjectMapper()))
                 .build();
         GitHub gitHub = restAdapter.create(GitHub.class);
-        SearchResult searchResult = gitHub.getRepos(keyword, "stars", 30);
+        SearchResult searchResult = gitHub.getRepos(keyword, "stars", 10);
         return searchResult;
     }
 

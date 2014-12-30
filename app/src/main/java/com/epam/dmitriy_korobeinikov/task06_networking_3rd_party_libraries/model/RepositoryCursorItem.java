@@ -29,7 +29,7 @@ public class RepositoryCursorItem {
     public String login;
     public String avatarUrl;
     public String type;
-    public String siteAdmin;
+    public boolean siteAdmin;
 
     public void parseDataFromCursor(Cursor cursor) {
         repositoryId = cursor.getInt(cursor.getColumnIndex("repo_id"));
@@ -42,7 +42,7 @@ public class RepositoryCursorItem {
         login = cursor.getString(cursor.getColumnIndex("login"));
         avatarUrl = cursor.getString(cursor.getColumnIndex("avatar_url"));
         type = cursor.getString(cursor.getColumnIndex("type"));
-        siteAdmin = cursor.getString(cursor.getColumnIndex("site_admin"));
+        siteAdmin = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("site_admin")));
     }
 
 

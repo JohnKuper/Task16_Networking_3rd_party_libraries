@@ -2,13 +2,10 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.frag
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
@@ -28,8 +25,6 @@ import android.widget.Toast;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoListAdapter;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.OwnerContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
@@ -56,6 +51,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     private ProgressDialog mDialog;
     private long mLastClickTime;
     private RepoCursorAdapter mRepoCursorAdapter;
+    private String mKeyword;
 
     private GithubSpiceRetrofitRequest mGithubRequest;
     private RepoSelectedListener mRepoSelectedListener;
@@ -118,9 +114,9 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         mRepoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //mRepoSelectedListener.onRepoSelected(mAdapter.getItem(position));
                 RepositoryCursorItem cursorItem = new RepositoryCursorItem();
                 cursorItem.parseDataFromCursor((Cursor) mRepoCursorAdapter.getItem(position));
+                //mRepoSelectedListener.onRepoSelected(cursorItem);
             }
         });
 
@@ -146,7 +142,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 //                mRepoList.setAdapter(mAdapter);
 //            }
 
-            getLoaderManager().initLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener(getActivity(), mRepoCursorAdapter, null));
+            getLoaderManager().initLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener(getActivity(), mRepoCursorAdapter, mKeyword));
 
             if (mDialog != null && mDialog.isShowing()) {
                 mDialog.dismiss();
@@ -181,6 +177,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 //        }
 //        mLastClickTime = SystemClock.elapsedRealtime();
 //        if (s.length() > 0) {
+        mKeyword = s;
         mGithubRequest = new GithubSpiceRetrofitRequest(SearchResult.class, s);
         mLastRequestCacheKey = mGithubRequest.createCacheKey();
 //            try {
