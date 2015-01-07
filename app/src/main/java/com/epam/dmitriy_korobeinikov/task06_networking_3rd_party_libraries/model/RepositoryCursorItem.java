@@ -22,10 +22,11 @@ public class RepositoryCursorItem {
     public int repositoryId;
     public String name;
     public String fullName;
-    public boolean mPrivate;
     public String description;
     public String createdAt;
+    public String updateAt;
     public int stargazersCount;
+    public String language;
     public String login;
     public String avatarUrl;
     public String type;
@@ -35,9 +36,10 @@ public class RepositoryCursorItem {
         repositoryId = cursor.getInt(cursor.getColumnIndex("repo_id"));
         name = cursor.getString(cursor.getColumnIndex("name"));
         fullName = cursor.getString(cursor.getColumnIndex("full_name"));
-        mPrivate = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("private")));
         description = cursor.getString(cursor.getColumnIndex("description"));
         createdAt = cursor.getString(cursor.getColumnIndex("created_at"));
+        updateAt = cursor.getString(cursor.getColumnIndex("updated_at"));
+        language = cursor.getString(cursor.getColumnIndex("language"));
         stargazersCount = cursor.getInt(cursor.getColumnIndex("stargazers_count"));
         login = cursor.getString(cursor.getColumnIndex("login"));
         avatarUrl = cursor.getString(cursor.getColumnIndex("avatar_url"));

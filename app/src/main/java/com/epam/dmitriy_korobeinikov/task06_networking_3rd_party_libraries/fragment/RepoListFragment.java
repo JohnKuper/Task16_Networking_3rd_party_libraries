@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
@@ -20,11 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoListAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
@@ -38,6 +41,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 /**
  * Created by Dmitriy_Korobeinikov on 12/12/2014.
+ * This class is used for search and display preview information about GitHub's repositories as list.
  */
 public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
@@ -45,8 +49,6 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     public static final int REPOSITORIES_LOADER = 1;
 
     private ListView mRepoList;
-    private RepoListAdapter mAdapter;
-    private String mLastRequestCacheKey;
     private ActionBarActivity mActivity;
     private ProgressDialog mDialog;
     private long mLastClickTime;
@@ -107,9 +109,9 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
             mActivity.setSupportActionBar(toolbar);
         }
 
-        mRepoCursorAdapter = new RepoCursorAdapter(getActivity(), null, REPOSITORIES_LOADER);
+        mRepoCursorAdapter = new RepoCursorAdapter(getActivity(), null, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
-        mRepoList = (ListView) v.findViewById(R.id.repoList);
+        mRepoList = (ListView) v.findViewById(R.id.repo_list);
         mRepoList.setAdapter(mRepoCursorAdapter);
         mRepoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -133,23 +135,33 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         @Override
         public void onRequestSuccess(SearchResult searchResult) {
             Log.d(TAG, "<<<<<< SUCCESS >>>>>> ");
-//            if (mAdapter != null) {
-//                mAdapter.setRepoListItems(searchResult.getItemsAsList());
-//                mAdapter.notifyDataSetChanged();
-//            }
-//            if (mAdapter == null) {
-//                mAdapter = new RepoListAdapter(getActivity(), searchResult.getItemsAsList());
-//                mRepoList.setAdapter(mAdapter);
-//            }
 
-            getLoaderManager().initLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener(getActivity(), mRepoCursorAdapter, mKeyword));
+            startRepositoriesCursorLoader();
+            dismissProgressDialog();
 
-            if (mDialog != null && mDialog.isShowing()) {
-                mDialog.dismiss();
-            }
-            if (searchResult.getItems().size() == 0) {
+            if (searchResult.totalCount == 0) {
                 Toast.makeText(getActivity(), "Search is complete. There are no results to display", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void dismissProgressDialog() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+    }
+
+    private void showProgressDialog() {
+            mDialog = ProgressDialog.show(getActivity(), null, null, true, false);
+            mDialog.setContentView(new ProgressBar(getActivity()));
+    }
+
+    private void startRepositoriesCursorLoader() {
+        Loader<Cursor> loader = getLoaderManager().getLoader(REPOSITORIES_LOADER);
+        if (loader != null) {
+            getLoaderManager().restartLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener(getActivity(), mRepoCursorAdapter, mKeyword));
+        } else {
+            getLoaderManager().initLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener(getActivity(), mRepoCursorAdapter, mKeyword));
         }
     }
 
@@ -172,26 +184,18 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public boolean onQueryTextSubmit(String s) {
-//        if (SystemClock.elapsedRealtime() - mLastClickTime < 200) {
-//            return false;
-//        }
-//        mLastClickTime = SystemClock.elapsedRealtime();
-//        if (s.length() > 0) {
-        mKeyword = s;
-        mGithubRequest = new GithubSpiceRetrofitRequest(SearchResult.class, s);
-        mLastRequestCacheKey = mGithubRequest.createCacheKey();
-//            try {
-//                if (!spiceManager.isDataInCache(SearchResult.class, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE).get()) {
-//                    mDialog = new ProgressDialog(getActivity());
-//                    mDialog.setMessage("Search in progress. Please wait...");
-//                    mDialog.show();
-//                }
-//            } catch (CacheCreationException | InterruptedException | ExecutionException e) {
-//                Log.e(TAG, e.toString());
-//            }
-        spiceManager.execute(mGithubRequest, mLastRequestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 200) {
+            return false;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
 
-
+        if (s.length() > 0) {
+            mKeyword = s;
+            mGithubRequest = new GithubSpiceRetrofitRequest(SearchResult.class, s);
+            String requestCacheKey = mGithubRequest.createCacheKey();
+            showProgressDialog();
+            spiceManager.execute(mGithubRequest, requestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());
+        }
         return true;
     }
 

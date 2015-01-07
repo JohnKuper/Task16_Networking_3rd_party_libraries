@@ -28,7 +28,7 @@ public class CursorLoaderListener implements LoaderManager.LoaderCallbacks<Curso
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        String selection = RepositoryContent.DESCRIPTION + " LIKE '%" + mKeyword + "%'";
+        String selection = RepositoryContent.DESCRIPTION + " LIKE '%" + mKeyword + "%' OR " + RepositoryContent.NAME + " LIKE '%" + mKeyword + "%'";
         return new CursorLoader(mContext, RepositoryContent.REPOSITORIES_URI, null, selection, null, null);
     }
 
@@ -40,6 +40,6 @@ public class CursorLoaderListener implements LoaderManager.LoaderCallbacks<Curso
 
     @Override
     public void onLoaderReset(Loader loader) {
-        mRepoCursorAdapter.changeCursor(null);
+        mRepoCursorAdapter.swapCursor(null);
     }
 }

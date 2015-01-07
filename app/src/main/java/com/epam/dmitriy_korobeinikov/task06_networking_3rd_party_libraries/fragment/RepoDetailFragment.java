@@ -94,9 +94,6 @@ public class RepoDetailFragment extends Fragment {
         mRepoOwnerSiteAdmin = (TextView) v.findViewById(R.id.detail_owner_site_admin);
         mRepoOwnerSiteAdmin.setText(OWNER_SITE_ADMIN_PREFIX + String.valueOf(owner.isSiteAdmin()));
 
-        mPrivate = (TextView) v.findViewById(R.id.detail_private);
-        mPrivate.setText(OTHER_DETAIL_PRIVATE_PREFIX + String.valueOf(mRepository.isPrivate()));
-
         mCreatedAt = (TextView) v.findViewById(R.id.detail_created_at);
         Format formatter = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         String formatDate = formatter.format(mRepository.getCreatedAt());

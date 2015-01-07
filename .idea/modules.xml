@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Task06_Networking_3rd_Party_Libraries.iml" filepath="$PROJECT_DIR$/Task06_Networking_3rd_Party_Libraries.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Task16_Networking_3rd_party_libraries.iml" filepath="$PROJECT_DIR$/Task16_Networking_3rd_party_libraries.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

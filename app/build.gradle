@@ -47,6 +47,6 @@ android {
         provided 'org.parceler:parceler:0.2.15'
         compile "com.tojc.ormlite.android:ormlite-content-provider-library:1.0.4"
         compile 'com.octo.android.robospice:robospice-ormlite:1.4.14'
-
+        compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
     }
 }

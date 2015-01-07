@@ -38,10 +38,6 @@ public class Repository {
     @DatabaseField(columnName = RepositoryContent.FULL_NAME)
     public String fullName;
 
-    @JsonProperty("private")
-    @DatabaseField(columnName = RepositoryContent.PRIVATE)
-    public boolean mPrivate;
-
     @JsonProperty("description")
     @DatabaseField(columnName = RepositoryContent.DESCRIPTION)
     public String description;
@@ -49,6 +45,14 @@ public class Repository {
     @JsonProperty("created_at")
     @DatabaseField(columnName = RepositoryContent.CREATED_AT)
     public Date createdAt;
+
+    @JsonProperty("updated_at")
+    @DatabaseField(columnName = RepositoryContent.UPDATED_AT)
+    public Date updatedAt;
+
+    @JsonProperty("language")
+    @DatabaseField(columnName = RepositoryContent.LANGUAGE)
+    public String language;
 
     @JsonProperty("stargazers_count")
     @DatabaseField(columnName = RepositoryContent.STARGAZERS_COUNT)
@@ -94,14 +98,6 @@ public class Repository {
         this.fullName = fullName;
     }
 
-    public boolean isPrivate() {
-        return mPrivate;
-    }
-
-    public void setpublic(boolean Isprivate) {
-        mPrivate = Isprivate;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -116,6 +112,22 @@ public class Repository {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public int getStargazersCount() {

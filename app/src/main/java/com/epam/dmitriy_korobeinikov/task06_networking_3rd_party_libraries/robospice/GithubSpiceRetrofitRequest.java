@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.converter.JacksonConverter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.GitHub;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHub;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import org.codehaus.jackson.map.ObjectMapper;

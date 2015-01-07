@@ -43,14 +43,12 @@ public class RepositoriesContentProvider extends ContentProvider {
         Log.d(TAG, "query, " + uri.toString());
         switch (URI_MATCHER.match(uri)) {
             case RepositoryContent.REPOSITORY_URI_PATTERN_MANY:
-                Log.d(TAG, "query with uri " + RepositoryContent.REPOSITORY_URI_PATTERN_MANY);
                 if (TextUtils.isEmpty(sortOrder)) {
                     sortOrder = RepositoryContent.NAME + " ASC";
                 }
                 break;
             case RepositoryContent.REPOSITORY_URI_PATTERN_ONE:
                 String id = uri.getLastPathSegment();
-                Log.d(TAG, "query with uri " + RepositoryContent.REPOSITORY_URI_PATTERN_ONE + id);
                 if (TextUtils.isEmpty(selection)) {
                     selection = RepositoryContent._ID + "=" + id;
                 } else {

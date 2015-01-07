@@ -21,10 +21,11 @@ public class RepositoryContent implements BaseColumns {
     public static final String REPO_ID = "repo_id";
     public static final String NAME = "name";
     public static final String FULL_NAME = "full_name";
-    public static final String PRIVATE = "private";
     public static final String DESCRIPTION = "description";
     public static final String CREATED_AT = "created_at";
+    public static final String UPDATED_AT = "updated_at";
     public static final String STARGAZERS_COUNT = "stargazers_count";
+    public static final String LANGUAGE = "language";
     public static final String OWNER_ID = "owner_id";
 
     public static final Uri REPOSITORIES_URI = new Uri.Builder()
