@@ -5,4 +5,19 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="TextViewDividingLine">
+        <item name="android:background">@color/text_view_dividing_line</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
+    <style name="TextViewRepoDetailTitle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextViewRepoDetailContent">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/background_material_dark</item>
+    </style>
+
 </resources>

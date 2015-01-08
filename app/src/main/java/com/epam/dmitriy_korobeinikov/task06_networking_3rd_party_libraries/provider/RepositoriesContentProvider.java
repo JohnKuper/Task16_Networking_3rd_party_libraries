@@ -7,15 +7,17 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.OwnerContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 
 /**
- * Created by Dmitriy_Korobeinikov on 12/25/2014.
+ * Created by Dmitriy Korobeynikov on 12/25/2014.
  * GitHub's repositories content provider.
  */
 public class RepositoriesContentProvider extends ContentProvider {
@@ -41,26 +43,26 @@ public class RepositoriesContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Log.d(TAG, "query, " + uri.toString());
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        String tables = RepositoryContent.TABLE_NAME + " JOIN "
+                + OwnerContent.TABLE_NAME + " ON " + RepositoryContent.OWNER_ID + " = " + OwnerContent.FULL_ID;
+
         switch (URI_MATCHER.match(uri)) {
             case RepositoryContent.REPOSITORY_URI_PATTERN_MANY:
+                queryBuilder.setTables(tables);
                 if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = RepositoryContent.NAME + " ASC";
+                    sortOrder = RepositoryContent.STARGAZERS_COUNT + " DESC";
                 }
                 break;
             case RepositoryContent.REPOSITORY_URI_PATTERN_ONE:
-                String id = uri.getLastPathSegment();
-                if (TextUtils.isEmpty(selection)) {
-                    selection = RepositoryContent._ID + "=" + id;
-                } else {
-                    selection = selection + " AND " + RepositoryContent._ID + " = " + id;
-                }
+                queryBuilder.setTables(tables);
+                queryBuilder.appendWhere(RepositoryContent.FULL_ID + "=" + uri.getLastPathSegment());
                 break;
             default:
                 throw new IllegalStateException("URI is not supported: " + uri);
         }
         mSQLiteDatabase = mDBHelper.getWritableDatabase();
-        String tables = "repositories as r join owners as o on r.owner_id=o._id";
-        Cursor cursor = mSQLiteDatabase.query(tables, projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor cursor = queryBuilder.query(mSQLiteDatabase, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), RepositoryContent.REPOSITORIES_URI);
         return cursor;
     }

@@ -25,7 +25,7 @@ public class DBCacheSpiceService extends SpringAndroidSpiceService {
     @Override
     public CacheManager createCacheManager(Application application) {
         CacheManager cacheManager = new CacheManager();
-        List<Class<?>> classCollection = new ArrayList<Class<?>>();
+        List<Class<?>> classCollection = new ArrayList<>();
 
         classCollection.add(Owner.class);
         classCollection.add(Repository.class);

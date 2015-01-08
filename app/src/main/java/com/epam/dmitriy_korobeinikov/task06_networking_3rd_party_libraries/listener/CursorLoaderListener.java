@@ -1,6 +1,5 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener;
 
-import android.content.ContentProvider;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -12,7 +11,9 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapt
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 
 /**
- * Created by Dmitriy_Korobeinikov on 12/29/2014.
+ * Created by Dmitriy Korobeynikov on 12/29/2014.
+ * This class is used for handling cursor loader's callbacks
+ * and swap obtained cursor to RepoCursorAdapter.
  */
 public class CursorLoaderListener implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -20,16 +21,18 @@ public class CursorLoaderListener implements LoaderManager.LoaderCallbacks<Curso
     private RepoCursorAdapter mRepoCursorAdapter;
     private String mKeyword;
 
-    public CursorLoaderListener(Context context, RepoCursorAdapter repoCursorAdapter, String selection) {
+    public CursorLoaderListener(Context context, RepoCursorAdapter repoCursorAdapter, String keyword) {
         mContext = context;
         mRepoCursorAdapter = repoCursorAdapter;
-        mKeyword = selection;
+        mKeyword = keyword;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        String selection = RepositoryContent.DESCRIPTION + " LIKE '%" + mKeyword + "%' OR " + RepositoryContent.NAME + " LIKE '%" + mKeyword + "%'";
-        return new CursorLoader(mContext, RepositoryContent.REPOSITORIES_URI, null, selection, null, null);
+        String[] selectionArgs = {"%" + mKeyword + "%", "%" + mKeyword + "%"};
+        String selection = RepositoryContent.DESCRIPTION + " LIKE ?" + " OR " + RepositoryContent.NAME + " LIKE ?";
+        return new CursorLoader(mContext, RepositoryContent.REPOSITORIES_URI, null, selection, selectionArgs, null);
     }
 
     @Override

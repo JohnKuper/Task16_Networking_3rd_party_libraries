@@ -26,10 +26,6 @@ public class Repository {
     @DatabaseField(columnName = RepositoryContent._ID, generatedId = true)
     public int id = 0;
 
-    @JsonProperty("id")
-    @DatabaseField(columnName = RepositoryContent.REPO_ID)
-    public int repositoryId;
-
     @JsonProperty("name")
     @DatabaseField(columnName = RepositoryContent.NAME, unique = true)
     public String name;
@@ -62,6 +58,9 @@ public class Repository {
     @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, columnName = RepositoryContent.OWNER_ID)
     public Owner owner;
 
+    @DatabaseField(foreign = true, columnName = RepositoryContent.OWNER_ID)
+    public Tag tags;
+
     @Transient
     @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
     public SearchResult result;
@@ -72,14 +71,6 @@ public class Repository {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getRepositoryId() {
-        return repositoryId;
-    }
-
-    public void setRepositoryId(int repositoryId) {
-        this.repositoryId = repositoryId;
     }
 
     public String getName() {

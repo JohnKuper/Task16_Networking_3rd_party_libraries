@@ -2,24 +2,18 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.mode
 
 import android.database.Cursor;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.OwnerContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
-import com.j256.ormlite.field.DatabaseField;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesDateUtils;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.parceler.Parcel;
 
-import java.util.Date;
-
 /**
- * Created by Dmitriy_Korobeinikov on 12/29/2014.
- * Contains data after query from tables: repositories and owners with join.
+ * Created by Dmitriy Korobeynikov on 12/29/2014.
+ * Contains data after query with join from tables: repositories and owners.
  */
 @Parcel
 public class RepositoryCursorItem {
 
-    public int repositoryId;
+    //Repository
     public String name;
     public String fullName;
     public String description;
@@ -27,24 +21,77 @@ public class RepositoryCursorItem {
     public String updateAt;
     public int stargazersCount;
     public String language;
+
+    //Owner
     public String login;
     public String avatarUrl;
     public String type;
-    public boolean siteAdmin;
 
     public void parseDataFromCursor(Cursor cursor) {
-        repositoryId = cursor.getInt(cursor.getColumnIndex("repo_id"));
+
+        language = cursor.getString(cursor.getColumnIndex("language"));
         name = cursor.getString(cursor.getColumnIndex("name"));
         fullName = cursor.getString(cursor.getColumnIndex("full_name"));
         description = cursor.getString(cursor.getColumnIndex("description"));
-        createdAt = cursor.getString(cursor.getColumnIndex("created_at"));
-        updateAt = cursor.getString(cursor.getColumnIndex("updated_at"));
-        language = cursor.getString(cursor.getColumnIndex("language"));
+        createdAt = RepositoriesDateUtils.getFormatDateAsString(cursor, "created_at", "yyyy-MM-dd HH:mm:ss");
+        updateAt = RepositoriesDateUtils.getElapsedDate(cursor, "updated_at");
         stargazersCount = cursor.getInt(cursor.getColumnIndex("stargazers_count"));
+
         login = cursor.getString(cursor.getColumnIndex("login"));
         avatarUrl = cursor.getString(cursor.getColumnIndex("avatar_url"));
         type = cursor.getString(cursor.getColumnIndex("type"));
-        siteAdmin = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("site_admin")));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+
+    public String getUpdateAt() {
+        return updateAt;
+    }
+
+
+    public int getStargazersCount() {
+        return stargazersCount;
+    }
+
+
+    public String getLanguage() {
+        return language;
+    }
+
+
+    public String getLogin() {
+        return login;
+    }
+
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+
+    public String getType() {
+        return type;
     }
 
 

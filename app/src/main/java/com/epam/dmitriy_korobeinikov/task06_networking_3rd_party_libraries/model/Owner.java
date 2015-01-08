@@ -11,7 +11,7 @@ import org.parceler.Parcel;
 import org.parceler.Transient;
 
 /**
- * Created by Dmitriy_Korobeinikov on 12/15/2014.
+ * Created by Dmitriy Korobeynikov on 12/15/2014.
  * Contains owner data from JSON and describes database table's fields.
  */
 @Parcel
@@ -35,10 +35,6 @@ public class Owner {
     @DatabaseField(columnName = OwnerContent.TYPE)
     public String type;
 
-    @JsonProperty("site_admin")
-    @DatabaseField(columnName = OwnerContent.SITE_ADMIN)
-    public boolean siteAdmin;
-
     @Transient
     @DatabaseField(foreign = true, columnName = OwnerContent.REPOSITORY_ID, foreignAutoCreate = true, foreignAutoRefresh = true)
     public Repository repository;
@@ -55,32 +51,12 @@ public class Owner {
         return login;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     public String getAvatarUrl() {
         return avatarUrl;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public boolean isSiteAdmin() {
-        return siteAdmin;
-    }
-
-    public void setSiteAdmin(boolean siteAdmin) {
-        this.siteAdmin = siteAdmin;
     }
 
     public Repository getRepository() {

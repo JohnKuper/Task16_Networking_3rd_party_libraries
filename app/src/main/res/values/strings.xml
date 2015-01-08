@@ -10,4 +10,17 @@
     <!--Menu actions labels-->
     <string name="menu_search">Search</string>
 
+    <!--Detail fragment titles-->
+    <string name="repo_language_title">Language</string>
+    <string name="repo_name_title">Name</string>
+    <string name="repo_details_title">Repository\'s details</string>
+    <string name="repo_full_name_title">Full name</string>
+    <string name="repo_description_title">Description</string>
+    <string name="repo_created_at_title">Created at</string>
+    <string name="repo_updated_at_title">Updated at</string>
+    <string name="repo_login_title">Login</string>
+    <string name="repo_avatar_url_title">Avatar URL</string>
+    <string name="repo_type_title">Type</string>
+    <string name="repo_tags_title">Tags</string>
+
 </resources>

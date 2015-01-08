@@ -40,7 +40,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 /**
- * Created by Dmitriy_Korobeinikov on 12/12/2014.
+ * Created by Dmitriy Korobeynikov on 12/12/2014.
  * This class is used for search and display preview information about GitHub's repositories as list.
  */
 public class RepoListFragment extends Fragment implements OnQueryTextListener {
@@ -95,14 +95,12 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_repo_list, container, false);
-
 
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -118,7 +116,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 RepositoryCursorItem cursorItem = new RepositoryCursorItem();
                 cursorItem.parseDataFromCursor((Cursor) mRepoCursorAdapter.getItem(position));
-                //mRepoSelectedListener.onRepoSelected(cursorItem);
+                mRepoSelectedListener.onRepoSelected(cursorItem);
             }
         });
 

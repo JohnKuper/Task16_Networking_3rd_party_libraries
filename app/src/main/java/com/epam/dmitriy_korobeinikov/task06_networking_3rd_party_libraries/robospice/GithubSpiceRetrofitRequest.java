@@ -13,7 +13,8 @@ import retrofit.RestAdapter;
 import retrofit.android.AndroidLog;
 
 /**
- * Created by Dmitriy_Korobeinikov on 12/15/2014.
+ * Created by Dmitriy Korobeynikov on 12/15/2014.
+ * Asynchronous rest request with Robospice and Retrofit.
  */
 public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<SearchResult> {
 
@@ -36,8 +37,7 @@ public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<Search
                 .setConverter(new JacksonConverter(new ObjectMapper()))
                 .build();
         GitHub gitHub = restAdapter.create(GitHub.class);
-        SearchResult searchResult = gitHub.getRepos(keyword, "stars", 10);
-        return searchResult;
+        return gitHub.getRepos(keyword, "stars", 10);
     }
 
     public String createCacheKey() {

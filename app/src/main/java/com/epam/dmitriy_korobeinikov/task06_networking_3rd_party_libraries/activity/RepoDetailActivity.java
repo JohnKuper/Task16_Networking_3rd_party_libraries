@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoDetailFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 
 import org.parceler.Parcels;
 
@@ -22,7 +23,7 @@ public class RepoDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo_detail);
 
-        Repository repository = Parcels.unwrap(getIntent().getParcelableExtra(RepoDetailFragment.REPO_DATA));
+        RepositoryCursorItem repository = Parcels.unwrap(getIntent().getParcelableExtra(RepoDetailFragment.REPO_DATA));
 
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentById(R.id.repo_detail_container);

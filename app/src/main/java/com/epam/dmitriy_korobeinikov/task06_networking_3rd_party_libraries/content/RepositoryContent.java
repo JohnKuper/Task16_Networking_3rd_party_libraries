@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
- * Created by Dmitriy_Korobeinikov on 12/26/2014.
+ * Created by Dmitriy Korobeynikov on 12/26/2014.
  * Describes data about Repository.class table in database.
  */
 public class RepositoryContent implements BaseColumns {
@@ -18,7 +18,7 @@ public class RepositoryContent implements BaseColumns {
     public static final int REPOSITORY_URI_PATTERN_ONE = 2;
 
     //Table columns
-    public static final String REPO_ID = "repo_id";
+    public static final String FULL_ID =  TABLE_NAME + "." + _ID;
     public static final String NAME = "name";
     public static final String FULL_NAME = "full_name";
     public static final String DESCRIPTION = "description";
@@ -27,6 +27,8 @@ public class RepositoryContent implements BaseColumns {
     public static final String STARGAZERS_COUNT = "stargazers_count";
     public static final String LANGUAGE = "language";
     public static final String OWNER_ID = "owner_id";
+    public static final String TAGS_ID = "tags_id";
+
 
     public static final Uri REPOSITORIES_URI = new Uri.Builder()
             .scheme(ContentResolver.SCHEME_CONTENT)
