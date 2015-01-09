@@ -1,12 +1,10 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.OwnerContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.TagContent;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import org.parceler.Parcel;
-import org.parceler.Transient;
 
 /**
  * Created by Dmitriy Korobeynikov on 09.01.2015.
@@ -22,9 +20,8 @@ public class Tag {
     @DatabaseField(columnName = TagContent.REPOSITORY_TAGS)
     public String repositoryTags;
 
-    @Transient
-    @DatabaseField(foreign = true, columnName = TagContent.REPOSITORY_ID)
-    public Repository repository;
+    @DatabaseField(columnName = TagContent.REPOSITORY_ID, foreign = true)
+    private Repository repository;
 
     public int getId() {
         return id;

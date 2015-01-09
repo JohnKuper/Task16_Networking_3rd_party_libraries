@@ -2,6 +2,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.mode
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -10,6 +11,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.parceler.Parcel;
 import org.parceler.Transient;
 
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -58,8 +60,8 @@ public class Repository {
     @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, columnName = RepositoryContent.OWNER_ID)
     public Owner owner;
 
-    @DatabaseField(foreign = true, columnName = RepositoryContent.TAGS_ID)
-    public Tag tags;
+    @ForeignCollectionField(columnName = RepositoryContent.TAGS_ID, maxEagerLevel = 2, eager = true)
+    private Collection<Tag> tags;
 
     @Transient
     @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
@@ -143,5 +145,13 @@ public class Repository {
 
     public void setResult(SearchResult result) {
         this.result = result;
+    }
+
+    public Collection<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
     }
 }
