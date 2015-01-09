@@ -6,6 +6,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.conte
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Owner;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Tag;
 import com.octo.android.robospice.SpringAndroidSpiceService;
 import com.octo.android.robospice.persistence.CacheManager;
 import com.octo.android.robospice.persistence.ormlite.InDatabaseObjectPersisterFactory;
@@ -30,6 +31,7 @@ public class DBCacheSpiceService extends SpringAndroidSpiceService {
         classCollection.add(Owner.class);
         classCollection.add(Repository.class);
         classCollection.add(SearchResult.class);
+        classCollection.add(Tag.class);
 
         RoboSpiceDatabaseHelper databaseHelper = new RoboSpiceDatabaseHelper(application, BaseContent.DATABASE_NAME, BaseContent.DATABASE_VERSION);
         InDatabaseObjectPersisterFactory inDatabaseObjectPersisterFactory = new InDatabaseObjectPersisterFactory(application, databaseHelper, classCollection);

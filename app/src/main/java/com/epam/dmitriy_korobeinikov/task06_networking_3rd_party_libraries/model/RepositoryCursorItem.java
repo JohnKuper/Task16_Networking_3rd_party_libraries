@@ -2,6 +2,8 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.mode
 
 import android.database.Cursor;
 
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.OwnerContent;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesDateUtils;
 
 import org.parceler.Parcel;
@@ -14,6 +16,7 @@ import org.parceler.Parcel;
 public class RepositoryCursorItem {
 
     //Repository
+    public String repositoryId;
     public String name;
     public String fullName;
     public String description;
@@ -21,6 +24,7 @@ public class RepositoryCursorItem {
     public String updateAt;
     public int stargazersCount;
     public String language;
+    public String tagsId;
 
     //Owner
     public String login;
@@ -29,17 +33,23 @@ public class RepositoryCursorItem {
 
     public void parseDataFromCursor(Cursor cursor) {
 
-        language = cursor.getString(cursor.getColumnIndex("language"));
-        name = cursor.getString(cursor.getColumnIndex("name"));
-        fullName = cursor.getString(cursor.getColumnIndex("full_name"));
-        description = cursor.getString(cursor.getColumnIndex("description"));
-        createdAt = RepositoriesDateUtils.getFormatDateAsString(cursor, "created_at", "yyyy-MM-dd HH:mm:ss");
-        updateAt = RepositoriesDateUtils.getElapsedDate(cursor, "updated_at");
-        stargazersCount = cursor.getInt(cursor.getColumnIndex("stargazers_count"));
+        repositoryId = cursor.getString(cursor.getColumnIndex(RepositoryContent.ID_ALIAS));
+        language = cursor.getString(cursor.getColumnIndex(RepositoryContent.LANGUAGE));
+        name = cursor.getString(cursor.getColumnIndex(RepositoryContent.NAME));
+        fullName = cursor.getString(cursor.getColumnIndex(RepositoryContent.FULL_NAME));
+        description = cursor.getString(cursor.getColumnIndex(RepositoryContent.DESCRIPTION));
+        createdAt = RepositoriesDateUtils.getFormatDateAsString(cursor, RepositoryContent.CREATED_AT, "yyyy-MM-dd HH:mm:ss");
+        updateAt = RepositoriesDateUtils.getElapsedDate(cursor, RepositoryContent.UPDATED_AT);
+        stargazersCount = cursor.getInt(cursor.getColumnIndex(RepositoryContent.STARGAZERS_COUNT));
+        tagsId = cursor.getString(cursor.getColumnIndex(RepositoryContent.TAGS_ID));
 
-        login = cursor.getString(cursor.getColumnIndex("login"));
-        avatarUrl = cursor.getString(cursor.getColumnIndex("avatar_url"));
-        type = cursor.getString(cursor.getColumnIndex("type"));
+        login = cursor.getString(cursor.getColumnIndex(OwnerContent.LOGIN));
+        avatarUrl = cursor.getString(cursor.getColumnIndex(OwnerContent.AVATAR_URL));
+        type = cursor.getString(cursor.getColumnIndex(OwnerContent.TYPE));
+    }
+
+    public String getRepositoryId() {
+        return repositoryId;
     }
 
     public String getName() {
@@ -94,5 +104,7 @@ public class RepositoryCursorItem {
         return type;
     }
 
-
+    public String getTagsId() {
+        return tagsId;
+    }
 }

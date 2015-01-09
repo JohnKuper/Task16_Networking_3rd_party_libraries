@@ -58,7 +58,7 @@ public class Repository {
     @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, columnName = RepositoryContent.OWNER_ID)
     public Owner owner;
 
-    @DatabaseField(foreign = true, columnName = RepositoryContent.OWNER_ID)
+    @DatabaseField(foreign = true, columnName = RepositoryContent.TAGS_ID)
     public Tag tags;
 
     @Transient

@@ -36,7 +36,7 @@ public class Owner {
     public String type;
 
     @Transient
-    @DatabaseField(foreign = true, columnName = OwnerContent.REPOSITORY_ID, foreignAutoCreate = true, foreignAutoRefresh = true)
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, columnName = OwnerContent.REPOSITORY_ID)
     public Repository repository;
 
     public int getId() {

@@ -17,8 +17,10 @@ public class RepositoryContent implements BaseColumns {
     public static final int REPOSITORY_URI_PATTERN_MANY = 1;
     public static final int REPOSITORY_URI_PATTERN_ONE = 2;
 
+    public static final String FULL_ID = TABLE_NAME + "." + _ID;
+    public static final String ID_ALIAS = "repository_id";
+
     //Table columns
-    public static final String FULL_ID =  TABLE_NAME + "." + _ID;
     public static final String NAME = "name";
     public static final String FULL_NAME = "full_name";
     public static final String DESCRIPTION = "description";
