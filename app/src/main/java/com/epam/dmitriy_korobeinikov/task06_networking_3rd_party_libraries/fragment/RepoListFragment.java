@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
@@ -151,16 +152,18 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     }
 
     private void showProgressDialog() {
-            mDialog = ProgressDialog.show(getActivity(), null, null, true, false);
-            mDialog.setContentView(new ProgressBar(getActivity()));
+        mDialog = ProgressDialog.show(getActivity(), null, null, true, false);
+        mDialog.setContentView(new ProgressBar(getActivity()));
     }
 
     private void startRepositoriesCursorLoader() {
         Loader<Cursor> loader = getLoaderManager().getLoader(REPOSITORIES_LOADER);
+        String selection = RepositoryContent.DESCRIPTION + " LIKE ?" + " OR " + RepositoryContent.NAME + " LIKE ?";
+        String[] selectionArgs = {"%" + mKeyword + "%", "%" + mKeyword + "%"};
         if (loader != null) {
-            getLoaderManager().restartLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener(getActivity(), mRepoCursorAdapter, mKeyword));
+            getLoaderManager().restartLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener<>(getActivity(), RepositoryContent.REPOSITORIES_URI, mRepoCursorAdapter, selection, selectionArgs));
         } else {
-            getLoaderManager().initLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener(getActivity(), mRepoCursorAdapter, mKeyword));
+            getLoaderManager().initLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener<>(getActivity(), RepositoryContent.REPOSITORIES_URI, mRepoCursorAdapter, selection, selectionArgs));
         }
     }
 

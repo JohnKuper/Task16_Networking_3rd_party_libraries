@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -46,12 +45,11 @@ public class RepositoriesContentProvider extends ContentProvider {
         mProjectionMap = buildProjectionMap();
     }
 
-    private DBHelper mDBHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     @Override
     public boolean onCreate() {
-        mDBHelper = new DBHelper(getContext());
+        DBHelper mDBHelper = new DBHelper(getContext());
         mSQLiteDatabase = mDBHelper.getWritableDatabase();
         return true;
     }
@@ -96,11 +94,17 @@ public class RepositoriesContentProvider extends ContentProvider {
                 queryBuilder.setProjectionMap(mProjectionMap);
                 queryBuilder.appendWhere(RepositoryContent.FULL_ID + "=" + uri.getLastPathSegment());
                 break;
+            case TagContent.TAG_URI_PATTERN_MANY:
+                queryBuilder.setTables(TagContent.TABLE_NAME);
+                if (TextUtils.isEmpty(sortOrder)) {
+                    sortOrder = TagContent.REPOSITORY_TAG + " COLLATE NOCASE";
+                }
+                break;
             default:
                 throw new IllegalStateException("URI is not supported: " + uri);
         }
         Cursor cursor = queryBuilder.query(mSQLiteDatabase, projection, selection, selectionArgs, null, null, sortOrder);
-        cursor.setNotificationUri(getContext().getContentResolver(), RepositoryContent.REPOSITORIES_URI);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
@@ -124,9 +128,7 @@ public class RepositoriesContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        Log.d(TAG, "insert, " + uri.toString());
-        if (URI_MATCHER.match(uri) != TagContent.TAG_URI_PATTERN_ONE)
-            throw new IllegalArgumentException("Wrong URI: " + uri);
+        checkPatternOneUriForTagContent(uri, "insert");
 
         long row = mSQLiteDatabase.insert(TagContent.TABLE_NAME, null, values);
         Uri newUri = ContentUris.withAppendedId(TagContent.TAGS_URI, row);
@@ -137,12 +139,30 @@ public class RepositoriesContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        checkPatternOneUriForTagContent(uri, "delete");
+
+        String id = uri.getLastPathSegment();
+        if (TextUtils.isEmpty(selection)) {
+            selection = TagContent.REPOSITORY_ID + " = " + id;
+        } else {
+            selection = selection + " AND " + TagContent.REPOSITORY_ID + " = " + id;
+        }
+        int deleteRows = mSQLiteDatabase.delete(TagContent.TABLE_NAME, selection, selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        return deleteRows;
     }
+
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return 0;
+    }
+
+    private void checkPatternOneUriForTagContent(Uri uri, String methodName) {
+        Log.d(TAG, methodName + ": " + uri.toString());
+        if (URI_MATCHER.match(uri) != TagContent.TAG_URI_PATTERN_ONE)
+            throw new IllegalArgumentException("Wrong URI: " + uri);
     }
 
     private class DBHelper extends SQLiteOpenHelper {
