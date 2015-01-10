@@ -23,4 +23,8 @@
     <string name="repo_type_title">Type</string>
     <string name="repo_tags_title">Tags</string>
 
+
+    <!--EditText hints-->
+    <string name="enter_tags_hint">Enter new tags separated by a space</string>
+
 </resources>

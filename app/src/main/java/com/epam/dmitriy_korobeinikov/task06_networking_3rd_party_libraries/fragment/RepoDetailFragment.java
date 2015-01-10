@@ -1,10 +1,13 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,8 @@ import android.widget.TextView;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.TagContent;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoTagsOpenListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.squareup.picasso.Picasso;
 
@@ -24,12 +29,14 @@ import org.parceler.Parcels;
 
 /**
  * Created by Dmitriy Korobeynikov on 12/16/2014.
- * Displays detailed information about the repository and includes buttons
- * for manipulating repository's tags.
+ * Displays detailed information about the repository and includes button
+ * for open repository's tags.
  */
 public class RepoDetailFragment extends Fragment {
 
     private RepositoryCursorItem mRepository;
+    private ActionBarActivity mActivity;
+    private RepoTagsOpenListener tagsOpenListener;
 
     public static final String REPO_DATA = "REPO_DATA";
     private static final String TAG = "Task06";
@@ -44,6 +51,20 @@ public class RepoDetailFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        mActivity = (ActionBarActivity) activity;
+        tagsOpenListener = (RepoTagsOpenListener) activity;
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+        mActivity = null;
+        tagsOpenListener = null;
+        super.onDetach();
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +76,11 @@ public class RepoDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_repo_details, container, false);
+
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.repo_detail_toolbar);
+        if (toolbar != null) {
+            mActivity.setSupportActionBar(toolbar);
+        }
 
         ImageView mAvatarImage = (ImageView) v.findViewById(R.id.detail_repo_image);
         Picasso.with(getActivity()).load(mRepository.getAvatarUrl()).into(mAvatarImage);
@@ -68,7 +94,7 @@ public class RepoDetailFragment extends Fragment {
         TextView mRepoFullName = (TextView) v.findViewById(R.id.detail_repo_full_name);
         mRepoFullName.setText(mRepository.getFullName());
 
-        TextView mRepoDescription = (TextView) v.findViewById(R.id.detail_repo_description);
+        final TextView mRepoDescription = (TextView) v.findViewById(R.id.detail_repo_description);
         mRepoDescription.setText(mRepository.getDescription());
 
         TextView mCreatedAt = (TextView) v.findViewById(R.id.detail_repo_created_at);
@@ -93,11 +119,7 @@ public class RepoDetailFragment extends Fragment {
         mRepoEditTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContentValues cv = new ContentValues();
-                cv.put(TagContent.REPOSITORY_TAGS, "good");
-                cv.put(TagContent.REPOSITORY_ID, "1");
-                Uri newUri = getActivity().getContentResolver().insert(RepositoryContent.REPOSITORIES_URI, cv);
-                Log.d(TAG, "insert, result Uri : " + newUri.toString());
+                tagsOpenListener.openRepoTags(mRepository.getRepositoryId());
             }
         });
         return v;

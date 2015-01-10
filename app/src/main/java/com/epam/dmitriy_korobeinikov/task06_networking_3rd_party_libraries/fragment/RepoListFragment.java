@@ -89,6 +89,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     @Override
     public void onDetach() {
         mRepoSelectedListener = null;
+        mActivity = null;
         super.onDetach();
     }
 
@@ -102,7 +103,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_repo_list, container, false);
 
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.repo_list_toolbar);
         if (toolbar != null) {
             mActivity.setSupportActionBar(toolbar);
         }

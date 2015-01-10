@@ -16,7 +16,7 @@ import org.parceler.Parcel;
 public class RepositoryCursorItem {
 
     //Repository
-    public String repositoryId;
+    public int repositoryId;
     public String name;
     public String fullName;
     public String description;
@@ -33,7 +33,7 @@ public class RepositoryCursorItem {
 
     public void parseDataFromCursor(Cursor cursor) {
 
-        repositoryId = cursor.getString(cursor.getColumnIndex(RepositoryContent.ID_ALIAS));
+        repositoryId = cursor.getInt(cursor.getColumnIndex(RepositoryContent.ID_ALIAS));
         language = cursor.getString(cursor.getColumnIndex(RepositoryContent.LANGUAGE));
         name = cursor.getString(cursor.getColumnIndex(RepositoryContent.NAME));
         fullName = cursor.getString(cursor.getColumnIndex(RepositoryContent.FULL_NAME));
@@ -41,14 +41,13 @@ public class RepositoryCursorItem {
         createdAt = RepositoriesDateUtils.getFormatDateAsString(cursor, RepositoryContent.CREATED_AT, "yyyy-MM-dd HH:mm:ss");
         updateAt = RepositoriesDateUtils.getElapsedDate(cursor, RepositoryContent.UPDATED_AT);
         stargazersCount = cursor.getInt(cursor.getColumnIndex(RepositoryContent.STARGAZERS_COUNT));
-        tagsId = cursor.getString(cursor.getColumnIndex(RepositoryContent.TAGS_ID));
 
         login = cursor.getString(cursor.getColumnIndex(OwnerContent.LOGIN));
         avatarUrl = cursor.getString(cursor.getColumnIndex(OwnerContent.AVATAR_URL));
         type = cursor.getString(cursor.getColumnIndex(OwnerContent.TYPE));
     }
 
-    public String getRepositoryId() {
+    public int getRepositoryId() {
         return repositoryId;
     }
 

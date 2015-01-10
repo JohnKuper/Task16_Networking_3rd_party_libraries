@@ -60,6 +60,7 @@ public class Repository {
     @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, columnName = RepositoryContent.OWNER_ID)
     public Owner owner;
 
+    @Transient
     @ForeignCollectionField(columnName = RepositoryContent.TAGS_ID, maxEagerLevel = 2, eager = true)
     private Collection<Tag> tags;
 

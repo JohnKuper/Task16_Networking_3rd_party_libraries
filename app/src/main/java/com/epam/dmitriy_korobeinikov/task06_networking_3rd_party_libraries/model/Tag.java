@@ -17,10 +17,10 @@ public class Tag {
     @DatabaseField(columnName = TagContent._ID, generatedId = true)
     public int id;
 
-    @DatabaseField(columnName = TagContent.REPOSITORY_TAGS)
+    @DatabaseField(columnName = TagContent.REPOSITORY_TAG, uniqueCombo = true)
     public String repositoryTags;
 
-    @DatabaseField(columnName = TagContent.REPOSITORY_ID, foreign = true)
+    @DatabaseField(columnName = TagContent.REPOSITORY_ID, foreign = true, uniqueCombo = true)
     private Repository repository;
 
     public int getId() {

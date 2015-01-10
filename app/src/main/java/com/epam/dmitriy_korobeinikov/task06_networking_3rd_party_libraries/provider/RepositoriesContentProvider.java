@@ -28,14 +28,21 @@ import java.util.Map;
  */
 public class RepositoriesContentProvider extends ContentProvider {
 
-    public static final String TAG = "ContentProvider";
+    public static final String TAG = "Task06";
     private static final UriMatcher URI_MATCHER;
-    private static final Map<String,String> mProjectionMap;
+    private static final Map<String, String> mProjectionMap;
 
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+
+        //Repository's uri
         URI_MATCHER.addURI(BaseContent.AUTHORITY, RepositoryContent.REPOSITORY_PATH, RepositoryContent.REPOSITORY_URI_PATTERN_MANY);
         URI_MATCHER.addURI(BaseContent.AUTHORITY, RepositoryContent.REPOSITORY_PATH + "/#", RepositoryContent.REPOSITORY_URI_PATTERN_ONE);
+
+        //Tag's uri
+        URI_MATCHER.addURI(BaseContent.AUTHORITY, TagContent.TAG_PATH, TagContent.TAG_URI_PATTERN_MANY);
+        URI_MATCHER.addURI(BaseContent.AUTHORITY, TagContent.TAG_PATH + "/#", TagContent.TAG_URI_PATTERN_ONE);
+
         mProjectionMap = buildProjectionMap();
     }
 
@@ -61,7 +68,6 @@ public class RepositoriesContentProvider extends ContentProvider {
         projectionMap.put(RepositoryContent.UPDATED_AT, RepositoryContent.UPDATED_AT);
         projectionMap.put(RepositoryContent.STARGAZERS_COUNT, RepositoryContent.STARGAZERS_COUNT);
         projectionMap.put(RepositoryContent.LANGUAGE, RepositoryContent.LANGUAGE);
-        projectionMap.put(RepositoryContent.TAGS_ID, RepositoryContent.TAGS_ID);
 
         projectionMap.put(OwnerContent.LOGIN, OwnerContent.LOGIN);
         projectionMap.put(OwnerContent.AVATAR_URL, OwnerContent.AVATAR_URL);
@@ -95,30 +101,39 @@ public class RepositoriesContentProvider extends ContentProvider {
         }
         Cursor cursor = queryBuilder.query(mSQLiteDatabase, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), RepositoryContent.REPOSITORIES_URI);
-        return cursor;    }
+        return cursor;
+    }
 
     @Override
     public String getType(Uri uri) {
         Log.d(TAG, "getType, " + uri.toString());
         switch (URI_MATCHER.match(uri)) {
+
             case RepositoryContent.REPOSITORY_URI_PATTERN_MANY:
                 return RepositoryContent.REPOSITORY_CONTENT_TYPE;
             case RepositoryContent.REPOSITORY_URI_PATTERN_ONE:
                 return RepositoryContent.REPOSITORY_CONTENT_ITEM_TYPE;
+
+            case TagContent.TAG_URI_PATTERN_MANY:
+                return TagContent.TAG_CONTENT_TYPE;
+            case TagContent.TAG_URI_PATTERN_ONE:
+                return TagContent.TAG_CONTENT_ITEM_TYPE;
         }
         return null;
     }
 
-
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        long row = mSQLiteDatabase.insert(TagContent.TABLE_NAME, "", values);
-        // If record is added successfully
-        Uri newUri = ContentUris.withAppendedId(RepositoryContent.REPOSITORIES_URI, row);
+        Log.d(TAG, "insert, " + uri.toString());
+        if (URI_MATCHER.match(uri) != TagContent.TAG_URI_PATTERN_ONE)
+            throw new IllegalArgumentException("Wrong URI: " + uri);
+
+        long row = mSQLiteDatabase.insert(TagContent.TABLE_NAME, null, values);
+        Uri newUri = ContentUris.withAppendedId(TagContent.TAGS_URI, row);
         getContext().getContentResolver().notifyChange(newUri, null);
+
         return newUri;
     }
-
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
