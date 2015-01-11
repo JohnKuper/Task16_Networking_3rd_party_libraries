@@ -1,6 +1,5 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment;
 
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -12,6 +11,8 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -50,23 +51,21 @@ public class RepoTagsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         mRepositoryId = getArguments().getInt(TagContent.REPOSITORY_ID);
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_without_search, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_repo_tags, container, false);
+
 
         mEnterTags = (EditText) v.findViewById(R.id.enter_tags_edit);
         mEnterTags.requestFocus();
@@ -95,9 +94,9 @@ public class RepoTagsFragment extends Fragment {
 
         startTagsCursorLoader();
 
-
         return v;
     }
+
 
     private void startTagsCursorLoader() {
         Loader<Cursor> loader = getLoaderManager().getLoader(TAGS_LOADER);

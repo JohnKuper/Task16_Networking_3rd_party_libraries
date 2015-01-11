@@ -9,6 +9,7 @@
 
     <!--Menu actions labels-->
     <string name="menu_search">Search</string>
+    <string name="menu_settings">Settings</string>
 
     <!--Detail fragment titles-->
     <string name="repo_language_title">Language</string>

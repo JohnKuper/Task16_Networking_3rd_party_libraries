@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -28,11 +28,9 @@ import org.parceler.Parcels;
 public class RepoDetailFragment extends Fragment {
 
     private RepositoryCursorItem mRepository;
-    private ActionBarActivity mActivity;
     private RepoTagsOpenListener tagsOpenListener;
 
     public static final String REPO_DATA = "REPO_DATA";
-    private static final String TAG = "Task06";
 
     public static RepoDetailFragment newInstance(RepositoryCursorItem repository) {
         Bundle args = new Bundle();
@@ -46,14 +44,12 @@ public class RepoDetailFragment extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
-        mActivity = (ActionBarActivity) activity;
         tagsOpenListener = (RepoTagsOpenListener) activity;
         super.onAttach(activity);
     }
 
     @Override
     public void onDetach() {
-        mActivity = null;
         tagsOpenListener = null;
         super.onDetach();
     }
@@ -61,6 +57,7 @@ public class RepoDetailFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         mRepository = Parcels.unwrap(getArguments().getParcelable(REPO_DATA));
 
@@ -69,11 +66,6 @@ public class RepoDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_repo_details, container, false);
-
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.repo_detail_toolbar);
-        if (toolbar != null) {
-            mActivity.setSupportActionBar(toolbar);
-        }
 
         ImageView mAvatarImage = (ImageView) v.findViewById(R.id.detail_repo_image);
         Picasso.with(getActivity()).load(mRepository.getAvatarUrl()).into(mAvatarImage);
@@ -116,5 +108,11 @@ public class RepoDetailFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_without_search, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

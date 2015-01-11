@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.TagContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
 
@@ -64,8 +62,10 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (!RepositoriesUtils.isEditTextEmpty(mTagEdit)) {
-                    updateTag(mTagEdit.getText().toString());
-                    dismiss();
+                    int updateRows = updateTag(mTagEdit.getText().toString());
+                    if (updateRows != -1) {
+                        dismiss();
+                    }
                 } else {
                     Toast.makeText(getActivity(), "Please input new name for tag", Toast.LENGTH_LONG).show();
                 }
@@ -83,13 +83,12 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
         return v;
     }
 
-    private void updateTag(String newTag) {
+    private int updateTag(String newTag) {
         ContentValues values = new ContentValues();
         values.put(TagContent.REPOSITORY_TAG, newTag);
         String selection = TagContent.REPOSITORY_TAG + " LIKE ?";
         String[] selectionArgs = {mRepositoryTag};
         Uri uri = ContentUris.withAppendedId(TagContent.TAGS_URI, mRepositoryId);
-        int updateRows = getActivity().getContentResolver().update(uri, values, selection, selectionArgs);
-        Log.d(BaseContent.LOG_TAG_TASK_06, "update, count = " + updateRows);
+        return getActivity().getContentResolver().update(uri, values, selection, selectionArgs);
     }
 }

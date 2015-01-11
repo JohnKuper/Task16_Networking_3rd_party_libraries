@@ -10,10 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.CursorAdapter;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +26,7 @@ import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
@@ -46,24 +45,15 @@ import com.octo.android.robospice.request.listener.RequestListener;
  */
 public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
-    private static final String TAG = "Task06";
     public static final int REPOSITORIES_LOADER = 1;
 
-    private ListView mRepoList;
-    private ActionBarActivity mActivity;
     private ProgressDialog mDialog;
     private long mLastClickTime;
     private RepoCursorAdapter mRepoCursorAdapter;
     private String mKeyword;
 
-    private GithubSpiceRetrofitRequest mGithubRequest;
     private RepoSelectedListener mRepoSelectedListener;
     protected SpiceManager spiceManager = new SpiceManager(DBCacheSpiceService.class);
-
-
-    protected SpiceManager getSpiceManager() {
-        return spiceManager;
-    }
 
     @Override
     public void onStart() {
@@ -82,7 +72,6 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public void onAttach(Activity activity) {
-        mActivity = (ActionBarActivity) activity;
         mRepoSelectedListener = (RepoSelectedListener) activity;
         super.onAttach(activity);
     }
@@ -90,7 +79,6 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     @Override
     public void onDetach() {
         mRepoSelectedListener = null;
-        mActivity = null;
         super.onDetach();
     }
 
@@ -104,14 +92,9 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_repo_list, container, false);
 
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.repo_list_toolbar);
-        if (toolbar != null) {
-            mActivity.setSupportActionBar(toolbar);
-        }
-
         mRepoCursorAdapter = new RepoCursorAdapter(getActivity(), null, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
-        mRepoList = (ListView) v.findViewById(R.id.repo_list);
+        ListView mRepoList = (ListView) v.findViewById(R.id.repo_list);
         mRepoList.setAdapter(mRepoCursorAdapter);
         mRepoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -129,12 +112,12 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
         @Override
         public void onRequestFailure(SpiceException e) {
-            Log.d(TAG, e.toString());
+            Log.d(BaseContent.LOG_TAG_TASK_06, "Request failure: ", e);
         }
 
         @Override
         public void onRequestSuccess(SearchResult searchResult) {
-            Log.d(TAG, "<<<<<< SUCCESS >>>>>> ");
+            Log.d(BaseContent.LOG_TAG_TASK_06, "<<<<<< SUCCESS >>>>>> ");
 
             startRepositoriesCursorLoader();
             dismissProgressDialog();
@@ -169,7 +152,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_with_search, menu);
         setupSearchView(menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -193,7 +176,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
         if (s.length() > 0) {
             mKeyword = s;
-            mGithubRequest = new GithubSpiceRetrofitRequest(SearchResult.class, s);
+            GithubSpiceRetrofitRequest mGithubRequest = new GithubSpiceRetrofitRequest(SearchResult.class, s);
             String requestCacheKey = mGithubRequest.createCacheKey();
             showProgressDialog();
             spiceManager.execute(mGithubRequest, requestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());
