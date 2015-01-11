@@ -1,26 +1,19 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment;
 
 import android.app.Activity;
-import android.content.ContentValues;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.TagContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoTagsOpenListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.squareup.picasso.Picasso;
@@ -115,7 +108,7 @@ public class RepoDetailFragment extends Fragment {
         TextView mRepoOwnerType = (TextView) v.findViewById(R.id.detail_repo_type);
         mRepoOwnerType.setText(mRepository.getType());
 
-        ImageButton mRepoEditTags = (ImageButton) v.findViewById(R.id.edit_tags);
+        ImageButton mRepoEditTags = (ImageButton) v.findViewById(R.id.edit_tags_btn);
         mRepoEditTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

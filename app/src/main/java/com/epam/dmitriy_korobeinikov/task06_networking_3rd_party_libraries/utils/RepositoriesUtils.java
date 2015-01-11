@@ -2,6 +2,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.util
 
 import android.database.Cursor;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.BuildConfig;
 import com.ocpsoft.pretty.time.PrettyTime;
@@ -14,7 +15,7 @@ import java.util.Date;
  * Created by Dmitriy Korobeynikov on 08.01.2015.
  * Converts date in human readable convenient format.
  */
-public class RepositoriesDateUtils {
+public class RepositoriesUtils {
 
     public static String getElapsedDate(Cursor cursor, String columnName) {
         Date date = getFormatDate(cursor, columnName, "yyyy-MM-dd HH:mm:ss.S");
@@ -39,5 +40,13 @@ public class RepositoriesDateUtils {
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         Date date = getFormatDate(cursor, columnName, format);
         return formatter.format(date);
+    }
+
+    public static boolean isEditTextEmpty(EditText etText) {
+        if (etText.getText().toString().trim().length() > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

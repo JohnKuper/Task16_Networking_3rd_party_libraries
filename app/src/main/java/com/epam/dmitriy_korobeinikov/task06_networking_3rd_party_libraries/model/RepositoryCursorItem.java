@@ -4,7 +4,7 @@ import android.database.Cursor;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.OwnerContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesDateUtils;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
 
 import org.parceler.Parcel;
 
@@ -38,8 +38,8 @@ public class RepositoryCursorItem {
         name = cursor.getString(cursor.getColumnIndex(RepositoryContent.NAME));
         fullName = cursor.getString(cursor.getColumnIndex(RepositoryContent.FULL_NAME));
         description = cursor.getString(cursor.getColumnIndex(RepositoryContent.DESCRIPTION));
-        createdAt = RepositoriesDateUtils.getFormatDateAsString(cursor, RepositoryContent.CREATED_AT, "yyyy-MM-dd HH:mm:ss");
-        updateAt = RepositoriesDateUtils.getElapsedDate(cursor, RepositoryContent.UPDATED_AT);
+        createdAt = RepositoriesUtils.getFormatDateAsString(cursor, RepositoryContent.CREATED_AT, "yyyy-MM-dd HH:mm:ss");
+        updateAt = RepositoriesUtils.getElapsedDate(cursor, RepositoryContent.UPDATED_AT);
         stargazersCount = cursor.getInt(cursor.getColumnIndex(RepositoryContent.STARGAZERS_COUNT));
 
         login = cursor.getString(cursor.getColumnIndex(OwnerContent.LOGIN));

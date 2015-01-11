@@ -156,7 +156,18 @@ public class RepositoriesContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        checkPatternOneUriForTagContent(uri, "update");
+
+        String id = uri.getLastPathSegment();
+        if (TextUtils.isEmpty(selection)) {
+            throw new IllegalArgumentException("repository_tag WHERE clause should be specified");
+        } else {
+            selection = selection + " AND " + TagContent.REPOSITORY_ID + " = " + id;
+        }
+        int updateRows = mSQLiteDatabase.update(TagContent.TABLE_NAME, values, selection, selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        return updateRows;
     }
 
     private void checkPatternOneUriForTagContent(Uri uri, String methodName) {

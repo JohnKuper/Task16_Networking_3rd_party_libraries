@@ -25,6 +25,11 @@
 
 
     <!--EditText hints-->
-    <string name="enter_tags_hint">Enter new tags separated by a space</string>
+    <string name="enter_tags">Enter new tags separated by a space</string>
+    <string name="enter_new_tag_name">Enter new tag name</string>
+
+    <!--Button's values-->
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robo
 
 import android.util.Log;
 
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.converter.JacksonConverter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHub;
@@ -19,7 +20,6 @@ import retrofit.android.AndroidLog;
 public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<SearchResult> {
 
     private String keyword;
-    private static final String TAG = "Task06";
     private static final String GITHUB_API_URL = "https://api.github.com";
 
     public GithubSpiceRetrofitRequest(Class<SearchResult> clazz, String keyword) {
@@ -29,10 +29,9 @@ public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<Search
 
     @Override
     public SearchResult loadDataFromNetwork() throws Exception {
-        Log.d(TAG, "Call web service");
+        Log.d(BaseContent.LOG_TAG_TASK_06, "Call web service");
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(GITHUB_API_URL)
-                .setLog(new AndroidLog(TAG))
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setConverter(new JacksonConverter(new ObjectMapper()))
                 .build();

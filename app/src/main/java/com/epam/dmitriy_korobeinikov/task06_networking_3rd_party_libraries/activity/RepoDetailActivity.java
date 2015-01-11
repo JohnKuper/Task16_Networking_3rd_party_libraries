@@ -46,7 +46,7 @@ public class RepoDetailActivity extends ActionBarActivity implements RepoTagsOpe
     private void attachTagsFragment(int repositoryId) {
 
         RepoTagsFragment tagsFragment = RepoTagsFragment.newInstance(repositoryId);
-        fragmentManager.beginTransaction().replace(R.id.repo_detail_container, tagsFragment).addToBackStack("detailFragment").commit();
+        fragmentManager.beginTransaction().replace(R.id.repo_detail_container, tagsFragment, "RepoTagsFragment").addToBackStack("replace_on_repo_tags_fragment").commit();
     }
 
     @Override

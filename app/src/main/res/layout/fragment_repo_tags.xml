@@ -24,16 +24,18 @@
             android:id="@+id/tag_accept_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_tag_add"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:paddingLeft="5dp"
+            android:src="@drawable/ic_tag_add"
+            android:background="@drawable/image_btn_selector"/>
 
         <EditText
             android:id="@+id/enter_tags_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/tag_accept_btn"
-            android:hint="@string/enter_tags_hint" />
+            android:hint="@string/enter_tags" />
     </RelativeLayout>
 
     <ListView

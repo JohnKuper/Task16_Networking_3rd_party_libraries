@@ -30,18 +30,10 @@
             android:scaleType="centerCrop"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true" />
-        <!-- Star icon -->
-        <ImageView
-            android:id="@+id/detail_star_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_star"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:padding="5dp" />
 
         <!--Main title-->
         <TextView
+            android:id="@+id/detail_main_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/repo_details_title"
@@ -53,6 +45,27 @@
             android:typeface="sans"
             android:textColor="@color/background_material_dark" />
 
+        <!-- Edit tags buttons -->
+        <ImageButton
+            android:id="@+id/edit_tags_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@drawable/ic_tag_cord"
+            android:background="@drawable/image_btn_selector"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+
+        <!-- Star icon -->
+        <ImageView
+            android:id="@+id/detail_star_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_star"
+            android:layout_toLeftOf="@id/edit_tags_btn"
+            android:layout_centerVertical="true"
+            android:padding="5dp" />
+
         <TextView
             android:id="@+id/detail_repo_stars"
             android:layout_width="wrap_content"
@@ -60,7 +73,6 @@
             android:textStyle="italic"
             tools:text="5693"
             android:paddingTop="5dp"
-            android:layout_below="@id/detail_star_image"
             android:layout_toLeftOf="@id/detail_star_image"
             android:layout_centerVertical="true" />
     </RelativeLayout>
@@ -224,15 +236,6 @@
                 tools:text="Organization" />
 
             <include layout="@layout/dividing_line" />
-
-            <!-- Edit tags buttons -->
-            <ImageButton
-                android:id="@+id/edit_tags"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_edit"
-                />
-
 
         </LinearLayout>
     </ScrollView>
