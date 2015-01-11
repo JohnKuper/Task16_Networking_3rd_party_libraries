@@ -1,10 +1,5 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-    </style>
-
     <style name="TextViewDividingLine">
         <item name="android:background">@color/text_view_dividing_line</item>
         <item name="android:layout_marginTop">5dp</item>

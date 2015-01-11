@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimaryDark">@color/app_color_primary_dark</item>
+        <item name="colorPrimary">@color/app_color_primary</item>
+        <item name="actionBarWidgetTheme">@style/ActionBarWidgetTheme</item>
+    </style>
+
+    <style name="ActionBarWidgetTheme" parent="Widget.AppCompat.SearchView">
+        <item name="android:textColorHint">#BBDEFB</item>
+
+    </style>
+
+</resources>

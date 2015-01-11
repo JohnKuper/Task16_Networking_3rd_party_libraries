@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -162,8 +163,11 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(this);
-        searchView.setSubmitButtonEnabled(true);
-        searchView.setQueryHint("Search for repositories");
+        searchView.setQueryHint("Enter keyword");
+
+        View searchPlate = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+        searchPlate.setBackgroundResource(R.drawable.abc_textfield_search_default_mtrl_alpha);
+
 
     }
 
