@@ -1,5 +1,6 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,6 +14,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragm
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.receiver.RepositoryBroadcastReceiver;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
 
 import org.parceler.Parcels;
 
@@ -62,10 +64,13 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
     }
 
     private void sendBroadCastForStartCheckService() {
-        Intent intent = new Intent();
-        intent.setAction(RepositoryBroadcastReceiver.RECEIVER_ACTION);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        sendBroadcast(intent);
+        String checkFrequency = RepositoriesUtils.getSharedPreferences(this).getString(SettingsActivity.PREF_CHECK_FREQUENCY_KEY, "0");
+        if (!checkFrequency.equals("0")) {
+            Intent intent = new Intent();
+            intent.setAction(RepositoryBroadcastReceiver.RECEIVER_ACTION);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            sendBroadcast(intent);
+        }
     }
 
 

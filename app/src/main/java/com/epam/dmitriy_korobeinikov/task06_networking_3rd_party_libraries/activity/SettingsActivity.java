@@ -17,7 +17,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.recei
 /**
  * Created by Dmitriy Korobeynikov on 1/13/2015.
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener {
 
     public static final String PREF_REPO_NAME_KEY = "prefRepoName";
     public static final String PREF_OWNER_LOGIN_KEY = "prefOwnerLogin";
@@ -28,24 +28,25 @@ public class SettingsActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.settings);
+        findPreference(PREF_CHECK_FREQUENCY_KEY).setOnPreferenceChangeListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        getPreferenceScreen().getSharedPreferences()
-//                .registerOnSharedPreferenceChangeListener(this);
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        getPreferenceScreen().getSharedPreferences()
-//                .unregisterOnSharedPreferenceChangeListener(this);
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
-//    @Override
-//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 //        String keyValue = sharedPreferences.getString(key, "");
 //        Preference checkFrequencyPref = findPreference(key);
 //        if (key.equals(PREF_CHECK_FREQUENCY_KEY) && (!keyValue.equals("0"))) {
@@ -57,7 +58,7 @@ public class SettingsActivity extends PreferenceActivity {
 //            checkFrequencyPref.setSummary("Never");
 //            cancelAlarmManager();
 //        }
-//    }
+    }
 
     private void sendBroadCastForStartCheckService() {
         Intent intent = new Intent();
@@ -75,4 +76,19 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
 
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        String key = preference.getKey();
+        String val = (String) newValue;
+        if (key.equals(PREF_CHECK_FREQUENCY_KEY) && (!val.equals("0"))) {
+            Log.d(BaseContent.LOG_TAG_TASK_06, "Selected value is: " + key);
+            preference.setSummary(val + " minute(s)");
+            sendBroadCastForStartCheckService();
+        } else if (key.equals(PREF_CHECK_FREQUENCY_KEY) && (key.equals("0"))) {
+            Log.d(BaseContent.LOG_TAG_TASK_06, "Cancel value was selected");
+            preference.setSummary("Never");
+            cancelAlarmManager();
+        }
+        return true;
+    }
 }
