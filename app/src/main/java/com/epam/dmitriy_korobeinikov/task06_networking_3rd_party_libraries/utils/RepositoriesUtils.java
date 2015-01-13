@@ -1,6 +1,7 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.BuildConfig;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.receiver.RepositoryBroadcastReceiver;
 import com.ocpsoft.pretty.time.PrettyTime;
 
 import java.text.ParseException;
@@ -57,4 +59,5 @@ public class RepositoriesUtils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences;
     }
+
 }

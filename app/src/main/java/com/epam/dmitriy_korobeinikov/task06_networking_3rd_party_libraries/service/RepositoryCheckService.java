@@ -3,41 +3,32 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.serv
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.BuildConfig;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.converter.JacksonConverter;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Owner;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHub;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHubRestImpl;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
-import retrofit.RestAdapter;
+import java.util.Set;
 
 /**
  * Created by Dmitriy Korobeynikov on 1/12/2015.
  */
 public class RepositoryCheckService extends IntentService {
 
-    public static final String REPO_NAME = "Task15_Activity";
-    public static final String OWNER_LOGIN = "JohnKuper";
     private static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
-    private Notification mNotification;
     private boolean mSuccess;
     private Handler mHandler;
 
@@ -80,7 +71,10 @@ public class RepositoryCheckService extends IntentService {
 
         Log.d(BaseContent.LOG_TAG_TASK_06, "onHandleIntent");
 
-        SearchResult searchResult = getUserRepository(REPO_NAME, OWNER_LOGIN);
+        SharedPreferences preferences = RepositoriesUtils.getSharedPreferences(getApplicationContext());
+        String repoName = preferences.getString(SettingsActivity.PREF_REPO_NAME_KEY, "null");
+        String ownerLogin = preferences.getString(SettingsActivity.PREF_OWNER_LOGIN_KEY, "null");
+        SearchResult searchResult = getUserRepository(repoName, ownerLogin);
         if (isRepositoryStargazersChanged(searchResult)) {
             Log.d(BaseContent.LOG_TAG_TASK_06, "Repository was changed!");
             Repository repository = searchResult.getSingleRepository();
@@ -100,26 +94,28 @@ public class RepositoryCheckService extends IntentService {
         Repository repository = searchResult.getSingleRepository();
         if (repository != null) {
             int stargazers = repository.getStargazersCount();
-            int currentStargazers = RepositoriesUtils.getSharedPreferences(getApplicationContext()).getInt(repository.getName(), -1);
+            int currentStargazers = RepositoriesUtils.getSharedPreferences(getApplicationContext()).getInt(repository.getName(), 0);
             if (stargazers != currentStargazers) {
                 return true;
             }
+        } else {
+            Toast.makeText(getApplicationContext(), "More than one repository was found. Specify the search criteria more detailed.", Toast.LENGTH_LONG).show();
         }
         return false;
     }
 
     private void sendNotificationAboutStargazersChanged(Repository repository) {
         int newRepoStargazers = repository.getStargazersCount();
-        int currentRepoStargazers = RepositoriesUtils.getSharedPreferences(getApplicationContext()).getInt(repository.getName(), -1);
+        int currentRepoStargazers = RepositoriesUtils.getSharedPreferences(getApplicationContext()).getInt(repository.getName(), 0);
         String contentText = "Repository with name " + repository.getName() + " was changed!";
         String subText = "Stargazer count changed from " + currentRepoStargazers + " to " + newRepoStargazers + ".";
-        mNotification = new NotificationCompat.Builder(getApplicationContext()).setContentTitle("Info")
+        Notification notification = new NotificationCompat.Builder(getApplicationContext()).setContentTitle("Info")
                 .setContentText(contentText)
                 .setSubText(subText)
                 .setTicker("Repository changed!")
                 .setAutoCancel(true).setSmallIcon(R.drawable.ic_launcher).build();
 
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        mNotificationManager.notify(NOTIFICATION_ID, notification);
     }
 
     private SearchResult getUserRepository(String repoName, String ownerLogin) {

@@ -2,6 +2,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.acti
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -12,23 +13,22 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragm
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.receiver.RepositoryBroadcastReceiver;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
 
 import org.parceler.Parcels;
 
 
 public class RepoListActivity extends ActionBarActivity implements RepoSelectedListener {
 
-    private FragmentManager mFragmentManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo_list);
 
-        loadSinglePaneMode();
-        sendBroadCastForStartCheckService();
+        PreferenceManager.setDefaultValues(this, R.xml.settings, true);
 
+        loadSinglePaneMode();
+
+        sendBroadCastForStartCheckService();
     }
 
     private boolean isSinglePaneMode() {
@@ -37,12 +37,12 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
 
     private void loadSinglePaneMode() {
 
-        mFragmentManager = getSupportFragmentManager();
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.repo_list_container);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.repo_list_container);
 
         if (fragment == null) {
             fragment = new RepoListFragment();
-            mFragmentManager.beginTransaction().add(R.id.repo_list_container, fragment).commit();
+            fragmentManager.beginTransaction().add(R.id.repo_list_container, fragment).commit();
         }
     }
 
@@ -67,6 +67,8 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         sendBroadcast(intent);
     }
+
+
 }
 
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.service.RepositoryCheckService;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
@@ -23,8 +24,8 @@ public class RepositoryBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(BaseContent.LOG_TAG_TASK_06, "onReceive invoke");
 
-        int checkFrequency = Integer.parseInt(RepositoriesUtils.getSharedPreferences(context).getString("prefCheckFrequency", "-1"));
-        if (checkFrequency != 0 && checkFrequency != -1) {
+        int checkFrequency = Integer.parseInt(RepositoriesUtils.getSharedPreferences(context).getString(SettingsActivity.PREF_CHECK_FREQUENCY_KEY, "0"));
+        if (checkFrequency != 0) {
             startRepositoryCheckService(context);
             setupAlarmManagerForSendPendingIntent(context, checkFrequency);
         }

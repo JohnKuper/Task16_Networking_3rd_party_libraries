@@ -5,24 +5,28 @@
         <EditTextPreference
             android:title="@string/pref_repo_name"
             android:summary="@string/pref_repo_name_summary"
-            android:key="prefRepoName"/>
+            android:key="prefRepoName"
+            android:defaultValue="@string/pref_repo_name_default"/>
         <EditTextPreference
             android:title="@string/pref_repo_owner_login"
             android:summary="@string/pref_repo_owner_login_summary"
-            android:key="prefOwnerLogin"/>
+            android:key="prefOwnerLogin"
+            android:defaultValue="@string/pref_repo_owner_login_default"/>
         <ListPreference
             android:title="@string/pref_check_frequency"
             android:summary="@string/pref_check_frequency_summary"
             android:key="prefCheckFrequency"
             android:entries="@array/checkFrequency"
-            android:entryValues="@array/checkFrequencyValues"/>
+            android:entryValues="@array/checkFrequencyValues"
+            android:defaultValue="@string/pref_check_frequency_default"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Search settings">
         <CheckBoxPreference
             android:title="@string/pref_only_by_tag"
             android:summary="@string/pref_only_by_tag_summary"
-            android:key="prefOnlyByTag"/>
+            android:key="prefOnlyByTag"
+            android:defaultValue="false"/>
     </PreferenceCategory>
 
 
