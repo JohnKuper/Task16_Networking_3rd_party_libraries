@@ -51,21 +51,14 @@ public class RepoTagsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         mRepositoryId = getArguments().getInt(TagContent.REPOSITORY_ID);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_without_search, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_repo_tags, container, false);
-
 
         mEnterTags = (EditText) v.findViewById(R.id.enter_tags_edit);
         mEnterTags.requestFocus();

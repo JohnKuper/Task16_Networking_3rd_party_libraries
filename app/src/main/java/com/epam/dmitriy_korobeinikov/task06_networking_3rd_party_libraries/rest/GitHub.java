@@ -2,7 +2,9 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 
+import retrofit.http.EncodedPath;
 import retrofit.http.GET;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -12,9 +14,9 @@ import retrofit.http.Query;
 public interface GitHub {
 
     @GET("/search/repositories")
-    SearchResult getRepos(@Query("q") String keyword,
-                  @Query("sort") String stars,
-                  @Query("per_page") int resultOnPage);
+    SearchResult getRepos(@Query(value = "q", encodeValue = false) String keyword,
+                          @Query("sort") String stars,
+                          @Query("per_page") int resultOnPage);
 
 
 }

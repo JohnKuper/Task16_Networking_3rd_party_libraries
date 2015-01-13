@@ -2,6 +2,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.frag
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -25,6 +26,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.RepoDetailActivity;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
@@ -155,6 +158,17 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         inflater.inflate(R.menu.menu_with_search, menu);
         setupSearchView(menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return true;
     }
 
     private void setupSearchView(Menu menu) {

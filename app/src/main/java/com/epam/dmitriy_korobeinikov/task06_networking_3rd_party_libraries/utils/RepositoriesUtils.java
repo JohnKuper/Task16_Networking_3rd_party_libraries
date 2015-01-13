@@ -1,6 +1,9 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -48,5 +51,10 @@ public class RepositoriesUtils {
         } else {
             return true;
         }
+    }
+
+    public static SharedPreferences getSharedPreferences(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences;
     }
 }

@@ -1,9 +1,12 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoDetailFragment;
@@ -27,6 +30,23 @@ public class RepoDetailActivity extends ActionBarActivity implements RepoTagsOpe
         setContentView(R.layout.activity_repo_detail);
 
         attachDetailFragment();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_without_search, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent = new Intent(RepoDetailActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return true;
     }
 
     private void attachDetailFragment() {

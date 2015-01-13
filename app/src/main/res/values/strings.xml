@@ -6,6 +6,7 @@
 
     <!--Activities labels-->
     <string name="activity_main_label">Repositories search</string>
+    <string name="activity_settings_label">Application settings</string>
 
     <!--Menu actions labels-->
     <string name="menu_search">Search</string>
@@ -32,5 +33,16 @@
     <!--Button's values-->
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
+
+    <!--Settings activity-->
+    <string name="pref_service_setting_category_title">Checking service settings</string>
+    <string name="pref_repo_name">Set repository name</string>
+    <string name="pref_repo_name_summary">Set tracked repository name</string>
+    <string name="pref_repo_owner_login">Set repository owner login</string>
+    <string name="pref_repo_owner_login_summary">Set tracked repository owner login</string>
+    <string name="pref_check_frequency">Choose check frequency</string>
+    <string name="pref_check_frequency_summary">Choose check frequency in minutes</string>
+    <string name="pref_only_by_tag">Only by tag</string>
+    <string name="pref_only_by_tag_summary">Search repositories only by tag</string>
 
 </resources>

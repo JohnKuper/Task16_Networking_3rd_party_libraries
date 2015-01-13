@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_service_setting_category_title">
+        <EditTextPreference
+            android:title="@string/pref_repo_name"
+            android:summary="@string/pref_repo_name_summary"
+            android:key="prefRepoName"/>
+        <EditTextPreference
+            android:title="@string/pref_repo_owner_login"
+            android:summary="@string/pref_repo_owner_login_summary"
+            android:key="prefOwnerLogin"/>
+        <ListPreference
+            android:title="@string/pref_check_frequency"
+            android:summary="@string/pref_check_frequency_summary"
+            android:key="prefCheckFrequency"
+            android:entries="@array/checkFrequency"
+            android:entryValues="@array/checkFrequencyValues"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Search settings">
+        <CheckBoxPreference
+            android:title="@string/pref_only_by_tag"
+            android:summary="@string/pref_only_by_tag_summary"
+            android:key="prefOnlyByTag"/>
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

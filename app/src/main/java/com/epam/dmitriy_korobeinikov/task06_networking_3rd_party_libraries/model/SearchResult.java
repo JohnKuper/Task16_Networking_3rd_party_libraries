@@ -44,6 +44,13 @@ public class SearchResult {
         return repositories;
     }
 
+    public Repository getSingleRepository() {
+        if (getItemsAsList().size() == 1) {
+            return getItemsAsList().get(0);
+        }
+        return null;
+    }
+
     public int getId() {
         return id;
     }
