@@ -6,7 +6,10 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,20 +19,19 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activ
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.receiver.RepositoryBroadcastReceiver;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHub;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHubRestImpl;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
-
-import java.util.Set;
 
 /**
  * Created by Dmitriy Korobeynikov on 1/12/2015.
+ * Service for tracking the repository from a particular user. Repository name and
+ * owner login for GitHub, should be specify in Settings.
  */
 public class RepositoryCheckService extends IntentService {
 
-    private static final int NOTIFICATION_ID = 1;
+    private static final int REPOSITORY_CHANGE_NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
-    private boolean mSuccess;
     private Handler mHandler;
 
     public RepositoryCheckService() {
@@ -41,37 +43,37 @@ public class RepositoryCheckService extends IntentService {
         super.onCreate();
         Log.d(BaseContent.LOG_TAG_TASK_06, "Service create");
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
         mHandler = new Handler();
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    public void onDestroy() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mSuccess) {
-                    Toast.makeText(getApplicationContext(), "Service finished work with success", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Service finished WITHOUT success", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        });
-        super.onDestroy();
-
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
         Log.d(BaseContent.LOG_TAG_TASK_06, "onHandleIntent");
+        if (isOnline()) {
+            checkRepository();
+        } else {
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+            editor.putString(SettingsActivity.PREF_CHECK_FREQUENCY_KEY, "0").apply();
+            RepositoryBroadcastReceiver.cancelAlarmManager(getApplicationContext());
+            SettingsActivity.setPreviousValueNever(true);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Internet connection is not available. Repositories tracking is disabled.", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
 
-        SharedPreferences preferences = RepositoriesUtils.getSharedPreferences(getApplicationContext());
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    private void checkRepository() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String repoName = preferences.getString(SettingsActivity.PREF_REPO_NAME_KEY, "null");
         String ownerLogin = preferences.getString(SettingsActivity.PREF_OWNER_LOGIN_KEY, "null");
         SearchResult searchResult = getUserRepository(repoName, ownerLogin);
@@ -81,11 +83,10 @@ public class RepositoryCheckService extends IntentService {
             sendNotificationAboutStargazersChanged(repository);
             updateRepositoryCurrentStargazersCount(repository);
         }
-        mSuccess = true;
     }
 
     private void updateRepositoryCurrentStargazersCount(Repository repository) {
-        SharedPreferences.Editor editor = RepositoriesUtils.getSharedPreferences(getApplicationContext()).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
         editor.putInt(repository.getName(), repository.getStargazersCount());
         editor.apply();
     }
@@ -94,19 +95,25 @@ public class RepositoryCheckService extends IntentService {
         Repository repository = searchResult.getSingleRepository();
         if (repository != null) {
             int stargazers = repository.getStargazersCount();
-            int currentStargazers = RepositoriesUtils.getSharedPreferences(getApplicationContext()).getInt(repository.getName(), 0);
+            int currentStargazers = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt(repository.getName(), 0);
             if (stargazers != currentStargazers) {
                 return true;
             }
         } else {
-            Toast.makeText(getApplicationContext(), "More than one repository was found. Specify the search criteria more detailed.", Toast.LENGTH_LONG).show();
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "More than one repository was found. Specify the search criteria more detailed.", Toast.LENGTH_LONG).show();
+
+                }
+            });
         }
         return false;
     }
 
     private void sendNotificationAboutStargazersChanged(Repository repository) {
         int newRepoStargazers = repository.getStargazersCount();
-        int currentRepoStargazers = RepositoriesUtils.getSharedPreferences(getApplicationContext()).getInt(repository.getName(), 0);
+        int currentRepoStargazers = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt(repository.getName(), 0);
         String contentText = "Repository with name " + repository.getName() + " was changed!";
         String subText = "Stargazer count changed from " + currentRepoStargazers + " to " + newRepoStargazers + ".";
         Notification notification = new NotificationCompat.Builder(getApplicationContext()).setContentTitle("Info")
@@ -115,16 +122,13 @@ public class RepositoryCheckService extends IntentService {
                 .setTicker("Repository changed!")
                 .setAutoCancel(true).setSmallIcon(R.drawable.ic_launcher).build();
 
-        mNotificationManager.notify(NOTIFICATION_ID, notification);
+        mNotificationManager.notify(REPOSITORY_CHANGE_NOTIFICATION_ID, notification);
     }
 
     private SearchResult getUserRepository(String repoName, String ownerLogin) {
         GitHub gitHub = GitHubRestImpl.getGitHubRestAdapter();
-        String qualifiersPath = getSearchQualifiersPath(repoName, ownerLogin);
+        String qualifiersPath = repoName + "+user:" + ownerLogin;
         return gitHub.getRepos(qualifiersPath, "stars", 10);
     }
 
-    private String getSearchQualifiersPath(String repoName, String ownerLogin) {
-        return repoName + "+user:" + ownerLogin;
-    }
 }

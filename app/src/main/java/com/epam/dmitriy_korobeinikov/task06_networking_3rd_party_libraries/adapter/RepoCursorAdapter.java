@@ -21,8 +21,8 @@ import com.squareup.picasso.Picasso;
  */
 public class RepoCursorAdapter extends CursorAdapter {
 
-    public RepoCursorAdapter(Context context, Cursor c, int flags) {
-        super(context, c, flags);
+    public RepoCursorAdapter(Context context, Cursor c) {
+        super(context, c, 0);
     }
 
     @Override
@@ -38,6 +38,11 @@ public class RepoCursorAdapter extends CursorAdapter {
         holder.repoStars = (TextView) v.findViewById(R.id.repo_stars);
         v.setTag(holder);
         return v;
+    }
+
+    @Override
+    public Cursor getCursor() {
+        return super.getCursor();
     }
 
     @Override

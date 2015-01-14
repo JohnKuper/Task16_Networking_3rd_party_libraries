@@ -51,11 +51,11 @@ public class RepositoriesContentProvider extends ContentProvider {
     }
 
     private SQLiteDatabase mSQLiteDatabase;
+    private DBHelper mDBHelper;
 
     @Override
     public boolean onCreate() {
-        DBHelper mDBHelper = new DBHelper(getContext());
-        mSQLiteDatabase = mDBHelper.getWritableDatabase();
+        mDBHelper = new DBHelper(getContext());
         return true;
     }
 
@@ -83,7 +83,7 @@ public class RepositoriesContentProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Log.d(BaseContent.LOG_TAG_TASK_06, "query, " + uri.toString());
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        String tables = RepositoryContent.TABLE_NAME + " JOIN "
+        String tables = RepositoryContent.TABLE_NAME + " INNER JOIN "
                 + OwnerContent.TABLE_NAME + " ON " + RepositoryContent.OWNER_ID + " = " + OwnerContent.FULL_ID;
 
         switch (URI_MATCHER.match(uri)) {
@@ -108,6 +108,7 @@ public class RepositoriesContentProvider extends ContentProvider {
             default:
                 throw new IllegalStateException("URI is not supported: " + uri);
         }
+        mSQLiteDatabase = mDBHelper.getWritableDatabase();
         Cursor cursor = queryBuilder.query(mSQLiteDatabase, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
@@ -137,6 +138,7 @@ public class RepositoriesContentProvider extends ContentProvider {
 
         long row = 0;
         try {
+            mSQLiteDatabase = mDBHelper.getWritableDatabase();
             row = mSQLiteDatabase.insertOrThrow(TagContent.TABLE_NAME, null, values);
         } catch (SQLiteConstraintException e) {
             Log.e(BuildConfig.APPLICATION_ID, "SQLite constraint during insert: ", e);
@@ -157,6 +159,7 @@ public class RepositoriesContentProvider extends ContentProvider {
         } else {
             selection = selection + " AND " + TagContent.REPOSITORY_ID + " = " + id;
         }
+        mSQLiteDatabase = mDBHelper.getWritableDatabase();
         int deleteRows = mSQLiteDatabase.delete(TagContent.TABLE_NAME, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
 
@@ -176,11 +179,12 @@ public class RepositoriesContentProvider extends ContentProvider {
         }
         int updateRows;
         try {
+            mSQLiteDatabase = mDBHelper.getWritableDatabase();
             updateRows = mSQLiteDatabase.updateWithOnConflict(TagContent.TABLE_NAME, values, selection, selectionArgs, SQLiteDatabase.CONFLICT_ROLLBACK);
             getContext().getContentResolver().notifyChange(uri, null);
         } catch (SQLiteConstraintException e) {
             Log.e(BuildConfig.APPLICATION_ID, "SQLite constraint during update: " + e);
-            Toast.makeText(getContext(), ONLY_UNIQUE_TAGS, Toast.LENGTH_LONG).show();
+            SingleToast.show(getContext(), ONLY_UNIQUE_TAGS, Toast.LENGTH_LONG);
             return -1;
         }
 

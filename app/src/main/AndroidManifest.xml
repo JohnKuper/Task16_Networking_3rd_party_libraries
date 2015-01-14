@@ -43,7 +43,6 @@
             <intent-filter>
                 <action android:name="com.johnkuper.epam.action.RepositoryCheckService"/>
 
-                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </receiver>
     </application>

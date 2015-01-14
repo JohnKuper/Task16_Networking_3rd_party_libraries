@@ -5,12 +5,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.service.RepositoryCheckService;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
 
 /**
  * Created by Dmitriy Korobeynikov on 1/12/2015.
@@ -24,10 +24,10 @@ public class RepositoryBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(BaseContent.LOG_TAG_TASK_06, "onReceive invoke");
 
-        int checkFrequency = Integer.parseInt(RepositoriesUtils.getSharedPreferences(context).getString(SettingsActivity.PREF_CHECK_FREQUENCY_KEY, "0"));
+        int checkFrequency = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_CHECK_FREQUENCY_KEY, "0"));
         if (checkFrequency != 0) {
             startRepositoryCheckService(context);
-            setupAlarmManagerForSendPendingIntent(context, checkFrequency);
+            setupAlarmManager(context, checkFrequency);
         }
     }
 
@@ -36,14 +36,23 @@ public class RepositoryBroadcastReceiver extends BroadcastReceiver {
         context.startService(serviceIntent);
     }
 
-    private void setupAlarmManagerForSendPendingIntent(Context context, int checkFrequency) {
-        Intent receiverIntent = new Intent();
-        receiverIntent.setAction(RECEIVER_ACTION);
-        receiverIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, CHECK_SERVICE_REQUEST_CODE, receiverIntent, 0);
+    private void setupAlarmManager(Context context, int checkFrequency) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-        int checkFrequencyInMinutes = checkFrequency * 1000 * 60;
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + checkFrequencyInMinutes, pendingIntent);
+        int checkFrequencyInMinutes = checkFrequency * 1000 * 20;
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + checkFrequencyInMinutes, getPendingIntent(context));
     }
+
+    public static void cancelAlarmManager(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = getPendingIntent(context);
+        pendingIntent.cancel();
+        alarmManager.cancel(pendingIntent);
+    }
+
+    public static PendingIntent getPendingIntent(Context context) {
+        Intent intent = new Intent();
+        intent.setAction(RepositoryBroadcastReceiver.RECEIVER_ACTION);
+        return PendingIntent.getBroadcast(context, CHECK_SERVICE_REQUEST_CODE, intent, 0);
+    }
+
 }

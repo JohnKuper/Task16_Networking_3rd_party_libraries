@@ -1,15 +1,10 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.EditText;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.BuildConfig;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.receiver.RepositoryBroadcastReceiver;
 import com.ocpsoft.pretty.time.PrettyTime;
 
 import java.text.ParseException;
@@ -48,16 +43,7 @@ public class RepositoriesUtils {
     }
 
     public static boolean isEditTextEmpty(EditText etText) {
-        if (etText.getText().toString().trim().length() > 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public static SharedPreferences getSharedPreferences(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences;
+        return etText.getText().toString().trim().length() <= 0;
     }
 
 }

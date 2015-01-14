@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
@@ -26,7 +25,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.RepoDetailActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
@@ -49,14 +47,66 @@ import com.octo.android.robospice.request.listener.RequestListener;
 public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     public static final int REPOSITORIES_LOADER = 1;
+    public static final String FRAGMENT_TAG = "RepoListFragment";
 
     private ProgressDialog mDialog;
     private long mLastClickTime;
     private RepoCursorAdapter mRepoCursorAdapter;
     private String mKeyword;
+    private ListView mRepoList;
 
     private RepoSelectedListener mRepoSelectedListener;
     protected SpiceManager spiceManager = new SpiceManager(DBCacheSpiceService.class);
+
+    @Override
+    public void onAttach(Activity activity) {
+        mRepoSelectedListener = (RepoSelectedListener) activity;
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " onCreate()");
+        if (savedInstanceState != null) {
+            mKeyword = savedInstanceState.getString("keyword");
+        }
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " onCreateView()");
+
+        View v = inflater.inflate(R.layout.fragment_repo_list, container, false);
+        mRepoList = (ListView) v.findViewById(R.id.repo_list);
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (mRepoCursorAdapter == null) {
+            mRepoCursorAdapter = new RepoCursorAdapter(getActivity(), null);
+        }
+
+        mRepoList.setAdapter(mRepoCursorAdapter);
+        mRepoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RepositoryCursorItem cursorItem = new RepositoryCursorItem();
+                cursorItem.parseDataFromCursor((Cursor) mRepoCursorAdapter.getItem(position));
+                mRepoSelectedListener.onRepoSelected(cursorItem);
+            }
+        });
+
+        if (mKeyword != null) {
+            startRepositoriesCursorLoader();
+            Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " startRepositoriesCursorLoader()");
+        }
+
+    }
 
     @Override
     public void onStart() {
@@ -74,48 +124,23 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        mRepoSelectedListener = (RepoSelectedListener) activity;
-        super.onAttach(activity);
-    }
-
-    @Override
     public void onDetach() {
         mRepoSelectedListener = null;
         super.onDetach();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_repo_list, container, false);
-
-        mRepoCursorAdapter = new RepoCursorAdapter(getActivity(), null, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-
-        ListView mRepoList = (ListView) v.findViewById(R.id.repo_list);
-        mRepoList.setAdapter(mRepoCursorAdapter);
-        mRepoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RepositoryCursorItem cursorItem = new RepositoryCursorItem();
-                cursorItem.parseDataFromCursor((Cursor) mRepoCursorAdapter.getItem(position));
-                mRepoSelectedListener.onRepoSelected(cursorItem);
-            }
-        });
-
-        return v;
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " onSaveInstanceState()");
+        outState.putString("keyword", mKeyword);
     }
 
     private class GeneralDataRequestListener implements RequestListener<SearchResult> {
 
         @Override
         public void onRequestFailure(SpiceException e) {
-            Log.d(BaseContent.LOG_TAG_TASK_06, "Request failure: ", e);
+            Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " Request failure: ", e);
         }
 
         @Override
@@ -129,6 +154,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
                 Toast.makeText(getActivity(), "Search is complete. There are no results to display", Toast.LENGTH_SHORT).show();
             }
         }
+
     }
 
     private void dismissProgressDialog() {
