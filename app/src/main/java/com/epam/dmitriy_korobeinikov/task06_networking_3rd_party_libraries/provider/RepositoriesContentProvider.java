@@ -31,6 +31,7 @@ import java.util.Map;
  */
 public class RepositoriesContentProvider extends ContentProvider {
 
+    public static final String LOG_TAG = RepositoriesContentProvider.class.getSimpleName();
     private static final String ONLY_UNIQUE_TAGS = "The repository can only have unique tags";
 
     private static final UriMatcher URI_MATCHER;
@@ -81,7 +82,7 @@ public class RepositoriesContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.d(BaseContent.LOG_TAG_TASK_06, "query, " + uri.toString());
+        Log.d(LOG_TAG, ": query, " + uri.toString());
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         String tables = RepositoryContent.TABLE_NAME + " JOIN "
                 + OwnerContent.TABLE_NAME + " ON " + RepositoryContent.OWNER_ID + " = " + OwnerContent.FULL_ID;
@@ -116,7 +117,7 @@ public class RepositoriesContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        Log.d(BaseContent.LOG_TAG_TASK_06, "getType, " + uri.toString());
+        Log.d(LOG_TAG, ": getType, " + uri.toString());
         switch (URI_MATCHER.match(uri)) {
 
             case RepositoryContent.REPOSITORY_URI_PATTERN_MANY:
@@ -141,7 +142,7 @@ public class RepositoriesContentProvider extends ContentProvider {
             mSQLiteDatabase = mDBHelper.getWritableDatabase();
             row = mSQLiteDatabase.insertOrThrow(TagContent.TABLE_NAME, null, values);
         } catch (SQLiteConstraintException e) {
-            Log.e(BuildConfig.APPLICATION_ID, "SQLite constraint during insert: ", e);
+            Log.e(LOG_TAG, ": SQLite constraint during insert ", e);
             SingleToast.show(getContext(), ONLY_UNIQUE_TAGS, Toast.LENGTH_LONG);
         }
         Uri newUri = ContentUris.withAppendedId(TagContent.TAGS_URI, row);
@@ -183,7 +184,7 @@ public class RepositoriesContentProvider extends ContentProvider {
             updateRows = mSQLiteDatabase.updateWithOnConflict(TagContent.TABLE_NAME, values, selection, selectionArgs, SQLiteDatabase.CONFLICT_ROLLBACK);
             getContext().getContentResolver().notifyChange(uri, null);
         } catch (SQLiteConstraintException e) {
-            Log.e(BuildConfig.APPLICATION_ID, "SQLite constraint during update: " + e);
+            Log.e(LOG_TAG, ": SQLite constraint during update " + e);
             SingleToast.show(getContext(), ONLY_UNIQUE_TAGS, Toast.LENGTH_LONG);
             return -1;
         }
@@ -192,7 +193,7 @@ public class RepositoriesContentProvider extends ContentProvider {
     }
 
     private void checkPatternOneUriForTagContent(Uri uri, String methodName) {
-        Log.d(BaseContent.LOG_TAG_TASK_06, methodName + ": " + uri.toString());
+        Log.d(LOG_TAG, methodName + ": " + uri.toString());
         if (URI_MATCHER.match(uri) != TagContent.TAG_URI_PATTERN_ONE)
             throw new IllegalArgumentException("Wrong URI: " + uri);
     }

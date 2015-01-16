@@ -22,13 +22,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
@@ -47,14 +45,20 @@ import com.octo.android.robospice.request.listener.RequestListener;
  */
 public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
+    public static final String LOG_TAG = RepoListFragment.class.getSimpleName();
     public static final int REPOSITORIES_LOADER = 1;
-    public static final String FRAGMENT_TAG = "RepoListFragment";
+    public static final String KEYWORD_BUNDLE_KEY = "keyWord";
+    public static final String SEARCH_VIEW_QUERY_BUNDLE_KEY = "searchViewQuery";
+
+    //SavedInstanceState values
+    private String mKeyword;
+    private String mSearchViewQuery;
 
     private ProgressDialog mDialog;
-    private long mLastClickTime;
     private RepoCursorAdapter mRepoCursorAdapter;
-    private String mKeyword;
     private ListView mRepoList;
+    private SearchView mSearchView;
+    private long mLastClickTime;
 
     private RepoSelectedListener mRepoSelectedListener;
     protected SpiceManager spiceManager = new SpiceManager(DBCacheSpiceService.class);
@@ -67,17 +71,19 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " onCreate()");
+        Log.d(LOG_TAG, " onCreate()");
         setHasOptionsMenu(true);
         if (savedInstanceState != null) {
-            mKeyword = savedInstanceState.getString("keyword");
+            mKeyword = savedInstanceState.getString(KEYWORD_BUNDLE_KEY);
+            mSearchViewQuery = savedInstanceState.getString(SEARCH_VIEW_QUERY_BUNDLE_KEY);
+
         }
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " onCreateView()");
+        Log.d(LOG_TAG, " onCreateView()");
 
         View v = inflater.inflate(R.layout.fragment_repo_list, container, false);
 
@@ -106,7 +112,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
         if (mKeyword != null) {
             startRepositoriesCursorLoader();
-            Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " startRepositoriesCursorLoader()");
+            Log.d(LOG_TAG, " startRepositoriesCursorLoader()");
         }
 
     }
@@ -135,20 +141,21 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " onSaveInstanceState()");
-        outState.putString("keyword", mKeyword);
+        Log.d(LOG_TAG, " onSaveInstanceState()");
+        outState.putString(KEYWORD_BUNDLE_KEY, mKeyword);
+        outState.putString(SEARCH_VIEW_QUERY_BUNDLE_KEY, mSearchView.getQuery().toString());
     }
 
     private class GeneralDataRequestListener implements RequestListener<SearchResult> {
 
         @Override
         public void onRequestFailure(SpiceException e) {
-            Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " Request failure: ", e);
+            Log.d(LOG_TAG, " Request failure: ", e);
         }
 
         @Override
         public void onRequestSuccess(SearchResult searchResult) {
-            Log.d(BaseContent.LOG_TAG_TASK_06, "<<<<<< SUCCESS >>>>>> ");
+            Log.d(LOG_TAG, "<<<<<< SUCCESS >>>>>> ");
 
             startRepositoriesCursorLoader();
             dismissProgressDialog();
@@ -184,6 +191,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.d(LOG_TAG, " onCreateOptionsMenu");
         inflater.inflate(R.menu.menu_with_search, menu);
         setupSearchView(menu);
         super.onCreateOptionsMenu(menu, inflater);
@@ -202,12 +210,15 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     private void setupSearchView(Menu menu) {
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        searchView.setIconifiedByDefault(false);
-        searchView.setOnQueryTextListener(this);
-        searchView.setQueryHint("Enter keyword");
+        MenuItemCompat.expandActionView(searchMenuItem);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setQueryHint("Enter keyword");
+        mSearchView.setQuery(mSearchViewQuery, false);
 
-        View searchPlate = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+
+        View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
         searchPlate.setBackgroundResource(R.drawable.abc_textfield_search_default_mtrl_alpha);
 
 
