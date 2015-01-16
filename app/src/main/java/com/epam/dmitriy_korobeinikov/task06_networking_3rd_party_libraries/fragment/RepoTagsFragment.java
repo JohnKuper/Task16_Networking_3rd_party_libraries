@@ -33,6 +33,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils
  */
 public class RepoTagsFragment extends Fragment {
 
+    public static final String FRAGMENT_TAG = "RepoTagsFragment";
     public static final int TAGS_LOADER = 2;
 
     private int mRepositoryId;

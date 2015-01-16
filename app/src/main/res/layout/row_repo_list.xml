@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/repo_row_data"
-    android:layout_width="fill_parent"
-    android:layout_height="88dp"
-    android:background="@drawable/list_selector"
-    android:orientation="horizontal"
-    tools:ignore="ContentDescription">
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/repo_row_data"
+                android:layout_width="fill_parent"
+                android:layout_height="88dp"
+                android:orientation="horizontal"
+                tools:ignore="ContentDescription">
 
     <!-- Left side Thumbnail image -->
     <LinearLayout
@@ -16,21 +16,21 @@
         android:padding="3dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@drawable/image_bg"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp">
 
-        <!-- Repository image -->
-        <ImageView
+        <com.makeramen.RoundedImageView
             android:id="@+id/repo_image"
-            android:layout_width="41dp"
-            android:layout_height="41dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:src="@drawable/ic_github"
-            android:scaleType="centerCrop" />
-
+            android:scaleType="fitCenter"
+            app:riv_border_width="1dp"
+            app:riv_border_color="#333333"
+            app:riv_oval="true"/>
     </LinearLayout>
 
 
@@ -43,12 +43,12 @@
         android:layout_toEndOf="@id/thumbnail"
         android:paddingTop="12dp"
         tools:text="Universal image loader"
-        android:textColor="#000000"
+        android:textColor="@android:color/black"
         android:textSize="16sp"
         android:typeface="sans"
         android:maxEms="13"
         android:maxLines="1"
-        android:ellipsize="end" />
+        android:ellipsize="end"/>
 
     <!-- Repository language-->
     <TextView
@@ -62,7 +62,7 @@
         android:maxLength="20"
         android:textColor="#343434"
         android:textSize="14sp"
-        android:typeface="sans" />
+        android:typeface="sans"/>
 
     <!-- Repository update date-->
     <TextView
@@ -77,7 +77,7 @@
         android:layout_toRightOf="@+id/thumbnail"
         android:layout_toEndOf="@id/thumbnail"
         tools:text="Updated: Jan 17,2014"
-        android:typeface="sans" />
+        android:typeface="sans"/>
 
     <!-- Right end Arrow -->
     <ImageView
@@ -87,7 +87,7 @@
         android:src="@drawable/ic_arrow"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"/>
 
     <!-- Star icon -->
     <ImageView
@@ -98,7 +98,7 @@
         android:layout_toLeftOf="@id/arrow_image"
         android:layout_toStartOf="@id/arrow_image"
         android:layout_centerVertical="true"
-        android:padding="5dp" />
+        android:padding="5dp"/>
 
     <!-- Amount of stars-->
     <TextView
@@ -106,10 +106,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="italic"
-        tools:text="5693"
         android:layout_toLeftOf="@id/star_image"
         android:layout_toStartOf="@id/star_image"
-        android:layout_centerVertical="true" />
-
+        android:layout_centerVertical="true"
+        android:textColor="@android:color/black"
+        tools:text="5693"/>
 
 </RelativeLayout>

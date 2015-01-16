@@ -1,13 +1,14 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
+
 import org.parceler.Parcel;
 import org.parceler.Transient;
 
@@ -15,7 +16,7 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * Created by Dmitriy_Korobeinikov on 12/15/2014.
+ * Created by Dmitriy Korobeynikov on 12/15/2014.
  * Contains repository data from JSON and describes database table's fields.
  */
 

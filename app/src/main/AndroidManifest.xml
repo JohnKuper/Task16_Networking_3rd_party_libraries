@@ -12,7 +12,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.RepoListActivity"
-            android:label="@string/activity_main_label">
+            android:label="@string/activity_main_label"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -20,11 +21,19 @@
         </activity>
         <activity
             android:name=".activity.RepoDetailActivity"
-            android:label="Repository detail"/>
+            android:label="Repository detail">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.RepoListActivity"/>
+        </activity>
 
         <activity
             android:name=".activity.SettingsActivity"
-            android:label="@string/activity_settings_label"/>
+            android:label="@string/activity_settings_label">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.RepoListActivity"/>
+        </activity>
 
         <service
             android:name=".robospice.DBCacheSpiceService"

@@ -25,6 +25,7 @@ import org.parceler.Parcels;
  */
 public class RepoDetailFragment extends Fragment {
 
+    public static final String FRAGMENT_TAG = "RepoDetailFragment";
     private RepositoryCursorItem mRepository;
     private RepoTagsOpenListener tagsOpenListener;
 

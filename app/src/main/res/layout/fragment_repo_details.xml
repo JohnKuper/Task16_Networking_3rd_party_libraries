@@ -12,16 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:background="@drawable/gradient_detail_header_bg">
+        android:background="@drawable/fragment_repo_detail_header_bg">
         <!-- Repository image -->
-        <ImageView
+        <com.makeramen.RoundedImageView
             android:id="@+id/detail_repo_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_github"
-            android:scaleType="centerCrop"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_github"
+            android:scaleType="fitCenter"
+            app:riv_border_width="1dp"
+            app:riv_border_color="#333333"
+            app:riv_oval="true"/>
 
         <!--Main title-->
         <TextView
@@ -34,8 +37,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textSize="16sp"
-            android:typeface="sans"
-            android:textColor="@color/background_material_dark"/>
+            android:textColor="@android:color/black"/>
 
         <!-- Edit tags buttons -->
         <ImageButton
@@ -63,10 +65,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="italic"
-            tools:text="5693"
             android:paddingTop="5dp"
             android:layout_toLeftOf="@id/detail_star_image"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/black"
+            tools:text="5693"/>
     </RelativeLayout>
 
     <ScrollView
@@ -76,7 +79,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/gradient_detail_bg"
             android:paddingLeft="@dimen/activity_padding"
             android:paddingRight="@dimen/activity_padding"
             android:paddingBottom="@dimen/activity_padding"

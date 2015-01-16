@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
@@ -66,8 +67,8 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " onCreate()");
+        setHasOptionsMenu(true);
         if (savedInstanceState != null) {
             mKeyword = savedInstanceState.getString("keyword");
         }
@@ -79,6 +80,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         Log.d(BaseContent.LOG_TAG_TASK_06, FRAGMENT_TAG + " onCreateView()");
 
         View v = inflater.inflate(R.layout.fragment_repo_list, container, false);
+
         mRepoList = (ListView) v.findViewById(R.id.repo_list);
         return v;
     }
@@ -100,6 +102,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
                 mRepoSelectedListener.onRepoSelected(cursorItem);
             }
         });
+        mRepoList.setEmptyView(getActivity().findViewById(R.id.empty));
 
         if (mKeyword != null) {
             startRepositoriesCursorLoader();

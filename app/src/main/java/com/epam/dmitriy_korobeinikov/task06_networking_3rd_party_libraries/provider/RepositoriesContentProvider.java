@@ -83,7 +83,7 @@ public class RepositoriesContentProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Log.d(BaseContent.LOG_TAG_TASK_06, "query, " + uri.toString());
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        String tables = RepositoryContent.TABLE_NAME + " INNER JOIN "
+        String tables = RepositoryContent.TABLE_NAME + " JOIN "
                 + OwnerContent.TABLE_NAME + " ON " + RepositoryContent.OWNER_ID + " = " + OwnerContent.FULL_ID;
 
         switch (URI_MATCHER.match(uri)) {

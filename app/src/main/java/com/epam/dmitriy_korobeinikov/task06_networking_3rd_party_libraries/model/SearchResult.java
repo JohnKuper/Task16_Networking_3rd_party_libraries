@@ -1,19 +1,19 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.SearchResultContent;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Created by Dmitriy_Korobeinikov on 12/15/2014.
- * Contains search result data from JSON and describes database table's fields.
+ * Created by Dmitriy Korobeynikov on 12/15/2014.
+ * Contains search result data from JSON and describes database table's fields for ORMLite.
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)

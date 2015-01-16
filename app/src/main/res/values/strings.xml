@@ -3,10 +3,14 @@
 
     <!--App values-->
     <string name="app_name">Task06_Networking_3rd_Party_Libraries</string>
+    <string name="list_view_empty_message">Enter a keyword to search for suitable repositories</string>
 
     <!--Activities labels-->
     <string name="activity_main_label">Repositories search</string>
     <string name="activity_settings_label">Application settings</string>
+
+    <!--Activity two pane-->
+    <string name="repo_detail_container_empty_message">Detailed information about the repository</string>
 
     <!--Menu actions labels-->
     <string name="menu_search">Search</string>
@@ -47,5 +51,7 @@
     <string name="pref_check_frequency_default">0</string>
     <string name="pref_only_by_tag">Only by tag</string>
     <string name="pref_only_by_tag_summary">Search repositories only by tag</string>
+
+
 
 </resources>

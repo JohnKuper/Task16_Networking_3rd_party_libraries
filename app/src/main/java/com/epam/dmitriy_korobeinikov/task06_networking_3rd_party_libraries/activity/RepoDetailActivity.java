@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +30,7 @@ public class RepoDetailActivity extends ActionBarActivity implements RepoTagsOpe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachDetailFragment();
     }
@@ -44,6 +47,9 @@ public class RepoDetailActivity extends ActionBarActivity implements RepoTagsOpe
             case R.id.action_settings:
                 Intent intent = new Intent(RepoDetailActivity.this, SettingsActivity.class);
                 startActivity(intent);
+                break;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
                 break;
         }
         return true;

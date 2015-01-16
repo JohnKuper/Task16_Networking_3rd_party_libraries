@@ -35,7 +35,6 @@
         android:paddingBottom="8dp"
         android:divider="#b5b5b5"
         android:dividerHeight="1dp"
-        android:listSelector="@drawable/list_selector"
         android:clickable="true"/>
 
 </LinearLayout>

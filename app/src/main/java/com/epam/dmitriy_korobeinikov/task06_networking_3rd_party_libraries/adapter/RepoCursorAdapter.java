@@ -15,6 +15,8 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.conte
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
 import com.squareup.picasso.Picasso;
 
+import java.io.PipedInputStream;
+
 /**
  * Created by Dmitriy Korobeynikov on 12/29/2014.
  * Fills the list of GitHub's repositories by data from cursor.
@@ -54,8 +56,7 @@ public class RepoCursorAdapter extends CursorAdapter {
         holder.repoUpdateDate.setText("Updated: " + RepositoriesUtils.getElapsedDate(cursor, RepositoryContent.UPDATED_AT));
         holder.repoStars.setText(String.valueOf(cursor.getString(cursor.getColumnIndex(RepositoryContent.STARGAZERS_COUNT))));
 
-        Picasso.with(context).setIndicatorsEnabled(true);
-        Picasso.with(context).load(cursor.getString(cursor.getColumnIndex(OwnerContent.AVATAR_URL))).into(holder.repoImage);
+        Picasso.with(context).load(cursor.getString(cursor.getColumnIndex(OwnerContent.AVATAR_URL))).noFade().into(holder.repoImage);
 
     }
 

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="action_settings" />
+    <item type="id" name="action_settings"/>
+    <item type="id" name="repo_list_container"/>
+    <item type="id" name="repo_detail_container"/>
+    <item type="id" name="empty"/>
 </resources>

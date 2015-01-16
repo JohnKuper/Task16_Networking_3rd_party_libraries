@@ -3,16 +3,10 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robo
 import android.util.Log;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.converter.JacksonConverter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHub;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHubRestImpl;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
-
-import org.codehaus.jackson.map.ObjectMapper;
-
-import retrofit.RestAdapter;
-import retrofit.android.AndroidLog;
 
 /**
  * Created by Dmitriy Korobeynikov on 12/15/2014.

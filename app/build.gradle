@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries"
@@ -39,6 +39,7 @@ android {
         compile 'com.squareup.retrofit:retrofit:1.8.0'
         compile 'com.squareup.picasso:picasso:2.3.3'
         compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+        compile 'com.squareup.retrofit:converter-jackson:1.8.0'
         compile 'com.octo.android.robospice:robospice:1.4.14'
         compile 'com.octo.android.robospice:robospice-spring-android:1.4.14'
         compile 'com.squareup.okhttp:okhttp:2.1.0'
@@ -48,5 +49,6 @@ android {
         compile "com.tojc.ormlite.android:ormlite-content-provider-library:1.0.4"
         compile 'com.octo.android.robospice:robospice-ormlite:1.4.14'
         compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
+        compile 'com.makeramen:roundedimageview:1.5.0'
     }
 }
