@@ -13,9 +13,8 @@ import retrofit.http.Query;
  */
 public interface GitHub {
 
-    @GET("/search/repositories")
+    @GET("/search/repositories?sort=stars")
     SearchResult getRepos(@Query(value = "q", encodeValue = false) String keyword,
-                          @Query("sort") String stars,
                           @Query("per_page") int resultOnPage);
 
 

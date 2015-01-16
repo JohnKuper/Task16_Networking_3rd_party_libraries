@@ -21,7 +21,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.receiver.RepositoryBroadcastReceiver;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHub;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHubRestImpl;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice.DBCacheSpiceService;
 
 /**
  * Created by Dmitriy Korobeynikov on 1/12/2015.
@@ -126,9 +126,9 @@ public class RepositoryCheckService extends IntentService {
     }
 
     private SearchResult getUserRepository(String repoName, String ownerLogin) {
-        GitHub gitHub = GitHubRestImpl.getGitHubRestAdapter();
+        GitHub gitHub = DBCacheSpiceService.getGitHubRestAdapter();
         String qualifiersPath = repoName + "+user:" + ownerLogin;
-        return gitHub.getRepos(qualifiersPath, "stars", 10);
+        return gitHub.getRepos(qualifiersPath, 10);
     }
 
 }

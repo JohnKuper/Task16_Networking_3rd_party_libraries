@@ -2,34 +2,34 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robo
 
 import android.util.Log;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHub;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHubRestImpl;
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
 /**
  * Created by Dmitriy Korobeynikov on 12/15/2014.
  * Asynchronous rest request with Robospice and Retrofit.
  */
-public class GithubSpiceRetrofitRequest extends SpringAndroidSpiceRequest<SearchResult> {
+public class GithubSpiceRetrofitRequest extends RetrofitSpiceRequest<SearchResult, GitHub> {
 
-    private String keyword;
+    public static final String LOG_TAG = GithubSpiceRetrofitRequest.class.getSimpleName();
+    private String mKeyword;
+    private int mPerPage;
 
-    public GithubSpiceRetrofitRequest(Class<SearchResult> clazz, String keyword) {
-        super(clazz);
-        this.keyword = keyword;
+    public GithubSpiceRetrofitRequest(String keyword, int perPage) {
+        super(SearchResult.class, GitHub.class);
+        this.mKeyword = keyword;
+        this.mPerPage = perPage;
     }
 
     @Override
-    public SearchResult loadDataFromNetwork() throws Exception {
-        Log.d(BaseContent.LOG_TAG_TASK_06, "Call web service");
-        GitHub gitHub = GitHubRestImpl.getGitHubRestAdapter();
-        return gitHub.getRepos(keyword, "stars", 10);
+    public SearchResult loadDataFromNetwork() {
+        Log.d(LOG_TAG, " Call web service");
+        return getService().getRepos(mKeyword, mPerPage);
     }
 
     public String createCacheKey() {
-        return "repositories." + keyword;
+        return "repositories." + mKeyword;
     }
 
 }

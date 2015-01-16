@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoDetailFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoListFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoTagsFragment;
@@ -35,7 +34,7 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo_list);
         if (savedInstanceState != null) {
-            mRepoListFragment = (RepoListFragment) getSupportFragmentManager().getFragment(savedInstanceState, RepoListFragment.FRAGMENT_TAG);
+            mRepoListFragment = (RepoListFragment) getSupportFragmentManager().getFragment(savedInstanceState, RepoListFragment.LOG_TAG);
             mIsViewsShouldHide = savedInstanceState.getBoolean(IS_VIEWS_SHOULD_HIDE_KEY);
         }
         mFragmentManager = getSupportFragmentManager();
@@ -51,8 +50,8 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mRepoListFragment = (RepoListFragment) getSupportFragmentManager().findFragmentByTag(RepoListFragment.FRAGMENT_TAG);
-        getSupportFragmentManager().putFragment(outState, RepoListFragment.FRAGMENT_TAG, mRepoListFragment);
+        mRepoListFragment = (RepoListFragment) getSupportFragmentManager().findFragmentByTag(RepoListFragment.LOG_TAG);
+        getSupportFragmentManager().putFragment(outState, RepoListFragment.LOG_TAG, mRepoListFragment);
         outState.putBoolean(IS_VIEWS_SHOULD_HIDE_KEY, mIsViewsShouldHide);
     }
 
@@ -65,7 +64,7 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
         Fragment fragment = mFragmentManager.findFragmentById(R.id.repo_list_container);
         if (fragment == null) {
             fragment = new RepoListFragment();
-            mFragmentManager.beginTransaction().add(R.id.repo_list_container, fragment, RepoListFragment.FRAGMENT_TAG).commit();
+            mFragmentManager.beginTransaction().add(R.id.repo_list_container, fragment, RepoListFragment.LOG_TAG).commit();
         }
     }
 

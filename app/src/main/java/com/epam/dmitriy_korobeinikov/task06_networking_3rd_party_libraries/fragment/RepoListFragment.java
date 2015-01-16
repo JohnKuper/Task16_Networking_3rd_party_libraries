@@ -233,7 +233,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
         if (s.length() > 0) {
             mKeyword = s;
-            GithubSpiceRetrofitRequest mGithubRequest = new GithubSpiceRetrofitRequest(SearchResult.class, s);
+            GithubSpiceRetrofitRequest mGithubRequest = new GithubSpiceRetrofitRequest(mKeyword, 10);
             String requestCacheKey = mGithubRequest.createCacheKey();
             showProgressDialog();
             spiceManager.execute(mGithubRequest, requestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());

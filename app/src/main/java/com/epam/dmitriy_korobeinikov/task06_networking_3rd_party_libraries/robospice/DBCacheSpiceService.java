@@ -7,21 +7,44 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Tag;
-import com.octo.android.robospice.SpringAndroidSpiceService;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHub;
 import com.octo.android.robospice.persistence.CacheManager;
 import com.octo.android.robospice.persistence.ormlite.InDatabaseObjectPersisterFactory;
 import com.octo.android.robospice.persistence.ormlite.RoboSpiceDatabaseHelper;
-
-import org.springframework.web.client.RestTemplate;
+import com.octo.android.robospice.retrofit.RetrofitJackson2SpiceService;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.RestAdapter;
+import retrofit.converter.JacksonConverter;
+
 /**
- * Created by Dmitriy_Korobeinikov on 12/25/2014.
+ * Created by Dmitriy Korobeynikov on 12/25/2014.
  * Caches the search results in the database.
  */
-public class DBCacheSpiceService extends SpringAndroidSpiceService {
+public class DBCacheSpiceService extends RetrofitJackson2SpiceService {
+
+    private static final String GITHUB_API_URL = "https://api.github.com";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        addRetrofitInterface(GitHub.class);
+    }
+
+    @Override
+    protected String getServerUrl() {
+        return GITHUB_API_URL;
+    }
+
+    public static GitHub getGitHubRestAdapter() {
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(GITHUB_API_URL)
+                .setConverter(new JacksonConverter())
+                .build();
+        return restAdapter.create(GitHub.class);
+    }
 
     @Override
     public CacheManager createCacheManager(Application application) {
@@ -39,8 +62,4 @@ public class DBCacheSpiceService extends SpringAndroidSpiceService {
         return cacheManager;
     }
 
-    @Override
-    public RestTemplate createRestTemplate() {
-        return null;
-    }
 }
