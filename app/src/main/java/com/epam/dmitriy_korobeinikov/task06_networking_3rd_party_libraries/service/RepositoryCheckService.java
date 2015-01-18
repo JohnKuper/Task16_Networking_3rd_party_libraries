@@ -63,7 +63,7 @@ public class RepositoryCheckService extends IntentService {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mContext, getString(R.string.internet_connection_is_not_available_service_disabled), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, getString(R.string.toast_internet_connection_is_not_available_service_disabled), Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -107,7 +107,7 @@ public class RepositoryCheckService extends IntentService {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mContext, getString(R.string.more_than_one_repository_found_by_check_service), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, getString(R.string.toast_more_than_one_repository_found_by_check_service), Toast.LENGTH_LONG).show();
 
                 }
             });

@@ -5,8 +5,7 @@
         <item name="android:layout_marginBottom">5dp</item>
     </style>
 
-    <style name="TextViewRepoDetailTitle">
-        <item name="android:textSize">14sp</item>
+    <style name="TextViewRepoDetailTitle" parent="android:TextAppearance.Small">
     </style>
 
     <style name="TextViewRepoDetailContent">

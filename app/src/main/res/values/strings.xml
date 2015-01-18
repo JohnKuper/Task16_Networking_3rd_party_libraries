@@ -17,6 +17,7 @@
 
     <!--Detail fragment titles-->
     <string name="repo_language_title">Language</string>
+    <string name="repo_stargazer_title">Stargazer</string>
     <string name="repo_name_title">Name</string>
     <string name="repo_details_title">Repository\'s details</string>
     <string name="repo_full_name_title">Full name</string>
@@ -57,10 +58,11 @@
     <string name="check_frequency_summary_in_minutes">%1$s minute(s)</string>
 
     <!--Toast messages-->
-    <string name="search_complete_without_results">"Search is complete. There are no results to display"</string>
-    <string name="empty_tag_name_after_renaming">"Please input new name for tag"</string>
-    <string name="more_than_one_repository_found_by_check_service">"More than one repository was found. Specify the search criteria more detailed."</string>
-    <string name="internet_connection_is_not_available_service_disabled">Internet connection is not available. Repositories tracking is disabled.</string>
+    <string name="toast_search_complete_without_results">"Search is complete. There are no results to display"</string>
+    <string name="toast_empty_tag_name_after_renaming">"Please input new name for tag"</string>
+    <string name="toast_more_than_one_repository_found_by_check_service">"More than one repository was found. Specify the search criteria more detailed."</string>
+    <string name="toast_internet_connection_is_not_available_service_disabled">Internet connection is not available. Repositories tracking is disabled.</string>
+    <string name="toast_only_unique_tags">The repository can only have unique tags</string>
 
     <!--Check service-->
     <string name="service_repository_was_changed">Repository with name %1$s was changed!</string>

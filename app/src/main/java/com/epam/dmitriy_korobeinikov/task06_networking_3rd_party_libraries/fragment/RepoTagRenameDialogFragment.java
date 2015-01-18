@@ -68,7 +68,7 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
                         dismiss();
                     }
                 } else {
-                    Toast.makeText(getActivity(), getString(R.string.empty_tag_name_after_renaming), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.toast_empty_tag_name_after_renaming), Toast.LENGTH_LONG).show();
                 }
             }
         });

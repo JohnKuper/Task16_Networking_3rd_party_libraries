@@ -25,7 +25,7 @@ import org.parceler.Parcels;
  */
 public class RepoDetailFragment extends Fragment {
 
-    public static final String FRAGMENT_TAG = "RepoDetailFragment";
+    public static final String LOG_TAG = RepoDetailFragment.class.getSimpleName();
     private RepositoryCursorItem mRepository;
     private RepoTagsOpenListener tagsOpenListener;
 
@@ -45,12 +45,6 @@ public class RepoDetailFragment extends Fragment {
     public void onAttach(Activity activity) {
         tagsOpenListener = (RepoTagsOpenListener) activity;
         super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        tagsOpenListener = null;
-        super.onDetach();
     }
 
 
@@ -77,7 +71,7 @@ public class RepoDetailFragment extends Fragment {
         TextView mRepoFullName = (TextView) v.findViewById(R.id.detail_repo_full_name);
         mRepoFullName.setText(mRepository.getFullName());
 
-        final TextView mRepoDescription = (TextView) v.findViewById(R.id.detail_repo_description);
+        TextView mRepoDescription = (TextView) v.findViewById(R.id.detail_repo_description);
         mRepoDescription.setText(mRepository.getDescription());
 
         TextView mCreatedAt = (TextView) v.findViewById(R.id.detail_repo_created_at);
@@ -86,7 +80,7 @@ public class RepoDetailFragment extends Fragment {
         TextView mUpdatedAt = (TextView) v.findViewById(R.id.detail_repo_updated_at);
         mUpdatedAt.setText(mRepository.getUpdateAt());
 
-        TextView mRepoStars = (TextView) v.findViewById(R.id.detail_repo_stars);
+        TextView mRepoStars = (TextView) v.findViewById(R.id.detail_repo_stargazer);
         mRepoStars.setText(String.valueOf(mRepository.getStargazersCount()));
 
         TextView mRepoOwnerLogin = (TextView) v.findViewById(R.id.detail_repo_login);
@@ -94,6 +88,7 @@ public class RepoDetailFragment extends Fragment {
 
         TextView mRepoOwnerAvatarUrl = (TextView) v.findViewById(R.id.detail_repo_avatar_url);
         mRepoOwnerAvatarUrl.setText(mRepository.getAvatarUrl());
+        mRepoOwnerAvatarUrl.setSelected(true);
 
         TextView mRepoOwnerType = (TextView) v.findViewById(R.id.detail_repo_type);
         mRepoOwnerType.setText(mRepository.getType());
@@ -106,6 +101,12 @@ public class RepoDetailFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onDetach() {
+        tagsOpenListener = null;
+        super.onDetach();
     }
 
 }

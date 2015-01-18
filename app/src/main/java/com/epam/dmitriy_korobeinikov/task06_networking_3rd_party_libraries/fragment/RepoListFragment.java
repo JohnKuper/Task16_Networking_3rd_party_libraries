@@ -161,7 +161,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
             dismissProgressDialog();
 
             if (searchResult.totalCount == 0) {
-                Toast.makeText(getActivity(), getString(R.string.search_complete_without_results), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.toast_search_complete_without_results), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -216,7 +216,6 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setQueryHint("Enter keyword");
         mSearchView.setQuery(mSearchViewQuery, false);
-
 
         View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
         searchPlate.setBackgroundResource(R.drawable.abc_textfield_search_default_mtrl_alpha);

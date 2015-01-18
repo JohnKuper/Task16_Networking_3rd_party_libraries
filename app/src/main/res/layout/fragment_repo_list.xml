@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/fragment_repo_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_repo_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ListView
         android:id="@+id/repo_list"
@@ -12,7 +13,7 @@
         android:dividerHeight="1dp"
         android:listSelector="@drawable/row_repo_list_selector"
         android:clickable="true"
-        />
+        tools:listitem="@layout/row_repo_list"/>
 
     <TextView
         android:id="@id/empty"
@@ -21,6 +22,6 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         style="@android:style/TextAppearance"
-        android:text="@string/list_view_empty_message"/>
+        android:text="@string/list_view_empty_message" />
 
 </RelativeLayout>

@@ -73,7 +73,7 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
             startActivity(i);
         } else {
             RepoDetailFragment repoDetailFragment = RepoDetailFragment.newInstance(repository);
-            mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoDetailFragment, RepoDetailFragment.FRAGMENT_TAG).commit();
+            mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoDetailFragment, RepoDetailFragment.LOG_TAG).commit();
             if (!mIsViewsShouldHide) {
                 hideInappropriateViews();
                 mIsViewsShouldHide = true;

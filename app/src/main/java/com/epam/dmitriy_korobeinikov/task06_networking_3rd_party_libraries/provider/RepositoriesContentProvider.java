@@ -3,6 +3,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.prov
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
@@ -13,6 +14,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.*;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.ViewsUtils;
 
@@ -26,7 +28,6 @@ import java.util.Map;
 public class RepositoriesContentProvider extends ContentProvider {
 
     public static final String LOG_TAG = RepositoriesContentProvider.class.getSimpleName();
-    private static final String ONLY_UNIQUE_TAGS = "The repository can only have unique tags";
 
     private static final UriMatcher URI_MATCHER;
     private static final Map<String, String> mProjectionMap;
@@ -47,10 +48,12 @@ public class RepositoriesContentProvider extends ContentProvider {
 
     private SQLiteDatabase mSQLiteDatabase;
     private DBHelper mDBHelper;
+    private Context mContext;
 
     @Override
     public boolean onCreate() {
-        mDBHelper = new DBHelper(getContext());
+        mContext = getContext();
+        mDBHelper = new DBHelper(mContext);
         return true;
     }
 
@@ -76,9 +79,9 @@ public class RepositoriesContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.d(LOG_TAG, ": query, " + uri.toString());
+        Log.d(LOG_TAG, "query, " + uri.toString());
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        String tables = RepositoryContent.TABLE_NAME + " JOIN "
+        String tables = RepositoryContent.TABLE_NAME + " INNER JOIN "
                 + OwnerContent.TABLE_NAME + " ON " + RepositoryContent.OWNER_ID + " = " + OwnerContent.FULL_ID;
 
         switch (URI_MATCHER.match(uri)) {
@@ -105,13 +108,13 @@ public class RepositoriesContentProvider extends ContentProvider {
         }
         mSQLiteDatabase = mDBHelper.getWritableDatabase();
         Cursor cursor = queryBuilder.query(mSQLiteDatabase, projection, selection, selectionArgs, null, null, sortOrder);
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        cursor.setNotificationUri(mContext.getContentResolver(), uri);
         return cursor;
     }
 
     @Override
     public String getType(Uri uri) {
-        Log.d(LOG_TAG, ": getType, " + uri.toString());
+        Log.d(LOG_TAG, "getType, " + uri.toString());
         switch (URI_MATCHER.match(uri)) {
 
             case RepositoryContent.REPOSITORY_URI_PATTERN_MANY:
@@ -136,11 +139,11 @@ public class RepositoriesContentProvider extends ContentProvider {
             mSQLiteDatabase = mDBHelper.getWritableDatabase();
             row = mSQLiteDatabase.insertOrThrow(TagContent.TABLE_NAME, null, values);
         } catch (SQLiteConstraintException e) {
-            Log.e(LOG_TAG, ": SQLite constraint during insert ", e);
-            ViewsUtils.showToast(getContext(), ONLY_UNIQUE_TAGS, Toast.LENGTH_LONG);
+            Log.e(LOG_TAG, "SQLite constraint during insert ", e);
+            ViewsUtils.showToast(mContext, mContext.getString(R.string.toast_only_unique_tags), Toast.LENGTH_LONG);
         }
         Uri newUri = ContentUris.withAppendedId(TagContent.TAGS_URI, row);
-        getContext().getContentResolver().notifyChange(newUri, null);
+        mContext.getContentResolver().notifyChange(newUri, null);
         return newUri;
     }
 
@@ -156,11 +159,10 @@ public class RepositoriesContentProvider extends ContentProvider {
         }
         mSQLiteDatabase = mDBHelper.getWritableDatabase();
         int deleteRows = mSQLiteDatabase.delete(TagContent.TABLE_NAME, selection, selectionArgs);
-        getContext().getContentResolver().notifyChange(uri, null);
+        mContext.getContentResolver().notifyChange(uri, null);
 
         return deleteRows;
     }
-
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
@@ -176,10 +178,10 @@ public class RepositoriesContentProvider extends ContentProvider {
         try {
             mSQLiteDatabase = mDBHelper.getWritableDatabase();
             updateRows = mSQLiteDatabase.updateWithOnConflict(TagContent.TABLE_NAME, values, selection, selectionArgs, SQLiteDatabase.CONFLICT_ROLLBACK);
-            getContext().getContentResolver().notifyChange(uri, null);
+            mContext.getContentResolver().notifyChange(uri, null);
         } catch (SQLiteConstraintException e) {
-            Log.e(LOG_TAG, ": SQLite constraint during update " + e);
-            ViewsUtils.showToast(getContext(), ONLY_UNIQUE_TAGS, Toast.LENGTH_LONG);
+            Log.e(LOG_TAG, "SQLite constraint during update " + e);
+            ViewsUtils.showToast(mContext, mContext.getString(R.string.toast_only_unique_tags), Toast.LENGTH_LONG);
             return -1;
         }
 
