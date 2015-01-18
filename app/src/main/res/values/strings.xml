@@ -7,15 +7,18 @@
     <string name="activity_main_label">Repositories search</string>
     <string name="activity_settings_label">Application settings</string>
 
-    <!--Activity two pane-->
-    <string name="list_view_empty_message">Enter a keyword to search for suitable repositories</string>
+    <!--RepoListActivity two pane-->
     <string name="repo_detail_container_empty_message">Detailed information about the repository</string>
 
     <!--Menu actions labels-->
     <string name="menu_search">Search</string>
     <string name="menu_settings">Settings</string>
 
-    <!--Detail fragment titles-->
+    <!--RepoListFragment-->
+    <string name="update_prefix">Updated: %1$s</string>
+    <string name="list_view_empty_message">Enter a keyword to search for suitable repositories</string>
+
+    <!--RepoDetailFragment-->
     <string name="repo_language_title">Language</string>
     <string name="repo_stargazer_title">Stargazer</string>
     <string name="repo_name_title">Name</string>
@@ -28,7 +31,6 @@
     <string name="repo_avatar_url_title">Avatar URL</string>
     <string name="repo_type_title">Type</string>
     <string name="repo_tags_title">Tags</string>
-
 
     <!--EditText hints-->
     <string name="enter_tags">Enter new tags separated by a space</string>
@@ -64,9 +66,10 @@
     <string name="toast_internet_connection_is_not_available_service_disabled">Internet connection is not available. Repositories tracking is disabled.</string>
     <string name="toast_only_unique_tags">The repository can only have unique tags</string>
 
-    <!--Check service-->
+    <!--Repositories check service-->
     <string name="service_repository_was_changed">Repository with name %1$s was changed!</string>
     <string name="service_stargazer_count_changed">Stargazer count changed from %1$d to %2$d.</string>
+
 
 
 </resources>

@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries">
+    package="com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".utils.RepositoriesApplication">
         <activity
             android:name=".activity.RepoListActivity"
             android:label="@string/activity_main_label"
             android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -24,7 +25,7 @@
             android:label="Repository detail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.RepoListActivity"/>
+                android:value=".activity.RepoListActivity" />
         </activity>
 
         <activity
@@ -32,25 +33,25 @@
             android:label="@string/activity_settings_label">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.RepoListActivity"/>
+                android:value=".activity.RepoListActivity" />
         </activity>
 
         <service
             android:name=".network.DBCacheSpiceService"
-            android:exported="false"/>
+            android:exported="false" />
 
-        <service android:name=".service.RepositoryCheckService"/>
+        <service android:name=".service.RepositoryCheckService" />
 
         <provider
             android:name=".provider.RepositoriesContentProvider"
             android:authorities="com.johnkuper.epam.githubcontentprovider"
-            android:exported="false"/>
+            android:exported="false" />
 
         <receiver
             android:name=".receiver.RepositoryBroadcastReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.johnkuper.epam.action.RepositoryCheckService"/>
+                <action android:name="com.johnkuper.epam.action.RepositoryCheckService" />
 
             </intent-filter>
         </receiver>

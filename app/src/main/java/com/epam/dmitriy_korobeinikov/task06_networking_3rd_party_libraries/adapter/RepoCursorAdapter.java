@@ -51,11 +51,10 @@ public class RepoCursorAdapter extends CursorAdapter {
         holder.repoName.setText(cursor.getString(cursor.getColumnIndex(RepositoryContent.NAME)));
         holder.repoLanguage.setText(cursor.getString(cursor.getColumnIndex(RepositoryContent.LANGUAGE)));
 
-        holder.repoUpdateDate.setText("Updated: " + RepositoriesDateUtils.getElapsedDate(cursor, RepositoryContent.UPDATED_AT));
+        holder.repoUpdateDate.setText(context.getString(R.string.update_prefix, RepositoriesDateUtils.getElapsedDate(cursor, RepositoryContent.UPDATED_AT)));
+
         holder.repoStars.setText(String.valueOf(cursor.getString(cursor.getColumnIndex(RepositoryContent.STARGAZERS_COUNT))));
-
         Picasso.with(context).load(cursor.getString(cursor.getColumnIndex(OwnerContent.AVATAR_URL))).noFade().into(holder.repoImage);
-
     }
 
     public static class ViewHolder {

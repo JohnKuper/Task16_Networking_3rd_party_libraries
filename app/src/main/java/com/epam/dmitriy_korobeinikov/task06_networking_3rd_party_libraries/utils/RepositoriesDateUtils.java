@@ -20,12 +20,12 @@ public class RepositoriesDateUtils {
 
     public static String getElapsedDate(Cursor cursor, String columnName) {
         Date date = getFormatDate(cursor, columnName, "yyyy-MM-dd HH:mm:ss.S");
-        PrettyTime prettyTime = new PrettyTime();
+        PrettyTime prettyTime = new PrettyTime(getAppLocale());
         return prettyTime.format(date);
     }
 
     public static Date getFormatDate(Cursor cursor, String columnName, String format) {
-        SimpleDateFormat formatter = new SimpleDateFormat(format, Locale.getDefault());
+        SimpleDateFormat formatter = new SimpleDateFormat(format, getAppLocale());
         String stringDate = cursor.getString(cursor.getColumnIndex(columnName));
         Date date = null;
 
@@ -38,8 +38,12 @@ public class RepositoriesDateUtils {
     }
 
     public static String getFormatDateAsString(Cursor cursor, String columnName, String format) {
-        SimpleDateFormat formatter = new SimpleDateFormat(format, Locale.getDefault());
+        SimpleDateFormat formatter = new SimpleDateFormat(format, getAppLocale());
         Date date = getFormatDate(cursor, columnName, format);
         return formatter.format(date);
+    }
+
+    public static Locale getAppLocale() {
+        return RepositoriesApplication.getAppContext().getResources().getConfiguration().locale;
     }
 }

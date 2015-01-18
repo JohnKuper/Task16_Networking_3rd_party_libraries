@@ -22,8 +22,8 @@ import org.parceler.Parcels;
 public class RepoListActivity extends ActionBarActivity implements RepoSelectedListener, RepoTagsOpenListener {
 
     public static final String LOG_TAG = RepoListActivity.class.getSimpleName();
-
     public static final String IS_VIEWS_SHOULD_HIDE_KEY = "isViewsShouldHide";
+
     private RepoListFragment mRepoListFragment;
     private FragmentManager mFragmentManager;
     private Boolean mIsViewsShouldHide = false;
