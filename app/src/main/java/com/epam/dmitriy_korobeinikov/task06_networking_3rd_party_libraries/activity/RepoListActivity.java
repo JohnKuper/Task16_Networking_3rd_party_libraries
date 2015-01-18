@@ -2,11 +2,9 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.acti
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
@@ -23,8 +21,9 @@ import org.parceler.Parcels;
 
 public class RepoListActivity extends ActionBarActivity implements RepoSelectedListener, RepoTagsOpenListener {
 
-    private final String LOG_TAG = getClass().getSimpleName();
-    public static final String IS_VIEWS_SHOULD_HIDE_KEY = "IS_VIEWS_SHOULD_HIDE_KEY";
+    public static final String LOG_TAG = RepoListActivity.class.getSimpleName();
+
+    public static final String IS_VIEWS_SHOULD_HIDE_KEY = "isViewsShouldHide";
     private RepoListFragment mRepoListFragment;
     private FragmentManager mFragmentManager;
     private Boolean mIsViewsShouldHide = false;
@@ -42,9 +41,8 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
             hideInappropriateViews();
         }
 
-
         attachRepoListFragment();
-        sendBroadCastForStartCheckService();
+        sendBroadcast(RepositoryBroadcastReceiver.getIncomingIntent());
     }
 
     @Override
@@ -54,7 +52,6 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
         getSupportFragmentManager().putFragment(outState, RepoListFragment.LOG_TAG, mRepoListFragment);
         outState.putBoolean(IS_VIEWS_SHOULD_HIDE_KEY, mIsViewsShouldHide);
     }
-
 
     private boolean isSinglePaneMode() {
         return findViewById(R.id.repo_detail_container) == null;
@@ -92,17 +89,7 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
     @Override
     public void openRepoTags(int repositoryId) {
         RepoTagsFragment repoTagsFragment = RepoTagsFragment.newInstance(repositoryId);
-        mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoTagsFragment, RepoTagsFragment.FRAGMENT_TAG).commit();
-    }
-
-    private void sendBroadCastForStartCheckService() {
-        String checkFrequency = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(SettingsActivity.PREF_CHECK_FREQUENCY_KEY, "0");
-        if (!checkFrequency.equals("0")) {
-            Log.d(LOG_TAG, "Send broadcast");
-            Intent intent = new Intent();
-            intent.setAction(RepositoryBroadcastReceiver.RECEIVER_ACTION);
-            sendBroadcast(intent);
-        }
+        mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoTagsFragment, RepoTagsFragment.LOG_TAG).commit();
     }
 }
 

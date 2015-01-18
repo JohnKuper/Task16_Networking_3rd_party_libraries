@@ -3,24 +3,18 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.prov
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.BuildConfig;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.OwnerContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.TagContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.SingleToast;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.*;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.ViewsUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,12 +35,12 @@ public class RepositoriesContentProvider extends ContentProvider {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
         //Repository's uri
-        URI_MATCHER.addURI(BaseContent.AUTHORITY, RepositoryContent.REPOSITORY_PATH, RepositoryContent.REPOSITORY_URI_PATTERN_MANY);
-        URI_MATCHER.addURI(BaseContent.AUTHORITY, RepositoryContent.REPOSITORY_PATH + "/#", RepositoryContent.REPOSITORY_URI_PATTERN_ONE);
+        URI_MATCHER.addURI(RepositoriesContract.AUTHORITY, RepositoryContent.REPOSITORY_PATH, RepositoriesContract.RepositoryContent.REPOSITORY_URI_PATTERN_MANY);
+        URI_MATCHER.addURI(RepositoriesContract.AUTHORITY, RepositoryContent.REPOSITORY_PATH + "/#", RepositoryContent.REPOSITORY_URI_PATTERN_ONE);
 
         //Tag's uri
-        URI_MATCHER.addURI(BaseContent.AUTHORITY, TagContent.TAG_PATH, TagContent.TAG_URI_PATTERN_MANY);
-        URI_MATCHER.addURI(BaseContent.AUTHORITY, TagContent.TAG_PATH + "/#", TagContent.TAG_URI_PATTERN_ONE);
+        URI_MATCHER.addURI(RepositoriesContract.AUTHORITY, TagContent.TAG_PATH, TagContent.TAG_URI_PATTERN_MANY);
+        URI_MATCHER.addURI(RepositoriesContract.AUTHORITY, TagContent.TAG_PATH + "/#", TagContent.TAG_URI_PATTERN_ONE);
 
         mProjectionMap = buildProjectionMap();
     }
@@ -143,7 +137,7 @@ public class RepositoriesContentProvider extends ContentProvider {
             row = mSQLiteDatabase.insertOrThrow(TagContent.TABLE_NAME, null, values);
         } catch (SQLiteConstraintException e) {
             Log.e(LOG_TAG, ": SQLite constraint during insert ", e);
-            SingleToast.show(getContext(), ONLY_UNIQUE_TAGS, Toast.LENGTH_LONG);
+            ViewsUtils.showToast(getContext(), ONLY_UNIQUE_TAGS, Toast.LENGTH_LONG);
         }
         Uri newUri = ContentUris.withAppendedId(TagContent.TAGS_URI, row);
         getContext().getContentResolver().notifyChange(newUri, null);
@@ -185,7 +179,7 @@ public class RepositoriesContentProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
         } catch (SQLiteConstraintException e) {
             Log.e(LOG_TAG, ": SQLite constraint during update " + e);
-            SingleToast.show(getContext(), ONLY_UNIQUE_TAGS, Toast.LENGTH_LONG);
+            ViewsUtils.showToast(getContext(), ONLY_UNIQUE_TAGS, Toast.LENGTH_LONG);
             return -1;
         }
 
@@ -196,22 +190,6 @@ public class RepositoriesContentProvider extends ContentProvider {
         Log.d(LOG_TAG, methodName + ": " + uri.toString());
         if (URI_MATCHER.match(uri) != TagContent.TAG_URI_PATTERN_ONE)
             throw new IllegalArgumentException("Wrong URI: " + uri);
-    }
-
-    private class DBHelper extends SQLiteOpenHelper {
-
-        public DBHelper(Context context) {
-            super(context, BaseContent.DATABASE_NAME, null, BaseContent.DATABASE_VERSION);
-        }
-
-        public void onCreate(SQLiteDatabase db) {
-
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        }
     }
 
 }

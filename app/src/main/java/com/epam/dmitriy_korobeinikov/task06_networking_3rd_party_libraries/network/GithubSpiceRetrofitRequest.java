@@ -1,9 +1,8 @@
-package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice;
+package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network;
 
 import android.util.Log;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHub;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
 /**

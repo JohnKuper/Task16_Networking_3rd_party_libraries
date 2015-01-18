@@ -14,8 +14,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.TagContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesDateUtils;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.*;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.ViewsUtils;
 
 /**
  * Created by Dmitriy Korobeynikov on 11.01.2015.
@@ -61,13 +62,13 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!RepositoriesUtils.isEditTextEmpty(mTagEdit)) {
+                if (!ViewsUtils.isEditTextEmpty(mTagEdit)) {
                     int updateRows = updateTag(mTagEdit.getText().toString());
                     if (updateRows != -1) {
                         dismiss();
                     }
                 } else {
-                    Toast.makeText(getActivity(), "Please input new name for tag", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.empty_tag_name_after_renaming), Toast.LENGTH_LONG).show();
                 }
             }
         });

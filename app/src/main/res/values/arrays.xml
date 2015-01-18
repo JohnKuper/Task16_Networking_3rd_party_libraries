@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string-array name="checkFrequency">
-        <item name="1">One minute</item>
-        <item name="5">Five minutes</item>
-        <item name="10">Ten minutes</item>
-        <item name="0">Never</item>
+        <item name="1">@string/check_frequency_one_minute</item>
+        <item name="5">@string/check_frequency_five_minutes</item>
+        <item name="10">@string/check_frequency_ten_minutes</item>
+        <item name="0">@string/check_frequency_never</item>
     </string-array>
     <string-array name="checkFrequencyValues">
         <item name="1">1</item>
@@ -13,5 +12,4 @@
         <item name="10">10</item>
         <item name="0">0</item>
     </string-array>
-
 </resources>

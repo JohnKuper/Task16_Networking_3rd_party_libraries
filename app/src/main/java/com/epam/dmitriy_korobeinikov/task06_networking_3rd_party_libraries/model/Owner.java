@@ -1,6 +1,5 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.OwnerContent;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,6 +9,8 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import org.parceler.Parcel;
 import org.parceler.Transient;
+
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.*;
 
 /**
  * Created by Dmitriy Korobeynikov on 12/15/2014.

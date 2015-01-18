@@ -11,8 +11,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -22,10 +20,10 @@ import android.widget.ListView;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.TagsCursorAdapter;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.TagContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.TagContent;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesDateUtils;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.ViewsUtils;
 
 /**
  * Created by Dmitriy Korobeynikov on 10.01.2015.
@@ -33,7 +31,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils
  */
 public class RepoTagsFragment extends Fragment {
 
-    public static final String FRAGMENT_TAG = "RepoTagsFragment";
+    public static final String LOG_TAG = RepoTagsFragment.class.getSimpleName();
     public static final int TAGS_LOADER = 2;
 
     private int mRepositoryId;
@@ -68,7 +66,7 @@ public class RepoTagsFragment extends Fragment {
         addTags.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!RepositoriesUtils.isEditTextEmpty(mEnterTags)) {
+                if (!ViewsUtils.isEditTextEmpty(mEnterTags)) {
                     String unsplitedTags = mEnterTags.getText().toString();
                     String[] splitedTags = unsplitedTags.split("\\s+");
 
@@ -109,7 +107,7 @@ public class RepoTagsFragment extends Fragment {
         values.put(TagContent.REPOSITORY_TAG, tag);
         Uri insertUri = ContentUris.withAppendedId(TagContent.TAGS_URI, mRepositoryId);
         Uri newUri = getActivity().getContentResolver().insert(insertUri, values);
-        Log.d(BaseContent.LOG_TAG_TASK_06, "insertNewTag result URI: " + newUri);
+        Log.d(LOG_TAG, "insertNewTag result URI: " + newUri);
     }
 
     public void deleteTag(int repositoryId, String repositoryTag) {
@@ -117,7 +115,7 @@ public class RepoTagsFragment extends Fragment {
         String selection = TagContent.REPOSITORY_TAG + " LIKE ?";
         String[] selectionArgs = {repositoryTag};
         int deleteRows = getActivity().getContentResolver().delete(uri, selection, selectionArgs);
-        Log.d(BaseContent.LOG_TAG_TASK_06, "delete: count = " + deleteRows);
+        Log.d(LOG_TAG, "delete: count = " + deleteRows);
     }
 
     public void showTagRenameDialog(int repositoryId, String repositoryTag) {

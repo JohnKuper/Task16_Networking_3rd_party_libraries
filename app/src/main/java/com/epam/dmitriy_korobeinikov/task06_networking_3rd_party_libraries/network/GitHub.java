@@ -1,4 +1,4 @@
-package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest;
+package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 

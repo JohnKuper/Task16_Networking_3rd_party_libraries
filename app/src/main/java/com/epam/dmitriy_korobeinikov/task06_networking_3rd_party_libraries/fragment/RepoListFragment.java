@@ -27,13 +27,13 @@ import android.widget.Toast;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice.DBCacheSpiceService;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice.GithubSpiceRetrofitRequest;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.DBCacheSpiceService;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.GithubSpiceRetrofitRequest;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.*;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -71,7 +71,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, " onCreate()");
+        Log.d(LOG_TAG, "onCreate()");
         setHasOptionsMenu(true);
         if (savedInstanceState != null) {
             mKeyword = savedInstanceState.getString(KEYWORD_BUNDLE_KEY);
@@ -83,7 +83,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(LOG_TAG, " onCreateView()");
+        Log.d(LOG_TAG, "onCreateView()");
 
         View v = inflater.inflate(R.layout.fragment_repo_list, container, false);
 
@@ -112,7 +112,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
         if (mKeyword != null) {
             startRepositoriesCursorLoader();
-            Log.d(LOG_TAG, " startRepositoriesCursorLoader()");
+            Log.d(LOG_TAG, "startRepositoriesCursorLoader()");
         }
 
     }
@@ -141,7 +141,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(LOG_TAG, " onSaveInstanceState()");
+        Log.d(LOG_TAG, "onSaveInstanceState()");
         outState.putString(KEYWORD_BUNDLE_KEY, mKeyword);
         outState.putString(SEARCH_VIEW_QUERY_BUNDLE_KEY, mSearchView.getQuery().toString());
     }
@@ -161,7 +161,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
             dismissProgressDialog();
 
             if (searchResult.totalCount == 0) {
-                Toast.makeText(getActivity(), "Search is complete. There are no results to display", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.search_complete_without_results), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -191,7 +191,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.d(LOG_TAG, " onCreateOptionsMenu");
+        Log.d(LOG_TAG, "onCreateOptionsMenu");
         inflater.inflate(R.menu.menu_with_search, menu);
         setupSearchView(menu);
         super.onCreateOptionsMenu(menu, inflater);

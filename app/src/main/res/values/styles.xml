@@ -1,5 +1,4 @@
 <resources>
-
     <style name="TextViewDividingLine">
         <item name="android:background">@color/text_view_dividing_line</item>
         <item name="android:layout_marginTop">5dp</item>
@@ -14,5 +13,4 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/background_material_dark</item>
     </style>
-
 </resources>

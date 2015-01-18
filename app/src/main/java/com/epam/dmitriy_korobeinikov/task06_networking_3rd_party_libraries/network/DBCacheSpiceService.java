@@ -1,13 +1,12 @@
-package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.robospice;
+package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network;
 
 import android.app.Application;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.BaseContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Owner;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Tag;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.rest.GitHub;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.DBHelper;
 import com.octo.android.robospice.persistence.CacheManager;
 import com.octo.android.robospice.persistence.ormlite.InDatabaseObjectPersisterFactory;
 import com.octo.android.robospice.persistence.ormlite.RoboSpiceDatabaseHelper;
@@ -56,7 +55,7 @@ public class DBCacheSpiceService extends RetrofitJackson2SpiceService {
         classCollection.add(SearchResult.class);
         classCollection.add(Tag.class);
 
-        RoboSpiceDatabaseHelper databaseHelper = new RoboSpiceDatabaseHelper(application, BaseContent.DATABASE_NAME, BaseContent.DATABASE_VERSION);
+        RoboSpiceDatabaseHelper databaseHelper = new RoboSpiceDatabaseHelper(application, DBHelper.DATABASE_NAME, DBHelper.DATABASE_VERSION);
         InDatabaseObjectPersisterFactory inDatabaseObjectPersisterFactory = new InDatabaseObjectPersisterFactory(application, databaseHelper, classCollection);
         cacheManager.addPersister(inDatabaseObjectPersisterFactory);
         return cacheManager;

@@ -10,12 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.OwnerContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.content.RepositoryContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesUtils;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.OwnerContent;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.RepositoryContent;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesDateUtils;
 import com.squareup.picasso.Picasso;
-
-import java.io.PipedInputStream;
 
 /**
  * Created by Dmitriy Korobeynikov on 12/29/2014.
@@ -53,7 +51,7 @@ public class RepoCursorAdapter extends CursorAdapter {
         holder.repoName.setText(cursor.getString(cursor.getColumnIndex(RepositoryContent.NAME)));
         holder.repoLanguage.setText(cursor.getString(cursor.getColumnIndex(RepositoryContent.LANGUAGE)));
 
-        holder.repoUpdateDate.setText("Updated: " + RepositoriesUtils.getElapsedDate(cursor, RepositoryContent.UPDATED_AT));
+        holder.repoUpdateDate.setText("Updated: " + RepositoriesDateUtils.getElapsedDate(cursor, RepositoryContent.UPDATED_AT));
         holder.repoStars.setText(String.valueOf(cursor.getString(cursor.getColumnIndex(RepositoryContent.STARGAZERS_COUNT))));
 
         Picasso.with(context).load(cursor.getString(cursor.getColumnIndex(OwnerContent.AVATAR_URL))).noFade().into(holder.repoImage);
