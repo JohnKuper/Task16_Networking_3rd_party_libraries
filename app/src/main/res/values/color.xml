@@ -4,4 +4,5 @@
     <color name="app_color_primary_dark">#1976D2</color>
     <color name="app_color_primary">#2196F3</color>
     <color name="list_view_state_pressed_false">#E0E0E0</color>
+    <color name="search_view_hint_color">#BBDEFB</color>
 </resources>

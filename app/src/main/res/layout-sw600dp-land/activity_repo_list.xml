@@ -4,10 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@android:color/white"
-              android:paddingTop="8dp"
-              android:paddingRight="8dp"
-              android:paddingLeft="8dp"
-              android:paddingBottom="8dp"
+              android:padding="@dimen/activity_small_padding"
               android:baselineAligned="false">
 
     <FrameLayout

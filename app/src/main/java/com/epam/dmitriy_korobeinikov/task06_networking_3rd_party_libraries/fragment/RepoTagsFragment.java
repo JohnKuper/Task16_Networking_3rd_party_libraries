@@ -24,7 +24,6 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapt
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.OpenTagRenameDialogListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.TagContent;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesDateUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.ViewsUtils;
 
 /**
@@ -129,7 +128,7 @@ public class RepoTagsFragment extends Fragment {
         String selection = TagContent.REPOSITORY_TAG + " LIKE ?";
         String[] selectionArgs = {repositoryTag};
         int deleteRows = getActivity().getContentResolver().delete(uri, selection, selectionArgs);
-        Log.d(LOG_TAG, "delete: count = " + deleteRows);
+        Log.d(LOG_TAG, "delete count = " + deleteRows);
     }
 
     public void showTagRenameDialog(int repositoryId, String repositoryTag) {

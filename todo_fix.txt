@@ -7,7 +7,7 @@
 -	SpringAndroid -> просто Robospice с Retrofit. +++++
 -	BroadcastReciever можно сделать статический метод getIntent. +++++
 -	Побольше java-doc, комментов, особенно в нетривиальных местах.
--	DialogFragment fullscreen - Для телефонов.
+-	DialogFragment fullscreen - Для телефонов. +++++
 - 	Поправить логирование. +++++
 - 	Переделать все иконки на серые и добавить для разной плотности. Брать с гитхаба. +++++
 -	Сделать класс RepositoriesContract и описать в нем все таблицы и URI. +++++

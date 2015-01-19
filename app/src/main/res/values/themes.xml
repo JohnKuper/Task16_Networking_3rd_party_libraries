@@ -8,6 +8,6 @@
     </style>
 
     <style name="ActionBarWidgetTheme" parent="Widget.AppCompat.SearchView">
-        <item name="android:textColorHint">#BBDEFB</item>
+        <item name="android:textColorHint">@color/search_view_hint_color</item>
     </style>
 </resources>
