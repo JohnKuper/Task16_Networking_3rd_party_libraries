@@ -10,18 +10,20 @@ import android.view.View;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoDetailFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoListFragment;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoTagRenameDialogFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoTagsFragment;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.OpenTagRenameDialogListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoTagsOpenListener;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepositoryTagsOpenListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.receiver.RepositoryBroadcastReceiver;
 
 import org.parceler.Parcels;
 
 
-public class RepoListActivity extends ActionBarActivity implements RepoSelectedListener, RepoTagsOpenListener {
+public class RepositoryListActivity extends ActionBarActivity implements RepoSelectedListener, RepositoryTagsOpenListener, OpenTagRenameDialogListener {
 
-    public static final String LOG_TAG = RepoListActivity.class.getSimpleName();
+    public static final String LOG_TAG = RepositoryListActivity.class.getSimpleName();
     public static final String IS_VIEWS_SHOULD_HIDE_KEY = "isViewsShouldHide";
 
     private RepoListFragment mRepoListFragment;
@@ -68,7 +70,7 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
     @Override
     public void onRepoSelected(RepositoryCursorItem repository) {
         if (isSinglePaneMode()) {
-            Intent i = new Intent(this, RepoDetailActivity.class);
+            Intent i = new Intent(this, RepositoryDetailActivity.class);
             i.putExtra(RepoDetailFragment.REPO_DATA, Parcels.wrap(repository));
             startActivity(i);
         } else {
@@ -87,9 +89,15 @@ public class RepoListActivity extends ActionBarActivity implements RepoSelectedL
     }
 
     @Override
-    public void openRepoTags(int repositoryId) {
+    public void openRepositoryTags(int repositoryId) {
         RepoTagsFragment repoTagsFragment = RepoTagsFragment.newInstance(repositoryId);
         mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoTagsFragment, RepoTagsFragment.LOG_TAG).commit();
+    }
+
+    @Override
+    public void openTagRenameDialog(int repositoryId, String repositoryTag) {
+        RepoTagRenameDialogFragment dialogFragment = RepoTagRenameDialogFragment.newInstance(repositoryId, repositoryTag);
+        dialogFragment.show(mFragmentManager, RepoTagRenameDialogFragment.LOG_TAG);
     }
 }
 

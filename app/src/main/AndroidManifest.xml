@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme"
         android:name=".utils.RepositoriesApplication">
         <activity
-            android:name=".activity.RepoListActivity"
+            android:name=".activity.RepositoryListActivity"
             android:label="@string/activity_main_label"
             android:launchMode="singleTop">
             <intent-filter>
@@ -21,11 +21,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.RepoDetailActivity"
+            android:name=".activity.RepositoryDetailActivity"
             android:label="Repository detail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.RepoListActivity" />
+                android:value=".activity.RepositoryListActivity" />
         </activity>
 
         <activity
@@ -33,7 +33,7 @@
             android:label="@string/activity_settings_label">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.RepoListActivity" />
+                android:value=".activity.RepositoryListActivity" />
         </activity>
 
         <service

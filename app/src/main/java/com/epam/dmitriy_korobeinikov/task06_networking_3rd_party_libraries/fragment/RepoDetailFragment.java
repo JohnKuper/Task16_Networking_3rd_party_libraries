@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoTagsOpenListener;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepositoryTagsOpenListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.squareup.picasso.Picasso;
 
@@ -27,7 +27,7 @@ public class RepoDetailFragment extends Fragment {
 
     public static final String LOG_TAG = RepoDetailFragment.class.getSimpleName();
     private RepositoryCursorItem mRepository;
-    private RepoTagsOpenListener tagsOpenListener;
+    private RepositoryTagsOpenListener tagsOpenListener;
 
     public static final String REPO_DATA = "REPO_DATA";
 
@@ -43,7 +43,7 @@ public class RepoDetailFragment extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
-        tagsOpenListener = (RepoTagsOpenListener) activity;
+        tagsOpenListener = (RepositoryTagsOpenListener) activity;
         super.onAttach(activity);
     }
 
@@ -97,7 +97,7 @@ public class RepoDetailFragment extends Fragment {
         mRepoEditTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tagsOpenListener.openRepoTags(mRepository.getRepositoryId());
+                tagsOpenListener.openRepositoryTags(mRepository.getRepositoryId());
             }
         });
         return v;

@@ -11,8 +11,10 @@ import android.view.MenuItem;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoDetailFragment;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoTagRenameDialogFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoTagsFragment;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoTagsOpenListener;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.OpenTagRenameDialogListener;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepositoryTagsOpenListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 
 import org.parceler.Parcels;
@@ -21,7 +23,7 @@ import org.parceler.Parcels;
  * Created by Dmitriy Korobeynikov on 12/16/2014.
  * Displays detail information about the repository.
  */
-public class RepoDetailActivity extends ActionBarActivity implements RepoTagsOpenListener {
+public class RepositoryDetailActivity extends ActionBarActivity implements RepositoryTagsOpenListener, OpenTagRenameDialogListener {
 
     private FragmentManager fragmentManager;
 
@@ -44,7 +46,7 @@ public class RepoDetailActivity extends ActionBarActivity implements RepoTagsOpe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent intent = new Intent(RepoDetailActivity.this, SettingsActivity.class);
+                Intent intent = new Intent(RepositoryDetailActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 break;
             case android.R.id.home:
@@ -70,13 +72,17 @@ public class RepoDetailActivity extends ActionBarActivity implements RepoTagsOpe
     private void attachTagsFragment(int repositoryId) {
 
         RepoTagsFragment tagsFragment = RepoTagsFragment.newInstance(repositoryId);
-        fragmentManager.beginTransaction().replace(R.id.repo_detail_container, tagsFragment, "RepoTagsFragment").addToBackStack("replace_on_repo_tags_fragment").commit();
+        fragmentManager.beginTransaction().replace(R.id.repo_detail_container, tagsFragment, RepoTagsFragment.LOG_TAG).addToBackStack("replace_on_repo_tags_fragment").commit();
     }
 
     @Override
-    public void openRepoTags(int repositoryId) {
+    public void openRepositoryTags(int repositoryId) {
         attachTagsFragment(repositoryId);
     }
 
-
+    @Override
+    public void openTagRenameDialog(int repositoryId, String repositoryTag) {
+        RepoTagRenameDialogFragment tagRenameDialogFragment = RepoTagRenameDialogFragment.newInstance(repositoryId, repositoryTag);
+        fragmentManager.beginTransaction().replace(R.id.repo_detail_container, tagRenameDialogFragment, RepoTagRenameDialogFragment.LOG_TAG).addToBackStack("replace_on_repo_tag_rename_dialog_fragment").commit();
+    }
 }

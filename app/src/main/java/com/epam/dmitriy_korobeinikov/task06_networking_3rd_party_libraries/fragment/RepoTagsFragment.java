@@ -1,5 +1,6 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -21,6 +22,7 @@ import android.widget.ListView;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.TagsCursorAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.OpenTagRenameDialogListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.TagContent;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesDateUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.ViewsUtils;
@@ -37,6 +39,7 @@ public class RepoTagsFragment extends Fragment {
     private int mRepositoryId;
     private EditText mEnterTags;
     private TagsCursorAdapter mTagsAdapter;
+    private OpenTagRenameDialogListener mOpenTagRenameDialogListener;
 
     public static RepoTagsFragment newInstance(int repositoryId) {
         Bundle args = new Bundle();
@@ -46,6 +49,12 @@ public class RepoTagsFragment extends Fragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        mOpenTagRenameDialogListener = (OpenTagRenameDialogListener) activity;
+        super.onAttach(activity);
     }
 
     @Override
@@ -89,6 +98,11 @@ public class RepoTagsFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onDetach() {
+        mOpenTagRenameDialogListener = null;
+        super.onDetach();
+    }
 
     private void startTagsCursorLoader() {
         Loader<Cursor> loader = getLoaderManager().getLoader(TAGS_LOADER);
@@ -119,7 +133,6 @@ public class RepoTagsFragment extends Fragment {
     }
 
     public void showTagRenameDialog(int repositoryId, String repositoryTag) {
-        RepoTagRenameDialogFragment dialogFragment = RepoTagRenameDialogFragment.newInstance(repositoryId, repositoryTag);
-        dialogFragment.show(getFragmentManager(), "dialog_tag_rename");
+        mOpenTagRenameDialogListener.openTagRenameDialog(repositoryId, repositoryTag);
     }
 }
