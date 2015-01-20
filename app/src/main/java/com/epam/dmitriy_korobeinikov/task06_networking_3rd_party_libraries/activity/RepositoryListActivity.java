@@ -1,10 +1,12 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
@@ -43,8 +45,15 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
             hideInappropriateViews();
         }
 
+
         attachRepoListFragment();
         sendBroadcast(RepositoryBroadcastReceiver.getIncomingIntent());
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Log.d(LOG_TAG, "onConfigurationChanged");
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override

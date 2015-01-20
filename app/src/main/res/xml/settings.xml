@@ -4,11 +4,13 @@
     <PreferenceCategory android:title="@string/pref_service_setting_category_title">
         <EditTextPreference
             android:title="@string/pref_repo_name"
+            android:background="@android:drawable/editbox_background_normal"
             android:summary="@string/pref_repo_name_summary"
             android:key="prefRepoName"
             android:defaultValue="@string/pref_repo_name_default"/>
         <EditTextPreference
             android:title="@string/pref_repo_owner_login"
+            android:background="@android:drawable/editbox_background_normal"
             android:summary="@string/pref_repo_owner_login_summary"
             android:key="prefOwnerLogin"
             android:defaultValue="@string/pref_repo_owner_login_default"/>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -20,8 +21,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
@@ -38,6 +42,8 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by Dmitriy Korobeynikov on 12/12/2014.
@@ -219,7 +225,6 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
         View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
         searchPlate.setBackgroundResource(R.drawable.abc_textfield_search_default_mtrl_alpha);
-
 
     }
 

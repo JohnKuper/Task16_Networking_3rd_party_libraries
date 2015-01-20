@@ -56,10 +56,6 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
 
         mIsDialog = getDialog() != null;
 
-        if (mIsDialog) {
-            getDialog().setTitle("Edit tag");
-        }
-
         mTagEdit = (EditText) v.findViewById(R.id.tag_edit_text);
         mTagEdit.setText(mRepositoryTag);
         mTagEdit.requestFocus();
@@ -97,6 +93,21 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        setupDialogView();
+        super.onResume();
+    }
+
+    private void setupDialogView() {
+        if (mIsDialog) {
+            getDialog().setTitle("Edit tag");
+            int dialogWidth = 450;
+            int dialogHeight = 300;
+            getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
+        }
     }
 
     private int updateTag(String newTag) {

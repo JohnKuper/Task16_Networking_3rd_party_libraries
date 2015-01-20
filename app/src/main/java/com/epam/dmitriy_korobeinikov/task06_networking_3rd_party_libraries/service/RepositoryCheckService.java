@@ -3,6 +3,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.serv
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,10 +19,8 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.receiver.RepositoryBroadcastReceiver;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.GitHub;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.DBCacheSpiceService;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.AlarmManagerUtils;
 
 /**
  * Created by Dmitriy Korobeynikov on 1/12/2015.
@@ -44,7 +43,7 @@ public class RepositoryCheckService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(LOG_TAG, " Service create");
+        Log.d(LOG_TAG, "Service create");
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mHandler = new Handler();
         mContext = getApplicationContext();
@@ -52,13 +51,13 @@ public class RepositoryCheckService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(LOG_TAG, " onHandleIntent");
+        Log.d(LOG_TAG, "onHandleIntent");
         if (isOnline()) {
             checkRepository();
         } else {
+            Log.d(LOG_TAG, "Internet connection error");
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
             editor.putString(SettingsActivity.PREF_CHECK_FREQUENCY_KEY, "0").apply();
-            AlarmManagerUtils.cancelAlarmManager(mContext, RepositoryBroadcastReceiver.getPendingIntent(mContext));
             SettingsActivity.setPreviousValueNever(true);
             mHandler.post(new Runnable() {
                 @Override
@@ -120,10 +119,15 @@ public class RepositoryCheckService extends IntentService {
         int currentRepoStargazers = PreferenceManager.getDefaultSharedPreferences(mContext).getInt(repository.getName(), 0);
         String contentText = getString(R.string.service_repository_was_changed, repository.getName());
         String subText = getString(R.string.service_stargazer_count_changed, currentRepoStargazers, newRepoStargazers);
-        Notification notification = new NotificationCompat.Builder(mContext).setContentTitle("Info")
+
+        Intent intent = new Intent();
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+        Notification notification = new NotificationCompat.Builder(mContext)
+                .setContentTitle(getString(R.string.service_notification_content_title))
                 .setContentText(contentText)
                 .setSubText(subText)
-                .setTicker("Repository changed!")
+                .setContentIntent(pendingIntent)
+                .setTicker(getString(R.string.service_notification_ticker))
                 .setAutoCancel(true).setSmallIcon(R.drawable.ic_launcher).build();
 
         mNotificationManager.notify(REPOSITORY_CHANGE_NOTIFICATION_ID, notification);

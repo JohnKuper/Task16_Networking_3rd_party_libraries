@@ -105,7 +105,7 @@
         android:id="@+id/repo_stars"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="italic"
+        android:layout_marginRight="5dp"
         android:layout_toLeftOf="@id/star_image"
         android:layout_toStartOf="@id/star_image"
         android:layout_centerVertical="true"

@@ -20,14 +20,14 @@ public class RepositoryBroadcastReceiver extends BroadcastReceiver {
 
     public static final String LOG_TAG = RepositoryBroadcastReceiver.class.getSimpleName();
 
-    public static final String RECEIVER_ACTION = "com.johnkuper.epam.action.RepositoryCheckService";
-    public static final int CHECK_SERVICE_REQUEST_CODE = 1;
+    public static final String RECEIVER_ACTION = "com.johnkuper.epam.action.RepositoryBroadcastReceiver";
+    public static final int CHECK_SERVICE_REQUEST_CODE = 154635;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(LOG_TAG, "onReceive");
 
-        long checkFrequencyInMinutes = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_CHECK_FREQUENCY_KEY, "0")) * DateUtils.MINUTE_IN_MILLIS / 5;
+        long checkFrequencyInMinutes = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_CHECK_FREQUENCY_KEY, "0")) * DateUtils.MINUTE_IN_MILLIS;
         if (checkFrequencyInMinutes != 0) {
             startRepositoryCheckService(context);
             AlarmManagerUtils.setupAlarmManager(context, checkFrequencyInMinutes, getPendingIntent(context));

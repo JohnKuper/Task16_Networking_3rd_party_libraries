@@ -69,7 +69,8 @@
     <!--Repositories check service-->
     <string name="service_repository_was_changed">Repository with name %1$s was changed!</string>
     <string name="service_stargazer_count_changed">Stargazer count changed from %1$d to %2$d.</string>
-
+    <string name="service_notification_content_title">Info</string>
+    <string name="service_notification_ticker">Repository changed!</string>
 
 
 </resources>

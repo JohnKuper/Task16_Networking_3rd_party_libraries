@@ -4,10 +4,11 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimaryDark">@color/app_color_primary_dark</item>
         <item name="colorPrimary">@color/app_color_primary</item>
-        <item name="actionBarWidgetTheme">@style/ActionBarWidgetTheme</item>
+        <item name="actionBarWidgetTheme">@style/SearchViewWidgetTheme</item>
     </style>
 
-    <style name="ActionBarWidgetTheme" parent="Widget.AppCompat.SearchView">
+    <style name="SearchViewWidgetTheme" parent="Widget.AppCompat.SearchView">
         <item name="android:textColorHint">@color/search_view_hint_color</item>
     </style>
+
 </resources>
