@@ -1,12 +1,9 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity;
 
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
@@ -20,25 +17,17 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.liste
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.receiver.RepositoryBroadcastReceiver;
 
-import org.parceler.Parcels;
-
-import java.util.List;
-
 
 public class RepositoryListActivity extends ActionBarActivity implements RepoSelectedListener, RepositoryTagsOpenListener, OpenTagRenameDialogListener {
 
     public static final String LOG_TAG = RepositoryListActivity.class.getSimpleName();
-    public static final String IS_VIEWS_SHOULD_HIDE_KEY = "isViewsShouldHide";
 
     private RepoListFragment mRepoListFragment;
     private RepoTagsFragment mRepoTagsFragment;
     private RepoTagRenameDialogFragment mRepoTagRenameDialogFragment;
+    private RepoDetailFragment mRepoDetailFragment;
 
     private FragmentManager mFragmentManager;
-    private RepoDetailFragment mRepoDetailFragment1;
-
-    private boolean mIsViewsShouldHide = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +37,9 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
 
         if (savedInstanceState != null) {
             mRepoListFragment = (RepoListFragment) mFragmentManager.getFragment(savedInstanceState, RepoListFragment.LOG_TAG);
-//            mRepoDetailFragment = (RepoDetailFragment) mFragmentManager.getFragment(savedInstanceState, RepoDetailFragment.LOG_TAG);
-//            mRepoTagsFragment = (RepoTagsFragment) mFragmentManager.getFragment(savedInstanceState, RepoTagsFragment.LOG_TAG);
-//            mRepoTagRenameDialogFragment = (RepoTagRenameDialogFragment) mFragmentManager.getFragment(savedInstanceState, RepoTagRenameDialogFragment.LOG_TAG);
-
-        }
-        if (!isSinglePaneMode()) {
-            // cleanBackStack();
-            loadFragmentsForTwoPane();
-            hideRepoDetailContainerInappropriateViews();
+            mRepoDetailFragment = (RepoDetailFragment) mFragmentManager.getFragment(savedInstanceState, RepoDetailFragment.LOG_TAG);
+            mRepoTagsFragment = (RepoTagsFragment) mFragmentManager.getFragment(savedInstanceState, RepoTagsFragment.LOG_TAG);
+            mRepoTagRenameDialogFragment = (RepoTagRenameDialogFragment) mFragmentManager.getFragment(savedInstanceState, RepoTagRenameDialogFragment.LOG_TAG);
         }
 
         attachRepoListFragment();
@@ -67,7 +50,12 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
     protected void onResume() {
         super.onResume();
         if (!isSinglePaneMode()) {
+            clearBackStack();
+            loadFragmentsForTwoPane();
             hideRepoDetailContainerInappropriateViews();
+        } else {
+            clearBackStack();
+            loadFragmentForSinglePane();
         }
     }
 
@@ -76,27 +64,22 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
         super.onSaveInstanceState(outState);
         //Find fragments
         mRepoListFragment = (RepoListFragment) mFragmentManager.findFragmentByTag(RepoListFragment.LOG_TAG);
-//        mRepoDetailFragment = (RepoDetailFragment) mFragmentManager.findFragmentByTag(RepoDetailFragment.LOG_TAG);
-//        mRepoTagsFragment = (RepoTagsFragment) mFragmentManager.findFragmentByTag(RepoTagsFragment.LOG_TAG);
-//        mRepoTagRenameDialogFragment = (RepoTagRenameDialogFragment) mFragmentManager.findFragmentByTag(RepoTagRenameDialogFragment.LOG_TAG);
+        mRepoDetailFragment = (RepoDetailFragment) mFragmentManager.findFragmentByTag(RepoDetailFragment.LOG_TAG);
+        mRepoTagsFragment = (RepoTagsFragment) mFragmentManager.findFragmentByTag(RepoTagsFragment.LOG_TAG);
+        mRepoTagRenameDialogFragment = (RepoTagRenameDialogFragment) mFragmentManager.findFragmentByTag(RepoTagRenameDialogFragment.LOG_TAG);
 
         //Put fragments in a bundle
         mFragmentManager.putFragment(outState, RepoListFragment.LOG_TAG, mRepoListFragment);
-//        if (mRepoDetailFragment != null) {
-//            mFragmentManager.putFragment(outState, RepoDetailFragment.LOG_TAG, mRepoDetailFragment);
-//        }
-//        if (mRepoTagsFragment != null) {
-//            mFragmentManager.putFragment(outState, RepoTagsFragment.LOG_TAG, mRepoTagsFragment);
-//        }
-//        if (mRepoTagRenameDialogFragment != null) {
-//            mFragmentManager.putFragment(outState, RepoTagRenameDialogFragment.LOG_TAG, mRepoTagRenameDialogFragment);
-//        }
+        if (mRepoDetailFragment != null) {
+            mFragmentManager.putFragment(outState, RepoDetailFragment.LOG_TAG, mRepoDetailFragment);
+        }
+        if (mRepoTagsFragment != null) {
+            mFragmentManager.putFragment(outState, RepoTagsFragment.LOG_TAG, mRepoTagsFragment);
+        }
+        if (mRepoTagRenameDialogFragment != null) {
+            mFragmentManager.putFragment(outState, RepoTagRenameDialogFragment.LOG_TAG, mRepoTagRenameDialogFragment);
+        }
     }
-
-    private boolean isSinglePaneMode() {
-        return findViewById(R.id.repo_detail_container) == null;
-    }
-
 
     private void attachRepoListFragment() {
         Fragment fragment = mFragmentManager.findFragmentByTag(RepoListFragment.LOG_TAG);
@@ -106,58 +89,60 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
         }
     }
 
-    private void cleanBackStack() {
-        int backStackCount = mFragmentManager.getBackStackEntryCount();
-        for (int i = 0; i < backStackCount; i++) {
-            mFragmentManager.popBackStack();
+    private boolean isRepoDetailContainerEmpty() {
+        return mFragmentManager.findFragmentByTag(RepoDetailFragment.LOG_TAG) == null;
+    }
+
+    private boolean isSinglePaneMode() {
+        return findViewById(R.id.repo_detail_container) == null;
+    }
+
+    private void clearBackStack() {
+        if (mFragmentManager.getBackStackEntryCount() > 0) {
+            FragmentManager.BackStackEntry first = mFragmentManager.getBackStackEntryAt(0);
+            mFragmentManager.popBackStack(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
+    private void loadFragmentForSinglePane() {
+        changeFragmentContainer(R.id.repo_list_container, mRepoDetailFragment, RepoDetailFragment.LOG_TAG, true);
+        changeFragmentContainer(R.id.repo_list_container, mRepoTagsFragment, RepoTagsFragment.LOG_TAG, true);
+        changeFragmentContainer(R.id.repo_list_container, mRepoTagRenameDialogFragment, RepoTagRenameDialogFragment.LOG_TAG, true);
+    }
+
     private void loadFragmentsForTwoPane() {
-        List<Fragment> fragments = mFragmentManager.getFragments();
-        if (fragments != null && fragments.size() > 1) {
-            RepoDetailFragment repoDetailFragment = (RepoDetailFragment) fragments.get(1);
-            changeFragmentContainer(R.id.repo_detail_container, repoDetailFragment, RepoDetailFragment.LOG_TAG, false);
-
-//            RepoTagsFragment repoTagsFragment = (RepoTagsFragment) fragments.get(2);
-//            changeFragmentContainer(R.id.repo_detail_container, repoTagsFragment, RepoTagsFragment.LOG_TAG, true);
-
-//        if (mRepoTagsFragment != null) {
-//            mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, mRepoTagsFragment, RepoTagsFragment.LOG_TAG).addToBackStack(null).commit();
-//        }
-//        if (mRepoTagRenameDialogFragment != null) {
-//            mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, mRepoTagRenameDialogFragment, RepoTagRenameDialogFragment.LOG_TAG).addToBackStack(null).commit();
-//        }
-        }
+        changeFragmentContainer(R.id.repo_detail_container, mRepoDetailFragment, RepoDetailFragment.LOG_TAG, false);
+        changeFragmentContainer(R.id.repo_detail_container, mRepoTagsFragment, RepoTagsFragment.LOG_TAG, true);
+        changeFragmentContainer(R.id.repo_detail_container, mRepoTagRenameDialogFragment, RepoTagRenameDialogFragment.LOG_TAG, true);
     }
 
     private void changeFragmentContainer(int containerId, Fragment fragment, String tag, boolean addToBackStack) {
-        if (fragment != null) {
-            mFragmentManager.beginTransaction().remove(fragment).commit();
+        if (fragment == null) {
+            return;
+        }
+        mFragmentManager.beginTransaction().remove(fragment).commit();
+        mFragmentManager.executePendingTransactions();
+        if (addToBackStack) {
+            mFragmentManager.beginTransaction().replace(containerId, fragment, tag).addToBackStack(null).commit();
             mFragmentManager.executePendingTransactions();
-            Fragment copyFragment = recreateFragment(fragment);
-            if (addToBackStack) {
-                mFragmentManager.beginTransaction().replace(containerId, copyFragment, tag).addToBackStack(null).commit();
-            } else {
-                mFragmentManager.beginTransaction().replace(containerId, copyFragment, tag).commit();
-            }
-            mIsViewsShouldHide = true;
+        } else {
+            mFragmentManager.beginTransaction().replace(containerId, fragment, tag).commit();
+            mFragmentManager.executePendingTransactions();
         }
     }
 
-    private Fragment recreateFragment(Fragment f) {
-        try {
-            Fragment.SavedState savedState = mFragmentManager.saveFragmentInstanceState(f);
-            Fragment newInstance = f.getClass().newInstance();
-            newInstance.setInitialSavedState(savedState);
-
-            return newInstance;
-        } catch (InstantiationException | IllegalAccessException e) {
-            Log.e(LOG_TAG, "recreateFragment", e);
-            throw new RuntimeException("Cannot recreate fragment " + f.getClass().getName(), e);
-        }
-    }
+//    private Fragment recreateFragment(Fragment f) {
+//        try {
+//            Fragment.SavedState savedState = mFragmentManager.saveFragmentInstanceState(f);
+//            Fragment newInstance = f.getClass().newInstance();
+//            newInstance.setInitialSavedState(savedState);
+//
+//            return newInstance;
+//        } catch (InstantiationException | IllegalAccessException e) {
+//            Log.e(LOG_TAG, "recreateFragment: ", e);
+//            throw new RuntimeException("Cannot recreate fragment: " + f.getClass().getName(), e);
+//        }
+//    }
 
     @Override
     public void onRepoSelected(RepositoryCursorItem repository) {
@@ -165,18 +150,15 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
         if (isSinglePaneMode()) {
             mFragmentManager.beginTransaction().replace(R.id.repo_list_container, repoDetailFragment, RepoDetailFragment.LOG_TAG).addToBackStack(null).commit();
         } else {
+            clearBackStack();
             mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoDetailFragment, RepoDetailFragment.LOG_TAG).commit();
-            mIsViewsShouldHide = true;
+            mFragmentManager.executePendingTransactions();
             hideRepoDetailContainerInappropriateViews();
         }
     }
 
-    private boolean isRepoDetailContainerEmpty() {
-        return mFragmentManager.findFragmentById(R.id.repo_detail_container) == null;
-    }
-
     private void hideRepoDetailContainerInappropriateViews() {
-        if (mIsViewsShouldHide) {
+        if (!isRepoDetailContainerEmpty()) {
             findViewById(R.id.repo_detail_container_empty_message).setVisibility(View.GONE);
             findViewById(R.id.repo_detail_container).setBackgroundResource(0);
         }
@@ -188,14 +170,18 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
         if (isSinglePaneMode()) {
             mFragmentManager.beginTransaction().replace(R.id.repo_list_container, repoTagsFragment, RepoTagsFragment.LOG_TAG).addToBackStack(null).commit();
         } else {
-            mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoTagsFragment, RepoDetailFragment.LOG_TAG).commit();
+            mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoTagsFragment, RepoTagsFragment.LOG_TAG).addToBackStack(null).commit();
         }
     }
 
     @Override
     public void openTagRenameDialog(int repositoryId, String repositoryTag) {
         RepoTagRenameDialogFragment dialogFragment = RepoTagRenameDialogFragment.newInstance(repositoryId, repositoryTag);
-        dialogFragment.show(mFragmentManager, RepoTagRenameDialogFragment.LOG_TAG);
+        if (isSinglePaneMode()) {
+            mFragmentManager.beginTransaction().replace(R.id.repo_list_container, dialogFragment, RepoTagRenameDialogFragment.LOG_TAG).addToBackStack(null).commit();
+        } else {
+            dialogFragment.show(mFragmentManager, RepoTagRenameDialogFragment.LOG_TAG);
+        }
     }
 }
 

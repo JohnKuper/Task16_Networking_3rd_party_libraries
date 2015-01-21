@@ -24,6 +24,8 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils
 public class RepoTagRenameDialogFragment extends DialogFragment {
 
     public static final String LOG_TAG = RepoTagRenameDialogFragment.class.getSimpleName();
+    private static final String KEY_REPOSITORY_ID = "KEY_REPOSITORY_ID";
+    private static final String KEY_REPOSITORY_TAG = "KEY_REPOSITORY_TAG";
 
     private String mRepositoryTag;
     private int mRepositoryId;
@@ -46,6 +48,10 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mRepositoryId = savedInstanceState.getInt(KEY_REPOSITORY_ID);
+            mRepositoryTag = savedInstanceState.getString(KEY_REPOSITORY_TAG);
+        }
         mRepositoryId = getArguments().getInt(TagContent.REPOSITORY_ID);
         mRepositoryTag = getArguments().getString(TagContent.REPOSITORY_TAG);
     }
@@ -99,6 +105,13 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
     public void onResume() {
         setupDialogView();
         super.onResume();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_REPOSITORY_ID, mRepositoryId);
+        outState.putString(KEY_REPOSITORY_TAG, mRepositoryTag);
     }
 
     private void setupDialogView() {

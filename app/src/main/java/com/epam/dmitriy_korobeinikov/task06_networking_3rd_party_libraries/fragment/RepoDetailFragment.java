@@ -29,7 +29,7 @@ public class RepoDetailFragment extends Fragment {
     private RepositoryCursorItem mRepository;
     private RepositoryTagsOpenListener tagsOpenListener;
 
-    public static final String REPO_DATA = "REPO_DATA";
+    private static final String REPO_DATA = "REPO_DATA";
 
     public static RepoDetailFragment newInstance(RepositoryCursorItem repository) {
         Bundle args = new Bundle();

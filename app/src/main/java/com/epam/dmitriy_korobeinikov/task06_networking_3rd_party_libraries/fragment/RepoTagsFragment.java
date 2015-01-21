@@ -34,7 +34,8 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils
 public class RepoTagsFragment extends Fragment {
 
     public static final String LOG_TAG = RepoTagsFragment.class.getSimpleName();
-    public static final int TAGS_LOADER = 2;
+    private static final int TAGS_LOADER = 2;
+    private static final String KEY_REPOSITORY_ID = "KEY_REPOSITORY_ID";
 
     private int mRepositoryId;
     private EditText mEnterTags;
@@ -60,9 +61,12 @@ public class RepoTagsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRepositoryId = getArguments().getInt(TagContent.REPOSITORY_ID);
+        if (savedInstanceState != null) {
+            mRepositoryId = savedInstanceState.getInt(KEY_REPOSITORY_ID);
+        } else {
+            mRepositoryId = getArguments().getInt(TagContent.REPOSITORY_ID);
+        }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
@@ -96,6 +100,12 @@ public class RepoTagsFragment extends Fragment {
         startTagsCursorLoader();
 
         return v;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_REPOSITORY_ID, mRepositoryId);
     }
 
     @Override

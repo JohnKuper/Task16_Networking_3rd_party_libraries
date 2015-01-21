@@ -54,7 +54,6 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     public static final String LOG_TAG = RepoListFragment.class.getSimpleName();
     public static final int REPOSITORIES_LOADER = 1;
     public static final String KEYWORD_BUNDLE_KEY = "keyWord";
-    public static final String SEARCH_VIEW_QUERY_BUNDLE_KEY = "searchViewQuery";
 
     //SavedInstanceState values
     private String mKeyword;
@@ -81,7 +80,6 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         setHasOptionsMenu(true);
         if (savedInstanceState != null) {
             mKeyword = savedInstanceState.getString(KEYWORD_BUNDLE_KEY);
-            mSearchViewQuery = savedInstanceState.getString(SEARCH_VIEW_QUERY_BUNDLE_KEY);
 
         }
         super.onCreate(savedInstanceState);
@@ -149,7 +147,6 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         super.onSaveInstanceState(outState);
         Log.d(LOG_TAG, "onSaveInstanceState()");
         outState.putString(KEYWORD_BUNDLE_KEY, mKeyword);
-        outState.putString(SEARCH_VIEW_QUERY_BUNDLE_KEY, mSearchView.getQuery().toString());
     }
 
     private class GeneralDataRequestListener implements RequestListener<SearchResult> {
@@ -215,8 +212,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     }
 
     private void setupSearchView(Menu menu) {
-        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-        MenuItemCompat.expandActionView(searchMenuItem);
+        final MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         mSearchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
@@ -226,6 +222,15 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
         searchPlate.setBackgroundResource(R.drawable.abc_textfield_search_default_mtrl_alpha);
 
+        mSearchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!mSearchView.isFocusable()) {
+                    MenuItemCompat.collapseActionView(searchMenuItem);
+                }
+
+            }
+        });
     }
 
     @Override
