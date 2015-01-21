@@ -47,12 +47,20 @@ public class RepoDetailFragment extends Fragment {
         super.onAttach(activity);
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRepository = Parcels.unwrap(getArguments().getParcelable(REPO_DATA));
+        if (savedInstanceState != null) {
+            mRepository = Parcels.unwrap(savedInstanceState.getParcelable(REPO_DATA));
+        } else {
+            mRepository = Parcels.unwrap(getArguments().getParcelable(REPO_DATA));
+        }
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(REPO_DATA, Parcels.wrap(mRepository));
     }
 
     @Override

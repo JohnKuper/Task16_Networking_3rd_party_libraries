@@ -3,6 +3,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.frag
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,9 +19,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.TagsCursorAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.OpenTagRenameDialogListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.TagContent;
@@ -87,7 +88,7 @@ public class RepoTagsFragment extends Fragment {
             }
         });
 
-        mTagsAdapter = new TagsCursorAdapter(getActivity(), null, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER, RepoTagsFragment.this);
+        mTagsAdapter = new TagsCursorAdapter(getActivity(), null, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
         ListView tagsList = (ListView) v.findViewById(R.id.repo_tags_list);
         tagsList.setAdapter(mTagsAdapter);
@@ -133,5 +134,58 @@ public class RepoTagsFragment extends Fragment {
 
     public void showTagRenameDialog(int repositoryId, String repositoryTag) {
         mOpenTagRenameDialogListener.openTagRenameDialog(repositoryId, repositoryTag);
+    }
+
+    /**
+     * Fills the list of repository's tags by data from cursor.
+     */
+    private class TagsCursorAdapter extends CursorAdapter {
+
+        public TagsCursorAdapter(Context context, Cursor c, int flags) {
+            super(context, c, flags);
+        }
+
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View v = inflater.inflate(R.layout.row_tag_list, parent, false);
+
+            ViewHolder holder = new ViewHolder();
+            holder.tagName = (TextView) v.findViewById(R.id.tag_name);
+            holder.deleteTagBtn = (ImageButton) v.findViewById(R.id.tag_delete_btn);
+            holder.editTagBtn = (ImageButton) v.findViewById(R.id.tag_edit_btn);
+            v.setTag(holder);
+            return v;
+        }
+
+        @Override
+        public void bindView(View view, final Context context, final Cursor cursor) {
+            ViewHolder holder = (ViewHolder) view.getTag();
+
+            final String repositoryTag = cursor.getString(cursor.getColumnIndex(TagContent.REPOSITORY_TAG));
+            final int repositoryId = cursor.getInt(cursor.getColumnIndex(TagContent.REPOSITORY_ID));
+
+            holder.tagName.setText(cursor.getString(cursor.getColumnIndex(TagContent.REPOSITORY_TAG)));
+            holder.deleteTagBtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteTag(repositoryId, repositoryTag);
+                }
+            });
+
+            holder.editTagBtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showTagRenameDialog(repositoryId, repositoryTag);
+                }
+            });
+
+        }
+
+        public class ViewHolder {
+            public TextView tagName;
+            public ImageButton deleteTagBtn;
+            public ImageButton editTagBtn;
+        }
     }
 }
