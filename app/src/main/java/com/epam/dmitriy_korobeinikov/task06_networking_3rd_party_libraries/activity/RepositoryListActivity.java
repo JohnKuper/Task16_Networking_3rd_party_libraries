@@ -69,16 +69,17 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
         mRepoTagRenameDialogFragment = (RepoTagRenameDialogFragment) mFragmentManager.findFragmentByTag(RepoTagRenameDialogFragment.LOG_TAG);
 
         //Put fragments in a bundle
-        mFragmentManager.putFragment(outState, RepoListFragment.LOG_TAG, mRepoListFragment);
-        if (mRepoDetailFragment != null) {
-            mFragmentManager.putFragment(outState, RepoDetailFragment.LOG_TAG, mRepoDetailFragment);
+        putFragmentInBundle(outState, RepoListFragment.LOG_TAG, mRepoListFragment);
+        putFragmentInBundle(outState, RepoDetailFragment.LOG_TAG, mRepoDetailFragment);
+        putFragmentInBundle(outState, RepoTagsFragment.LOG_TAG, mRepoTagsFragment);
+        putFragmentInBundle(outState, RepoTagRenameDialogFragment.LOG_TAG, mRepoTagRenameDialogFragment);
+    }
+
+    private void putFragmentInBundle(Bundle bundle, String tag, Fragment fragment) {
+        if (fragment == null) {
+            return;
         }
-        if (mRepoTagsFragment != null) {
-            mFragmentManager.putFragment(outState, RepoTagsFragment.LOG_TAG, mRepoTagsFragment);
-        }
-        if (mRepoTagRenameDialogFragment != null) {
-            mFragmentManager.putFragment(outState, RepoTagRenameDialogFragment.LOG_TAG, mRepoTagRenameDialogFragment);
-        }
+        mFragmentManager.putFragment(bundle, tag, fragment);
     }
 
     private void attachRepoListFragment() {
@@ -130,19 +131,6 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
             mFragmentManager.executePendingTransactions();
         }
     }
-
-//    private Fragment recreateFragment(Fragment f) {
-//        try {
-//            Fragment.SavedState savedState = mFragmentManager.saveFragmentInstanceState(f);
-//            Fragment newInstance = f.getClass().newInstance();
-//            newInstance.setInitialSavedState(savedState);
-//
-//            return newInstance;
-//        } catch (InstantiationException | IllegalAccessException e) {
-//            Log.e(LOG_TAG, "recreateFragment: ", e);
-//            throw new RuntimeException("Cannot recreate fragment: " + f.getClass().getName(), e);
-//        }
-//    }
 
     @Override
     public void onRepoSelected(RepositoryCursorItem repository) {

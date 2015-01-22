@@ -72,5 +72,10 @@
     <string name="service_notification_content_title">Info</string>
     <string name="service_notification_ticker">Repository changed!</string>
 
+    <!--OAuth-->
+    <string name="account_label">JohnKuper</string>
+    <string name="signup_title">Create new account</string>
+    <string name="login_label">Log in</string>
+
 
 </resources>
