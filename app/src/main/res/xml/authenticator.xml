@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
                        android:accountType="com.johnkuper.epam.github.repositories.oauth"
-                       android:icon="@drawable/ic_github"
-                       android:smallIcon="@drawable/ic_github"
+                       android:icon="@drawable/ic_github_white"
+                       android:smallIcon="@drawable/ic_github_white"
                        android:label="@string/account_label"
     />

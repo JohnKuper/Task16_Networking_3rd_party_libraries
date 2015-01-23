@@ -4,28 +4,30 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.AuthBody;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.AuthResponse;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.DBCacheSpiceService;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.GitHub;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.GitHubAuthorizationRequest;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.spiceservice.BaseGitHubSpiceService;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 /**
  * Created by Dmitriy Korobeynikov on 1/22/2015.
+ * Calls by RepositoriesAuthenticatorService when user wanted to add new account.
  */
 public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
     private static final String LOG_TAG = AuthenticatorActivity.class.getSimpleName();
+
     private static final String CLIENT_ID = "57d08abea730de89c508";
     private static final String CLIENT_SECRET = "425df65f5d7f34bad1287dbc52cede6a3b082cad";
 
@@ -34,12 +36,16 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     public final static String ARG_ACCOUNT_NAME = "ACCOUNT_NAME";
     public final static String ARG_IS_ADDING_NEW_ACCOUNT = "IS_ADDING_ACCOUNT";
 
-    public static final String KEY_ERROR_MESSAGE = "ERR_MSG";
-
     public final static String PARAM_USER_PASS = "USER_PASS";
+    private final static String PREFIX_BASIC_AUTHORIZATION = "basic ";
+    private final static String PREFIX_TOKEN_AUTHORIZATION = "token ";
 
     private AccountManager mAccountManager;
+    private SpiceManager mSpiceManager = new SpiceManager(BaseGitHubSpiceService.class);
+    private String mAccountType;
     private String mAuthTokenType;
+    private String mUserName;
+    private String mUserPass;
 
     /**
      * Called when the activity is first created.
@@ -62,55 +68,71 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         findViewById(R.id.submit_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submit();
+                submitAuthorization();
+            }
+        });
+        findViewById(R.id.cancel_login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mSpiceManager.start(AuthenticatorActivity.this);
+    }
 
-    public void submit() {
+    @Override
+    protected void onStop() {
+        mSpiceManager.shouldStop();
+        super.onStop();
+    }
 
-        final String userName = ((TextView) findViewById(R.id.accountName)).getText().toString();
-        final String userPass = ((TextView) findViewById(R.id.accountPassword)).getText().toString();
+    private void submitAuthorization() {
+        mUserName = ((TextView) findViewById(R.id.accountName)).getText().toString();
+        mUserPass = ((TextView) findViewById(R.id.accountPassword)).getText().toString();
 
-        final String accountType = getIntent().getStringExtra(ARG_ACCOUNT_TYPE);
+        mAccountType = getIntent().getStringExtra(ARG_ACCOUNT_TYPE);
+        Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> Started authenticating");
 
-        new AsyncTask<String, Void, Intent>() {
+        String[] scopes = {"public_repo"};
+        String note = "admin script";
+        AuthBody authBody = fillAuthBody(CLIENT_SECRET, scopes, note);
 
-            @Override
-            protected Intent doInBackground(String... params) {
+        String authHeader = PREFIX_BASIC_AUTHORIZATION + getEncodedUserDetails(mUserName, mUserPass);
 
-                Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> Started authenticating");
+        GitHubAuthorizationRequest authorizationRequest = new GitHubAuthorizationRequest(CLIENT_ID, authBody, authHeader);
+        mSpiceManager.execute(authorizationRequest, new AuthResponseListener());
+    }
 
-                String authtoken = null;
-                Bundle data = new Bundle();
-                try {
-                    authtoken = getAuthToken(userName, userPass);
-                    Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> token - " + authtoken);
+    private class AuthResponseListener implements RequestListener<AuthResponse> {
+        @Override
+        public void onRequestFailure(SpiceException e) {
+            Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onRequestFailure ", e);
+        }
 
-                    data.putString(AccountManager.KEY_ACCOUNT_NAME, userName);
-                    data.putString(PARAM_USER_PASS, userPass);
-                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-                    data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
+        @Override
+        public void onRequestSuccess(AuthResponse authResponse) {
+            Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onRequestSuccess");
 
-                } catch (Exception e) {
-                    data.putString(KEY_ERROR_MESSAGE, e.getMessage());
-                }
+            String authToken = authResponse.getToken();
+            Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> token - " + authToken);
 
-                final Intent res = new Intent();
-                res.putExtras(data);
-                return res;
-            }
+            Bundle data = new Bundle();
+            data.putString(AccountManager.KEY_ACCOUNT_NAME, mUserName);
+            data.putString(PARAM_USER_PASS, mUserPass);
+            data.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
+            data.putString(AccountManager.KEY_AUTHTOKEN, authToken);
 
-            @Override
-            protected void onPostExecute(Intent intent) {
-                if (intent.hasExtra(KEY_ERROR_MESSAGE)) {
-                    Toast.makeText(getBaseContext(), intent.getStringExtra(KEY_ERROR_MESSAGE), Toast.LENGTH_SHORT).show();
-                } else {
-                    finishLogin(intent);
-                }
-            }
-        }.execute();
+            final Intent res = new Intent();
+            res.putExtras(data);
+
+            finishLogin(res);
+        }
+
     }
 
     private void finishLogin(Intent intent) {
@@ -146,21 +168,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         return encoded;
     }
 
-    private String getAuthToken(String userName, String password) {
+    private AuthBody fillAuthBody(String clientSecret, String[] scopes, String note) {
         AuthBody authBody = new AuthBody();
-        authBody.setClientSecret(CLIENT_SECRET);
-
-        String[] scopes = {"public_repo"};
+        authBody.setClientSecret(clientSecret);
         authBody.setScopes(scopes);
-
-        authBody.setNote("admin script");
-
-        String header = "Basic " + getEncodedUserDetails(userName, password);
-
-        GitHub gitHub = DBCacheSpiceService.getGitHubRestAdapter();
-        AuthResponse authResponse = gitHub.authorization(CLIENT_ID, authBody, header);
-
-        return authResponse.getToken();
+        authBody.setNote(note);
+        return authBody;
     }
-
 }

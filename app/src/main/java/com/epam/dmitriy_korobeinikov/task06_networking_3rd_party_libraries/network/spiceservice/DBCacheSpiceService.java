@@ -1,4 +1,4 @@
-package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network;
+package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.spiceservice;
 
 import android.app.Application;
 
@@ -7,47 +7,18 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Tag;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.DBHelper;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 import com.octo.android.robospice.persistence.CacheManager;
 import com.octo.android.robospice.persistence.ormlite.InDatabaseObjectPersisterFactory;
 import com.octo.android.robospice.persistence.ormlite.RoboSpiceDatabaseHelper;
-import com.octo.android.robospice.retrofit.RetrofitJackson2SpiceService;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.RestAdapter;
-import retrofit.converter.JacksonConverter;
-import retrofit.android.AndroidLog;
 
 /**
  * Created by Dmitriy Korobeynikov on 12/25/2014.
  * Caches the search results in the database.
  */
-public class DBCacheSpiceService extends RetrofitJackson2SpiceService {
-
-    private static final String GITHUB_API_URL = "https://api.github.com";
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        addRetrofitInterface(GitHub.class);
-    }
-
-    @Override
-    protected String getServerUrl() {
-        return GITHUB_API_URL;
-    }
-
-    public static GitHub getGitHubRestAdapter() {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(GITHUB_API_URL)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setLog(new AndroidLog(RepositoriesApplication.APP_NAME))
-                .setConverter(new JacksonConverter())
-                .build();
-        return restAdapter.create(GitHub.class);
-    }
+public class DBCacheSpiceService extends BaseGitHubSpiceService {
 
     @Override
     public CacheManager createCacheManager(Application application) {

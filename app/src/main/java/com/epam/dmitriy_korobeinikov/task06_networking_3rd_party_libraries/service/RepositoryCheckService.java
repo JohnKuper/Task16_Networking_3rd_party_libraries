@@ -19,8 +19,8 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.GitHub;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.DBCacheSpiceService;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.GitHub;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RetrofitHelper;
 
 /**
  * Created by Dmitriy Korobeynikov on 1/12/2015.
@@ -134,7 +134,7 @@ public class RepositoryCheckService extends IntentService {
     }
 
     private SearchResult getUserRepository(String repoName, String ownerLogin) {
-        GitHub gitHub = DBCacheSpiceService.getGitHubRestAdapter();
+        GitHub gitHub = RetrofitHelper.getGitHubBaseRestAdapter();
         String qualifiersPath = repoName + "+user:" + ownerLogin;
         return gitHub.getRepos(qualifiersPath, 10);
     }

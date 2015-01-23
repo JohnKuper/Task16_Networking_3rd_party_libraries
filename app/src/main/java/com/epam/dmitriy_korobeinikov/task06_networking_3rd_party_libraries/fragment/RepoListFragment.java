@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -21,11 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
@@ -35,15 +31,14 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.liste
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.DBCacheSpiceService;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.GithubSpiceRetrofitRequest;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.spiceservice.DBCacheSpiceService;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.GithubRepositoriesRequest;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract.*;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by Dmitriy Korobeynikov on 12/12/2014.
@@ -57,7 +52,6 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
     //SavedInstanceState values
     private String mKeyword;
-    private String mSearchViewQuery;
 
     private ProgressDialog mDialog;
     private RepoCursorAdapter mRepoCursorAdapter;
@@ -153,12 +147,13 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
         @Override
         public void onRequestFailure(SpiceException e) {
-            Log.d(LOG_TAG, " Request failure: ", e);
+            Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onRequestFailure - ", e);
+            dismissProgressDialog();
         }
 
         @Override
         public void onRequestSuccess(SearchResult searchResult) {
-            Log.d(LOG_TAG, "<<<<<< SUCCESS >>>>>> ");
+            Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onRequestSuccess");
 
             startRepositoriesCursorLoader();
             dismissProgressDialog();
@@ -217,7 +212,6 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setQueryHint("Enter keyword");
-        mSearchView.setQuery(mSearchViewQuery, false);
 
         View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
         searchPlate.setBackgroundResource(R.drawable.abc_textfield_search_default_mtrl_alpha);
@@ -242,7 +236,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
 
         if (s.length() > 0) {
             mKeyword = s;
-            GithubSpiceRetrofitRequest mGithubRequest = new GithubSpiceRetrofitRequest(mKeyword, 10);
+            GithubRepositoriesRequest mGithubRequest = new GithubRepositoriesRequest(mKeyword, 10);
             String requestCacheKey = mGithubRequest.createCacheKey();
             showProgressDialog();
             spiceManager.execute(mGithubRequest, requestCacheKey, DurationInMillis.ONE_MINUTE, new GeneralDataRequestListener());

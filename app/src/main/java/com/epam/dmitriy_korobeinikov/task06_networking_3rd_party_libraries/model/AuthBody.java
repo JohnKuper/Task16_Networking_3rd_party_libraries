@@ -1,5 +1,6 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -10,11 +11,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthBody {
 
-    @JsonProperty("client_secret")
     public String client_secret;
-    @JsonProperty("scopes")
     public String[] scopes;
-    @JsonProperty("note")
     public String note;
 
     public String getClientSecret() {

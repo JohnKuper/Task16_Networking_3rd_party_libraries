@@ -34,7 +34,10 @@
             android:label="@string/login_label"/>
 
         <service
-            android:name=".network.DBCacheSpiceService"
+            android:name=".network.spiceservice.DBCacheSpiceService"
+            android:exported="false"/>
+        <service
+            android:name=".network.spiceservice.BaseGitHubSpiceService"
             android:exported="false"/>
 
         <service android:name=".service.RepositoryCheckService"/>
