@@ -3,10 +3,18 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.acti
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.DrawerFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoDetailFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoListFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoTagRenameDialogFragment;
@@ -16,6 +24,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.liste
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepositoryTagsOpenListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.RepositoryCursorItem;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.receiver.RepositoryBroadcastReceiver;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 
 
 public class RepositoryListActivity extends ActionBarActivity implements RepoSelectedListener, RepositoryTagsOpenListener, OpenTagRenameDialogListener {
@@ -29,11 +38,21 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
 
     private FragmentManager mFragmentManager;
 
+    private ActionBar mActionBar;
+
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private CharSequence mAppTitle;
+    private CharSequence mDrawerTitle;
+    private FrameLayout mDrawerContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo_list);
         mFragmentManager = getSupportFragmentManager();
+        mActionBar = getSupportActionBar();
+
 
         if (savedInstanceState != null) {
             mRepoListFragment = (RepoListFragment) mFragmentManager.getFragment(savedInstanceState, RepoListFragment.LOG_TAG);
@@ -42,6 +61,7 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
             mRepoTagRenameDialogFragment = (RepoTagRenameDialogFragment) mFragmentManager.getFragment(savedInstanceState, RepoTagRenameDialogFragment.LOG_TAG);
         }
 
+        attachDrawerFragment();
         attachRepoListFragment();
         sendBroadcast(RepositoryBroadcastReceiver.getIncomingIntent());
     }
@@ -51,12 +71,64 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
         super.onResume();
         if (!isSinglePaneMode()) {
             clearBackStack();
+            setupDrawer();
             loadFragmentsForTwoPane();
             hideRepoDetailContainerInappropriateViews();
         } else {
             clearBackStack();
+            setupDrawer();
             loadFragmentForSinglePane();
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerContainer);
+        menu.findItem(R.id.action_search).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+//    @Override
+//    protected void onPostCreate(Bundle savedInstanceState) {
+//        super.onPostCreate(savedInstanceState);
+//        // Sync the toggle state after onRestoreInstanceState has occurred.
+//        mDrawerToggle.syncState();
+//    }
+
+    private void setupDrawer() {
+        mAppTitle = mDrawerTitle = getTitle();
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerContainer = (FrameLayout) findViewById(R.id.drawer_container);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.app_name) {
+            public void onDrawerClosed(View view) {
+                mActionBar.setTitle(mAppTitle);
+                Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onDrawerClosed");
+                // calling onPrepareOptionsMenu() to show action bar icons
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                mActionBar.setTitle(mDrawerTitle);
+                // calling onPrepareOptionsMenu() to hide action bar icons
+                Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onDrawerOpened");
+                invalidateOptionsMenu();
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setHomeButtonEnabled(true);
     }
 
     @Override
@@ -80,6 +152,11 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
             return;
         }
         mFragmentManager.putFragment(bundle, tag, fragment);
+    }
+
+    private void attachDrawerFragment() {
+        DrawerFragment fragment = new DrawerFragment();
+        mFragmentManager.beginTransaction().add(R.id.drawer_container, fragment).commit();
     }
 
     private void attachRepoListFragment() {

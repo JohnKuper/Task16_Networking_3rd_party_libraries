@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Drawer's items-->
+    <string-array name="drawer_items">
+        <item name="Repositories">Repositories</item>
+        <item name="Issues">Issues</item>
+    </string-array>
+    <!--Drawer's icons-->
+    <array name="drawer_icons">
+        <item>@drawable/ic_all_tasks</item>
+        <item>@drawable/ic_solved_task</item>
+        <item>@drawable/ic_unsolved_task</item>
+        <item>@drawable/ic_important_task</item>
+    </array>
+</resources>
