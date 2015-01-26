@@ -13,6 +13,7 @@ import android.view.View;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.NavigationDrawerFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoDetailFragment;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoIssuesFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoListFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoTagRenameDialogFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoTagsFragment;
@@ -197,7 +198,14 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-
+        switch (position) {
+            case 1:
+                RepoIssuesFragment fragment = new RepoIssuesFragment();
+                mFragmentManager.beginTransaction().replace(R.id.repo_list_container, fragment).addToBackStack(null).commit();
+                break;
+            default:
+                break;
+        }
     }
 }
 

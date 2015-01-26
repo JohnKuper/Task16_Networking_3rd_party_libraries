@@ -2,7 +2,10 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.netw
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.AuthBody;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.AuthResponse;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Issue;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
+
+import java.util.List;
 
 import retrofit.http.Body;
 import retrofit.http.GET;
@@ -23,4 +26,7 @@ public interface GitHub {
 
     @PUT("/authorizations/clients/{clientId}")
     AuthResponse authorization(@Path(value = "clientId", encode = false) String clientId, @Body AuthBody authBody, @Header("Authorization") String str);
+
+    @GET("/repos/{userName}/{repoName}/issues")
+    List<Issue> getRepoIssues(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName, @Header("Authorization") String token);
 }

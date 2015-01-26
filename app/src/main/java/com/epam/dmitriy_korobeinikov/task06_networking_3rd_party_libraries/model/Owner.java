@@ -41,6 +41,19 @@ public class Owner {
     @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, columnName = OwnerContent.REPOSITORY_ID)
     public Repository repository;
 
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Owner{");
+        sb.append("id=").append(id);
+        sb.append(", login='").append(login).append('\'');
+        sb.append(", avatarUrl='").append(avatarUrl).append('\'');
+        sb.append(", type='").append(type).append('\'');
+        sb.append(", repository=").append(repository);
+        sb.append('}');
+        return sb.toString();
+    }
+
     public int getId() {
         return id;
     }

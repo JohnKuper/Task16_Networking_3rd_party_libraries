@@ -83,7 +83,6 @@ public class GitHubAuthenticator extends AbstractAccountAuthenticator {
             return result;
         }
 
-
         // If we get here, then we couldn't access the user's password - so we
         // need to re-prompt them for their credentials. We do that by creating
         // an intent to display our AuthenticatorActivity.
