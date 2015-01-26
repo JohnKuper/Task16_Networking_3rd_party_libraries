@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
@@ -31,7 +30,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils
  * Created by Dmitriy Korobeynikov on 10.01.2015.
  * Contains all the tags of a particular repository and provides manipulating with them.
  */
-public class RepoTagsFragment extends Fragment {
+public class RepoTagsFragment extends BaseFragment {
 
     public static final String LOG_TAG = RepoTagsFragment.class.getSimpleName();
     private static final int TAGS_LOADER = 2;
@@ -103,6 +102,12 @@ public class RepoTagsFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActionBar().setTitle(getString(R.string.fragment_repo_tags_label));
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_REPOSITORY_ID, mRepositoryId);
@@ -145,6 +150,7 @@ public class RepoTagsFragment extends Fragment {
     public void showTagRenameDialog(int repositoryId, String repositoryTag) {
         mOpenTagRenameDialogListener.openTagRenameDialog(repositoryId, repositoryTag);
     }
+
 
     /**
      * Fills the list of repository's tags by data from cursor.

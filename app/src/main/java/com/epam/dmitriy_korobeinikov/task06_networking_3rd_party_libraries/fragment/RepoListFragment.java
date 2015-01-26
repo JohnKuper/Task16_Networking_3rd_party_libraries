@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
@@ -25,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.RepositoryListActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
@@ -44,7 +47,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
  * Created by Dmitriy Korobeynikov on 12/12/2014.
  * This class is used for search and display preview information about GitHub's repositories as list.
  */
-public class RepoListFragment extends Fragment implements OnQueryTextListener {
+public class RepoListFragment extends BaseFragment implements OnQueryTextListener {
 
     public static final String LOG_TAG = RepoListFragment.class.getSimpleName();
     public static final int REPOSITORIES_LOADER = 1;
@@ -131,6 +134,12 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActionBar().setTitle(getString(R.string.activity_main_label));
+    }
+
+    @Override
     public void onDetach() {
         mRepoSelectedListener = null;
         super.onDetach();
@@ -186,6 +195,7 @@ public class RepoListFragment extends Fragment implements OnQueryTextListener {
             getLoaderManager().initLoader(REPOSITORIES_LOADER, null, new CursorLoaderListener<>(getActivity(), RepositoryContent.REPOSITORIES_URI, mRepoCursorAdapter, selection, selectionArgs));
         }
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

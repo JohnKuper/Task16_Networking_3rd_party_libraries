@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--App values-->
-    <string name="app_name" translatable="false">Task06_Networking_3rd_Party_Libraries</string>
+    <string name="app_name" translatable="false">Repositories Observer</string>
 
-    <!--Activities labels-->
-    <string name="activity_main_label">Repositories search</string>
+    <!--App titles-->
     <string name="activity_settings_label">Application settings</string>
+    <string name="activity_main_label">Repositories search</string>
+    <string name="fragment_repo_tags_label">Repository\'s tags</string>
 
     <!--RepoListActivity two pane-->
     <string name="repo_detail_container_empty_message">Detailed information about the repository</string>

@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,6 +106,7 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         setupDialogView();
+        getActionBar().setTitle(getString(R.string.fragment_repo_tags_label));
         super.onResume();
     }
 
@@ -130,5 +133,9 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
         String[] selectionArgs = {mRepositoryTag};
         Uri uri = ContentUris.withAppendedId(TagContent.TAGS_URI, mRepositoryId);
         return getActivity().getContentResolver().update(uri, values, selection, selectionArgs);
+    }
+
+    public ActionBar getActionBar() {
+        return ((ActionBarActivity) getActivity()).getSupportActionBar();
     }
 }

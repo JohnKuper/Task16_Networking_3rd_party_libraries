@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Setting activity-->
     <string-array name="checkFrequency">
         <item name="1">@string/check_frequency_one_minute</item>
         <item name="5">@string/check_frequency_five_minutes</item>
@@ -11,5 +12,15 @@
         <item name="5">5</item>
         <item name="10">10</item>
         <item name="0">0</item>
+    </string-array>
+
+    <!--Navigation drawer-->
+    <string-array name="nav_drawer_titles">
+        <item>Repositories</item>
+        <item>Issues</item>
+    </string-array>
+    <string-array name="nav_drawer_icons">
+        <item>@drawable/ic_book</item>
+        <item>@drawable/ic_issue</item>
     </string-array>
 </resources>

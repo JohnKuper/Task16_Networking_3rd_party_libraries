@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,7 @@ import org.parceler.Parcels;
  * Displays detailed information about the repository and includes button
  * for open repository's tags.
  */
-public class RepoDetailFragment extends Fragment {
+public class RepoDetailFragment extends BaseFragment {
 
     public static final String LOG_TAG = RepoDetailFragment.class.getSimpleName();
     private RepositoryCursorItem mRepository;
@@ -109,6 +111,12 @@ public class RepoDetailFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActionBar().setTitle(getString(R.string.repo_details_title));
     }
 
     @Override

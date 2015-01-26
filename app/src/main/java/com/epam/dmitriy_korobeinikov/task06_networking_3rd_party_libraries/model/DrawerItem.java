@@ -5,24 +5,28 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.mode
  */
 public class DrawerItem {
 
-    private String title;
-    private int icon;
-
-    public DrawerItem(String title, int icon) {
-        this.title = title;
-        this.icon = icon;
-
-    }
+    private String mTitle;
+    private int mIcon;
 
     public String getTitle() {
-        return this.title;
-    }
-
-    public int getIcon() {
-        return this.icon;
+        return mTitle;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        mTitle = title;
+    }
+
+    public int getIcon() {
+        return mIcon;
+    }
+
+    public void setIcon(int icon) {
+        mIcon = icon;
+    }
+
+    public DrawerItem(String title, int icon) {
+        mTitle = title;
+        mIcon = icon;
+
     }
 }

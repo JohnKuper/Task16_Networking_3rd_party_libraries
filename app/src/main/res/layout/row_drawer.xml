@@ -10,8 +10,6 @@
         android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
         android:layout_centerVertical="true"
         tools:src="@drawable/ic_github"/>
 
@@ -20,7 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/drawer_item_icon"
+        android:paddingLeft="56dp"
+        android:textColor="@android:color/black"
         tools:text="Test"
         />
 

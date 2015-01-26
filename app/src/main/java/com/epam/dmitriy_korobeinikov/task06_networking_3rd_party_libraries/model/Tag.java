@@ -21,7 +21,7 @@ public class Tag {
     public String repositoryTags;
 
     @DatabaseField(columnName = TagContent.REPOSITORY_ID, foreign = true, uniqueCombo = true)
-    private Repository repository;
+    public Repository repository;
 
     public int getId() {
         return id;
