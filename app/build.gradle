@@ -47,9 +47,10 @@ android {
         compile 'com.squareup.okhttp:okhttp-urlconnection:2.1.0'
         compile 'org.parceler:parceler-api:0.2.15'
         provided 'org.parceler:parceler:0.2.15'
-        compile "com.tojc.ormlite.android:ormlite-content-provider-library:1.0.4"
         compile 'com.octo.android.robospice:robospice-ormlite:1.4.14'
         compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
         compile 'com.makeramen:roundedimageview:1.5.0'
+        compile 'com.j256.ormlite:ormlite-android:4.45'
+
     }
 }

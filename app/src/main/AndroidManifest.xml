@@ -55,7 +55,11 @@
 
         <provider
             android:name=".provider.RepositoriesContentProvider"
-            android:authorities="com.johnkuper.epam.githubcontentprovider"
+            android:authorities="com.johnkuper.epam.contentprovider.repositories"
+            android:exported="false"/>
+        <provider
+            android:name=".provider.IssuesContentProvider"
+            android:authorities="com.johnkuper.epam.contentprovider.issues"
             android:exported="false"/>
 
         <receiver

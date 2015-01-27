@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
  */
 public final class RepositoriesContract {
 
-    public static final String AUTHORITY = "com.johnkuper.epam.githubcontentprovider";
+    public static final String AUTHORITY = "com.johnkuper.epam.contentprovider.repositories";
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.";
 

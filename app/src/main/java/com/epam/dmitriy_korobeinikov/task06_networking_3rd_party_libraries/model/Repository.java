@@ -31,7 +31,7 @@ public class Repository {
     public int id = 0;
 
     @JsonProperty("name")
-    @DatabaseField(columnName = RepositoryContent.NAME, unique = true)
+    @DatabaseField(columnName = RepositoryContent.NAME, uniqueCombo = true)
     public String name;
 
     @JsonProperty("full_name")
@@ -39,7 +39,7 @@ public class Repository {
     public String fullName;
 
     @JsonProperty("description")
-    @DatabaseField(columnName = RepositoryContent.DESCRIPTION)
+    @DatabaseField(columnName = RepositoryContent.DESCRIPTION, uniqueCombo = true)
     public String description;
 
     @JsonProperty("created_at")

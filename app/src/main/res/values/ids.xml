@@ -7,4 +7,6 @@
     <item type="id" name="drawer_container"/>
     <item type="id" name="drawer_layout"/>
     <item type="id" name="navigation_drawer"/>
+    <item type="id" name="cancel_btn"/>
+    <item type="id" name="ok_btn"/>
 </resources>

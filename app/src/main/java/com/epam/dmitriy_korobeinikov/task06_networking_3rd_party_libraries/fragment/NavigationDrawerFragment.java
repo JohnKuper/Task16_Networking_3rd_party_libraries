@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.DrawerItem;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 
 import java.util.ArrayList;
 
@@ -33,6 +35,7 @@ import java.util.ArrayList;
  */
 public class NavigationDrawerFragment extends BaseFragment {
 
+    public static final String LOG_TAG = NavigationDrawerFragment.class.getSimpleName();
     /**
      * Remember the position of the selected item.
      */
@@ -66,7 +69,6 @@ public class NavigationDrawerFragment extends BaseFragment {
             mFromSavedInstanceState = true;
         }
 
-        selectItem(mCurrentSelectedPosition);
     }
 
     @Override
@@ -234,7 +236,14 @@ public class NavigationDrawerFragment extends BaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onOptionsItemSelected");
+            return true;
+        }
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
 
     }
 

@@ -6,7 +6,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Tag;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.DBHelper;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesDBHelper;
 import com.octo.android.robospice.persistence.CacheManager;
 import com.octo.android.robospice.persistence.ormlite.InDatabaseObjectPersisterFactory;
 import com.octo.android.robospice.persistence.ormlite.RoboSpiceDatabaseHelper;
@@ -30,7 +30,7 @@ public class DBCacheSpiceService extends BaseGitHubSpiceService {
         classCollection.add(SearchResult.class);
         classCollection.add(Tag.class);
 
-        RoboSpiceDatabaseHelper databaseHelper = new RoboSpiceDatabaseHelper(application, DBHelper.DATABASE_NAME, DBHelper.DATABASE_VERSION);
+        RoboSpiceDatabaseHelper databaseHelper = new RoboSpiceDatabaseHelper(application, RepositoriesDBHelper.DATABASE_NAME, RepositoriesDBHelper.DATABASE_VERSION);
         InDatabaseObjectPersisterFactory inDatabaseObjectPersisterFactory = new InDatabaseObjectPersisterFactory(application, databaseHelper, classCollection);
         cacheManager.addPersister(inDatabaseObjectPersisterFactory);
         return cacheManager;

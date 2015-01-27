@@ -47,13 +47,13 @@ public class RepositoriesContentProvider extends ContentProvider {
     }
 
     private SQLiteDatabase mSQLiteDatabase;
-    private DBHelper mDBHelper;
+    private RepositoriesDBHelper mRepositoriesDBHelper;
     private Context mContext;
 
     @Override
     public boolean onCreate() {
         mContext = getContext();
-        mDBHelper = new DBHelper(mContext);
+        mRepositoriesDBHelper = new RepositoriesDBHelper(mContext);
         return true;
     }
 
@@ -106,7 +106,7 @@ public class RepositoriesContentProvider extends ContentProvider {
             default:
                 throw new IllegalStateException("URI is not supported: " + uri);
         }
-        mSQLiteDatabase = mDBHelper.getWritableDatabase();
+        mSQLiteDatabase = mRepositoriesDBHelper.getWritableDatabase();
         Cursor cursor = queryBuilder.query(mSQLiteDatabase, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(mContext.getContentResolver(), uri);
         return cursor;
@@ -136,7 +136,7 @@ public class RepositoriesContentProvider extends ContentProvider {
 
         long row = 0;
         try {
-            mSQLiteDatabase = mDBHelper.getWritableDatabase();
+            mSQLiteDatabase = mRepositoriesDBHelper.getWritableDatabase();
             row = mSQLiteDatabase.insertOrThrow(TagContent.TABLE_NAME, null, values);
         } catch (SQLiteConstraintException e) {
             Log.e(LOG_TAG, "SQLite constraint during insert ", e);
@@ -157,7 +157,7 @@ public class RepositoriesContentProvider extends ContentProvider {
         } else {
             selection = selection + " AND " + TagContent.REPOSITORY_ID + " = " + id;
         }
-        mSQLiteDatabase = mDBHelper.getWritableDatabase();
+        mSQLiteDatabase = mRepositoriesDBHelper.getWritableDatabase();
         int deleteRows = mSQLiteDatabase.delete(TagContent.TABLE_NAME, selection, selectionArgs);
         mContext.getContentResolver().notifyChange(uri, null);
 
@@ -176,7 +176,7 @@ public class RepositoriesContentProvider extends ContentProvider {
         }
         int updateRows;
         try {
-            mSQLiteDatabase = mDBHelper.getWritableDatabase();
+            mSQLiteDatabase = mRepositoriesDBHelper.getWritableDatabase();
             updateRows = mSQLiteDatabase.updateWithOnConflict(TagContent.TABLE_NAME, values, selection, selectionArgs, SQLiteDatabase.CONFLICT_ROLLBACK);
             mContext.getContentResolver().notifyChange(uri, null);
         } catch (SQLiteConstraintException e) {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_height="72dp">
+
+    <!-- Issue title-->
+    <TextView
+        android:id="@+id/issue_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Bug with UI"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:typeface="sans"
+        android:maxEms="13"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <!-- Issue body-->
+    <TextView
+        android:id="@+id/issue_body"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/issue_title"
+        tools:text="Found a new bug with accept button"
+        android:textColor="#343434"
+        android:textSize="14sp"
+        android:typeface="sans"/>
+
+    <ImageButton
+        android:id="@+id/issue_close_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_tag_remove"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:paddingLeft="1dp"
+        android:background="@drawable/image_btn_selector"/>
+
+</RelativeLayout>

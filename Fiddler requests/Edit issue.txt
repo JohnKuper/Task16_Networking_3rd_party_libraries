@@ -1,0 +1,9 @@
+PATCH https://api.github.com/repos/JohnKuper/Task15_Activity/issues/2 HTTP/1.1
+User-Agent: Fiddler
+Authorization: token 8183dab7a6f73a5e3a38a41f7f56dee0a659de8b
+Host: api.github.com
+Content-Length: 25
+
+{
+  "state": "closed"
+}

@@ -83,7 +83,7 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
                         }
                     }
                 } else {
-                    Toast.makeText(getActivity(), getString(R.string.toast_empty_tag_name_after_renaming), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.toast_empty_required_fields), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -119,7 +119,7 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
 
     private void setupDialogView() {
         if (mIsDialog) {
-            getDialog().setTitle("Edit tag");
+            getDialog().setTitle(getString(R.string.dialog_fragment_tag_rename_title));
             int dialogWidth = 450;
             int dialogHeight = 300;
             getDialog().getWindow().setLayout(dialogWidth, dialogHeight);

@@ -1,0 +1,14 @@
+PUT https://api.github.com/authorizations/clients/57d08abea730de89c508
+
+User-Agent: Fiddler
+Authorization: basic Sm9obkt1cGVyOkg0NWFVeTMzYg==
+Host: api.github.com
+Content-Length: 134
+
+{
+  "client_secret": "425df65f5d7f34bad1287dbc52cede6a3b082cad",
+  "scopes": [
+    "public_repo"
+  ],
+  "note": "admin script"
+}

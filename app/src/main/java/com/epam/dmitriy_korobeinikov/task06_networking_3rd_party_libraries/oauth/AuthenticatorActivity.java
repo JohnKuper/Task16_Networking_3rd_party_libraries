@@ -28,9 +28,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
     private static final String LOG_TAG = AuthenticatorActivity.class.getSimpleName();
 
-    private static final String CLIENT_ID = "57d08abea730de89c508";
-    private static final String CLIENT_SECRET = "425df65f5d7f34bad1287dbc52cede6a3b082cad";
-
     public final static String ARG_ACCOUNT_TYPE = "ACCOUNT_TYPE";
     public final static String ARG_AUTH_TYPE = "AUTH_TYPE";
     public final static String ARG_ACCOUNT_NAME = "ACCOUNT_NAME";
@@ -100,11 +97,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
         String[] scopes = {"public_repo"};
         String note = "admin script";
-        AuthBody authBody = fillAuthBody(CLIENT_SECRET, scopes, note);
+        AuthBody authBody = fillAuthBody(AccountGeneral.CLIENT_SECRET, scopes, note);
 
         String authHeader = PREFIX_BASIC_AUTHORIZATION + getEncodedUserDetails(mUserName, mUserPass);
 
-        GitHubAuthorizationRequest authorizationRequest = new GitHubAuthorizationRequest(CLIENT_ID, authBody, authHeader);
+        GitHubAuthorizationRequest authorizationRequest = new GitHubAuthorizationRequest(AccountGeneral.CLIENT_ID, authBody, authHeader);
         mSpiceManager.execute(authorizationRequest, new AuthResponseListener());
     }
 
