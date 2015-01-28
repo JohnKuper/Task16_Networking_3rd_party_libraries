@@ -106,7 +106,7 @@ public class RepoTagRenameDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         setupDialogView();
-        getActionBar().setTitle(getString(R.string.fragment_repo_tags_label));
+        getActionBar().setTitle(getString(R.string.fragment_repo_tags_title));
         super.onResume();
     }
 

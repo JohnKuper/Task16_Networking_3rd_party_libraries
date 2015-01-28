@@ -2,16 +2,12 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.frag
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
@@ -27,8 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.RepositoryListActivity;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.adapter.RepoCursorAdapter;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoSelectedListener;
@@ -136,7 +130,7 @@ public class RepoListFragment extends BaseFragment implements OnQueryTextListene
     @Override
     public void onResume() {
         super.onResume();
-        getActionBar().setTitle(getString(R.string.activity_main_label));
+        getActionBar().setTitle(getString(R.string.activity_main_title));
     }
 
     @Override
@@ -203,17 +197,6 @@ public class RepoListFragment extends BaseFragment implements OnQueryTextListene
         inflater.inflate(R.menu.menu_with_search, menu);
         setupSearchView(menu);
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                startActivity(intent);
-                break;
-        }
-        return true;
     }
 
     private void setupSearchView(Menu menu) {

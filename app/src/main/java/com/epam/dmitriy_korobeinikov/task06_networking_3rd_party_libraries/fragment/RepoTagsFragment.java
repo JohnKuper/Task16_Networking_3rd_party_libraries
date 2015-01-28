@@ -104,7 +104,7 @@ public class RepoTagsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActionBar().setTitle(getString(R.string.fragment_repo_tags_label));
+        getActionBar().setTitle(getString(R.string.fragment_repo_tags_title));
     }
 
     @Override

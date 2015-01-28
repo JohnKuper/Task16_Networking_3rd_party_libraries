@@ -16,7 +16,7 @@
         android:name=".utils.RepositoriesApplication">
         <activity
             android:name=".activity.RepositoryListActivity"
-            android:label="@string/activity_main_label"
+            android:label="@string/activity_main_title"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -26,7 +26,7 @@
 
         <activity
             android:name=".activity.SettingsActivity"
-            android:label="@string/activity_settings_label">
+            android:label="@string/activity_settings_title">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.RepositoryListActivity"/>

@@ -33,8 +33,6 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.liste
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.issue.Issue;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.GitHub;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountGeneral;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.IssuesContract;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.RepositoriesContract;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.PreferencesUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RetrofitHelper;
@@ -64,6 +62,12 @@ public class RepoIssuesFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         mIssueCreateListener = (RepoIssueCreateListener) activity;
         super.onAttach(activity);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -114,9 +118,9 @@ public class RepoIssuesFragment extends BaseFragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        super.onActivityCreated(savedInstanceState);
+    public void onResume() {
+        getActionBar().setTitle(getString(R.string.fragment_repo_issues_title));
+        super.onResume();
     }
 
     @Override
@@ -130,9 +134,11 @@ public class RepoIssuesFragment extends BaseFragment {
         switch (item.getItemId()) {
             case R.id.action_add_issue:
                 mIssueCreateListener.onIssueCreate();
+                return true;
+            default:
                 break;
         }
-        return true;
+        return false;
     }
 
     @Override

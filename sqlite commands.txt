@@ -1,4 +1,5 @@
 adb -e shell
 ls /data/data/com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries/databases/
-sqlite3 /data/data/com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries/databases/Repositories
+sqlite3 /data/data/com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries/databases/Repositories.db
+sqlite3 /data/data/com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries/databases/Issues.db
 select * from repositories as r join owners as o on r.owner_id=o._id;

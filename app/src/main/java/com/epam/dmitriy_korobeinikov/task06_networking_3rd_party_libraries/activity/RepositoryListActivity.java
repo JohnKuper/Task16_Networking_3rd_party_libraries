@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -72,7 +74,7 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
             hideRepoDetailContainerInappropriateViews();
         } else {
             clearBackStack();
-            loadFragmentForSinglePane();
+            loadFragmentsForSinglePane();
         }
     }
 
@@ -92,6 +94,26 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
         putFragmentInBundle(outState, RepoTagsFragment.LOG_TAG, mRepoTagsFragment);
         putFragmentInBundle(outState, RepoTagRenameDialogFragment.LOG_TAG, mRepoTagRenameDialogFragment);
         putFragmentInBundle(outState, RepoIssuesFragment.LOG_TAG, mRepoIssuesFragment);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_without_search, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent = new Intent(RepositoryListActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                break;
+        }
+        return false;
     }
 
 
@@ -125,10 +147,11 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
         }
     }
 
-    private void loadFragmentForSinglePane() {
+    private void loadFragmentsForSinglePane() {
         changeFragmentContainer(R.id.repo_list_container, mRepoDetailFragment, RepoDetailFragment.LOG_TAG, true);
         changeFragmentContainer(R.id.repo_list_container, mRepoTagsFragment, RepoTagsFragment.LOG_TAG, true);
         changeFragmentContainer(R.id.repo_list_container, mRepoTagRenameDialogFragment, RepoTagRenameDialogFragment.LOG_TAG, true);
+        changeFragmentContainer(R.id.repo_list_container, mRepoIssuesFragment, RepoIssuesFragment.LOG_TAG, true);
     }
 
     private void loadFragmentsForTwoPane() {
@@ -145,7 +168,7 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
         mFragmentManager.beginTransaction().remove(fragment).commit();
         mFragmentManager.executePendingTransactions();
         if (addToBackStack) {
-            mFragmentManager.beginTransaction().replace(containerId, fragment, tag).addToBackStack(null).commit();
+            mFragmentManager.beginTransaction().replace(containerId, fragment, tag).addToBackStack(tag).commit();
             mFragmentManager.executePendingTransactions();
         } else {
             mFragmentManager.beginTransaction().replace(containerId, fragment, tag).commit();
@@ -157,7 +180,7 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
     public void onRepoSelected(RepositoryCursorItem repository) {
         RepoDetailFragment repoDetailFragment = RepoDetailFragment.newInstance(repository);
         if (isSinglePaneMode()) {
-            mFragmentManager.beginTransaction().replace(R.id.repo_list_container, repoDetailFragment, RepoDetailFragment.LOG_TAG).addToBackStack(null).commit();
+            mFragmentManager.beginTransaction().replace(R.id.repo_list_container, repoDetailFragment, RepoDetailFragment.LOG_TAG).addToBackStack(RepoDetailFragment.LOG_TAG).commit();
         } else {
             clearBackStack();
             mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoDetailFragment, RepoDetailFragment.LOG_TAG).commit();
@@ -177,9 +200,9 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
     public void openRepositoryTags(int repositoryId) {
         RepoTagsFragment repoTagsFragment = RepoTagsFragment.newInstance(repositoryId);
         if (isSinglePaneMode()) {
-            mFragmentManager.beginTransaction().replace(R.id.repo_list_container, repoTagsFragment, RepoTagsFragment.LOG_TAG).addToBackStack(null).commit();
+            mFragmentManager.beginTransaction().replace(R.id.repo_list_container, repoTagsFragment, RepoTagsFragment.LOG_TAG).addToBackStack(RepoTagsFragment.LOG_TAG).commit();
         } else {
-            mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoTagsFragment, RepoTagsFragment.LOG_TAG).addToBackStack(null).commit();
+            mFragmentManager.beginTransaction().replace(R.id.repo_detail_container, repoTagsFragment, RepoTagsFragment.LOG_TAG).addToBackStack(RepoTagsFragment.LOG_TAG).commit();
         }
     }
 
@@ -187,7 +210,7 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
     public void openTagRenameDialog(int repositoryId, String repositoryTag) {
         RepoTagRenameDialogFragment dialogFragment = RepoTagRenameDialogFragment.newInstance(repositoryId, repositoryTag);
         if (isSinglePaneMode()) {
-            mFragmentManager.beginTransaction().replace(R.id.repo_list_container, dialogFragment, RepoTagRenameDialogFragment.LOG_TAG).addToBackStack(null).commit();
+            mFragmentManager.beginTransaction().replace(R.id.repo_list_container, dialogFragment, RepoTagRenameDialogFragment.LOG_TAG).addToBackStack(RepoTagRenameDialogFragment.LOG_TAG).commit();
         } else {
             dialogFragment.show(mFragmentManager, RepoTagRenameDialogFragment.LOG_TAG);
         }
@@ -216,6 +239,14 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
+            case 0:
+                if (mFragmentManager.findFragmentById(R.id.repo_list_container) instanceof RepoListFragment) {
+                    break;
+                }
+                clearBackStack();
+                RepoListFragment repoListFragment = (RepoListFragment) mFragmentManager.findFragmentByTag(RepoListFragment.LOG_TAG);
+                mFragmentManager.beginTransaction().replace(R.id.repo_list_container, repoListFragment, RepoListFragment.LOG_TAG).commit();
+                break;
             case 1:
                 if (isCurrentFragmentOnTopOfBackStack(RepoIssuesFragment.LOG_TAG)) {
                     break;

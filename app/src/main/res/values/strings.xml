@@ -4,9 +4,10 @@
     <string name="app_name" translatable="false">Repositories Observer</string>
 
     <!--App titles-->
-    <string name="activity_settings_label">Application settings</string>
-    <string name="activity_main_label">Repositories search</string>
-    <string name="fragment_repo_tags_label">Repository\'s tags</string>
+    <string name="activity_settings_title">Application settings</string>
+    <string name="activity_main_title">Repositories search</string>
+    <string name="fragment_repo_tags_title">Repository\'s tags</string>
+    <string name="fragment_repo_issues_title">Repository\'s issues</string>
 
     <!--RepoListActivity two pane-->
     <string name="repo_detail_container_empty_message">Detailed information about the repository</string>
