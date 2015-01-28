@@ -1,6 +1,10 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils;
 
+import android.content.Context;
+
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.BaseGitHubService;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.GitHub;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.IssuesGitHubService;
 
 import retrofit.RestAdapter;
 import retrofit.android.AndroidLog;
@@ -13,12 +17,10 @@ import retrofit.converter.JacksonConverter;
 public class RetrofitHelper {
 
     public static GitHub getGitHubBaseRestAdapter() {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(RepositoriesApplication.GITHUB_API_URL)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setLog(new AndroidLog(RepositoriesApplication.APP_NAME))
-                .setConverter(new JacksonConverter())
-                .build();
-        return restAdapter.create(GitHub.class);
+        return new BaseGitHubService(new RestAdapter.Builder()).getService();
+    }
+
+    public static GitHub getGitHubAuthRestAdapter(Context context) {
+        return new IssuesGitHubService(context).getService();
     }
 }

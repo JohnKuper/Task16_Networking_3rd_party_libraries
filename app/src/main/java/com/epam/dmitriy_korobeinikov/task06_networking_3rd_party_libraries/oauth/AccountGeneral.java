@@ -10,6 +10,8 @@ public class AccountGeneral {
 
     public static final String ACCOUNT_TYPE = "com.johnkuper.epam.github.repositories.oauth";
     public static final String ACCOUNT_NAME = "JohnKuper";
+    public static final String[] ACCOUNT_SCOPES = {"public_repo"};
+    public static final String ACCOUNT_NOTE = "admin script";
 
     /**
      * Auth token types

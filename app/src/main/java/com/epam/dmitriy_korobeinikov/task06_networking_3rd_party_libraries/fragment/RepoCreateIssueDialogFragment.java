@@ -15,8 +15,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.IssuesUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.PreferencesUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesDateUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.ViewsUtils;
 
 import static com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.IssuesContract.IssueContent;
@@ -60,7 +62,7 @@ public class RepoCreateIssueDialogFragment extends DialogFragment {
                     String title = mIssueTitle.getText().toString();
                     String body = mIssueBody.getText().toString();
                     try {
-                        createIssue(title, body);
+                        IssuesUtils.createLocalIssue("", title, body, mOwnerLogin, mRepoName, IssueContent.STATE_OPEN);
                         dismiss();
                     } catch (SQLiteConstraintException e) {
                         Log.e(RepositoriesApplication.APP_NAME, LOG_TAG + "> SQLite constraint during insert ", e);
@@ -96,15 +98,5 @@ public class RepoCreateIssueDialogFragment extends DialogFragment {
         getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
     }
 
-    private Uri createIssue(String title, String body) {
-        ContentValues values = new ContentValues();
-        values.put(IssueContent.TITLE, title);
-        values.put(IssueContent.BODY, body);
-        values.put(IssueContent.STATE, IssueContent.STATE_OPEN);
-        values.put(IssueContent.OWNER_LOGIN, mOwnerLogin);
-        values.put(IssueContent.REPO_NAME, mRepoName);
-        Uri newUri = getActivity().getContentResolver().insert(IssueContent.ISSUES_URI, values);
-        Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> createIssue: New URI = " + newUri);
-        return newUri;
-    }
+
 }

@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -33,8 +34,11 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.liste
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.issue.Issue;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.GitHub;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountGeneral;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.IssuesContract;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.IssuesUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.PreferencesUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesDateUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RetrofitHelper;
 
 import java.io.IOException;
@@ -79,7 +83,13 @@ public class RepoIssuesFragment extends BaseFragment {
         getIssues.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getIssues();
+                // getIssues();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
+                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true); // Performing a sync no matter if it's off
+
+                Account account = new Account(AccountGeneral.ACCOUNT_NAME, AccountGeneral.ACCOUNT_TYPE);
+                ContentResolver.requestSync(account, IssuesContract.AUTHORITY, bundle);
             }
         });
 
@@ -102,7 +112,6 @@ public class RepoIssuesFragment extends BaseFragment {
                         }
                         return authToken;
                     }
-
                 }.execute();
             }
         });
@@ -153,7 +162,7 @@ public class RepoIssuesFragment extends BaseFragment {
             protected List<Issue> doInBackground(Void... params) {
                 Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> getIssues");
                 GitHub gitHub = RetrofitHelper.getGitHubBaseRestAdapter();
-                return gitHub.getRepoIssues("JohnKuper", "Task15_Activity", TOKEN);
+                return gitHub.getRepoIssues("JohnKuper", "Task15_Activity");
             }
 
             @Override
@@ -161,13 +170,6 @@ public class RepoIssuesFragment extends BaseFragment {
                 Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> Issues after mapping: " + issues.toString());
             }
         }.execute();
-    }
-
-    private int closeIssue(int issueId) {
-        ContentValues values = new ContentValues();
-        values.put(IssueContent.STATE, IssueContent.STATE_CLOSED);
-        Uri uri = ContentUris.withAppendedId(IssueContent.ISSUES_URI, issueId);
-        return getActivity().getContentResolver().update(uri, values, null, null);
     }
 
     private void getCurrentPreferences() {
@@ -221,7 +223,7 @@ public class RepoIssuesFragment extends BaseFragment {
             holder.closeIssueBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    closeIssue(issueId);
+                    IssuesUtils.changeLocalIssueState(issueId,IssueContent.STATE_CLOSED);
                 }
             });
         }

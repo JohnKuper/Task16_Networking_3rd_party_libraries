@@ -37,7 +37,7 @@ public class RepositoryCursorItem {
         name = cursor.getString(cursor.getColumnIndex(RepositoryContent.NAME));
         fullName = cursor.getString(cursor.getColumnIndex(RepositoryContent.FULL_NAME));
         description = cursor.getString(cursor.getColumnIndex(RepositoryContent.DESCRIPTION));
-        createdAt = RepositoriesDateUtils.getFormatDateAsString(cursor, RepositoryContent.CREATED_AT, "yyyy-MM-dd HH:mm:ss");
+        createdAt = RepositoriesDateUtils.getFormatDateAsString(cursor, RepositoryContent.CREATED_AT, RepositoriesDateUtils.BASE_DATE_FORMAT);
         updateAt = RepositoriesDateUtils.getElapsedDate(cursor, RepositoryContent.UPDATED_AT);
         stargazersCount = cursor.getInt(cursor.getColumnIndex(RepositoryContent.STARGAZERS_COUNT));
 

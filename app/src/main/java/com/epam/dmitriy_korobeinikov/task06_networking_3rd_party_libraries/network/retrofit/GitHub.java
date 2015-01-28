@@ -5,7 +5,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.issue.Issue;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.issue.IssueCreateRequest;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.issue.IssueEditRequest;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.issue.IssueUpdateRequest;
 
 import java.util.List;
 
@@ -32,11 +32,11 @@ public interface GitHub {
     AuthResponse authorization(@Path(value = "clientId", encode = false) String clientId, @Body AuthBody authBody, @Header("Authorization") String str);
 
     @GET("/repos/{userName}/{repoName}/issues?state=all")
-    List<Issue> getRepoIssues(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName, @Header("Authorization") String token);
+    List<Issue> getRepoIssues(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName);
 
     @POST("/repos/{userName}/{repoName}/issues")
     Issue createIssue(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName, @Body IssueCreateRequest issueCreateRequest);
 
     @PATCH("/repos/{userName}/{repoName}/issues/{issueNumber}")
-    Issue updateIssue(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName, @Path(value = "issueNumber") int issueNumber, @Body IssueEditRequest issueEditRequest);
+    Issue updateIssue(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName, @Path(value = "issueNumber") int issueNumber, @Body IssueUpdateRequest issueEditRequest);
 }

@@ -26,12 +26,13 @@ public class IssuesContract {
         public static final String STATE_CLOSED = "closed";
 
         //Table columns
-        public static final String ISSUE_ID = "issue_id";
+        public static final String ISSUE_NUMBER = "number";
         public static final String TITLE = "title";
         public static final String BODY = "body";
         public static final String STATE = "state";
         public static final String OWNER_LOGIN = "owner_login";
         public static final String REPO_NAME = "repo_name";
+        public static final String UPDATED_AT = "updated_at";
 
         public static final Uri ISSUES_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(ISSUE_PATH).build();
 

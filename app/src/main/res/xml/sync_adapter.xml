@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
+              android:contentAuthority="com.johnkuper.epam.contentprovider.issues"
+              android:accountType="com.johnkuper.epam.github.repositories.oauth"
+              android:userVisible="true"
+              android:supportsUploading="true"/>

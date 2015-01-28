@@ -7,6 +7,7 @@ import com.ocpsoft.pretty.time.PrettyTime;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -17,9 +18,10 @@ import java.util.Locale;
 public class RepositoriesDateUtils {
 
     public static final String LOG_TAG = RepositoriesDateUtils.class.getSimpleName();
+    public static final String BASE_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static String getElapsedDate(Cursor cursor, String columnName) {
-        Date date = getFormatDate(cursor, columnName, "yyyy-MM-dd HH:mm:ss.S");
+        Date date = getFormatDate(cursor, columnName, BASE_DATE_FORMAT);
         PrettyTime prettyTime = new PrettyTime(getAppLocale());
         return prettyTime.format(date);
     }
@@ -41,6 +43,17 @@ public class RepositoriesDateUtils {
         SimpleDateFormat formatter = new SimpleDateFormat(format, getAppLocale());
         Date date = getFormatDate(cursor, columnName, format);
         return formatter.format(date);
+    }
+
+    public static String getFormatDateAsString(Date date, String format) {
+        SimpleDateFormat formatter = new SimpleDateFormat(format, getAppLocale());
+        return formatter.format(date);
+    }
+
+    public static String getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat(BASE_DATE_FORMAT);
+        return formatter.format(new Date(calendar.getTimeInMillis()));
     }
 
     public static Locale getAppLocale() {

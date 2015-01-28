@@ -20,6 +20,8 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import static com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountGeneral.*;
+
 /**
  * Created by Dmitriy Korobeynikov on 1/22/2015.
  * Calls by RepositoriesAuthenticatorService when user wanted to add new account.
@@ -56,7 +58,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         String accountName = getIntent().getStringExtra(ARG_ACCOUNT_NAME);
         mAuthTokenType = getIntent().getStringExtra(ARG_AUTH_TYPE);
         if (mAuthTokenType == null)
-            mAuthTokenType = AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
+            mAuthTokenType = AUTHTOKEN_TYPE_FULL_ACCESS;
 
         if (accountName != null) {
             ((TextView) findViewById(R.id.accountName)).setText(accountName);
@@ -95,13 +97,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mAccountType = getIntent().getStringExtra(ARG_ACCOUNT_TYPE);
         Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> Started authenticating");
 
-        String[] scopes = {"public_repo"};
-        String note = "admin script";
-        AuthBody authBody = fillAuthBody(AccountGeneral.CLIENT_SECRET, scopes, note);
+        AuthBody authBody = fillAuthBody(CLIENT_SECRET, ACCOUNT_SCOPES, ACCOUNT_NOTE);
 
         String authHeader = PREFIX_BASIC_AUTHORIZATION + getEncodedUserDetails(mUserName, mUserPass);
 
-        GitHubAuthorizationRequest authorizationRequest = new GitHubAuthorizationRequest(AccountGeneral.CLIENT_ID, authBody, authHeader);
+        GitHubAuthorizationRequest authorizationRequest = new GitHubAuthorizationRequest(CLIENT_ID, authBody, authHeader);
         mSpiceManager.execute(authorizationRequest, new AuthResponseListener());
     }
 

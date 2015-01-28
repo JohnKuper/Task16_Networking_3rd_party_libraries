@@ -3,6 +3,6 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.mode
 /**
  * Created by Dmitriy Korobeynikov on 27.01.2015.
  */
-public class IssueEditRequest {
+public class IssueUpdateRequest {
     public String state;
 }
