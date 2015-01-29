@@ -42,7 +42,7 @@ public class RepoCreateIssueDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOwnerLogin = PreferencesUtils.getCurrentOwnerLogin(getActivity());
+        mOwnerLogin = PreferencesUtils.getCurrentAccountName(getActivity());
         mRepoName = PreferencesUtils.getCurrentRepoName(getActivity());
     }
 

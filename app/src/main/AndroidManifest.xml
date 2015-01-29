@@ -8,6 +8,7 @@
     <!--Authenticator-->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
 
     <!--Client-->
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>

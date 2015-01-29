@@ -15,6 +15,7 @@
     <!--Menu actions labels-->
     <string name="menu_search">Search</string>
     <string name="menu_settings">Settings</string>
+    <string name="action_sync_now">Sync now</string>
 
     <!--RepoListFragment-->
     <string name="update_prefix">Updated: %1$s</string>
@@ -86,6 +87,7 @@
     <!-- Dialog fragments-->
     <string name="dialog_fragment_create_issue_title">Create new Issue</string>
     <string name="dialog_fragment_tag_rename_title">Edit tag</string>
+
 
 
 </resources>

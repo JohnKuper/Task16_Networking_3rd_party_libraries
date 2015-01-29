@@ -1,5 +1,6 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit;
 
+import android.content.ContentProvider;
 import android.content.Context;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.issue.IssueUpdateRequest;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountGeneral;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountHelper;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.PreferencesUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 
 import java.util.List;
@@ -54,7 +56,7 @@ public class IssuesGitHubService extends BaseGitHubService {
 
         @Override
         public void intercept(RequestFacade request) {
-            request.addHeader("Authorization", "token " + mAccountHelper.getAccountToken(AccountGeneral.ACCOUNT_NAME));
+            request.addHeader("Authorization", "token " + mAccountHelper.getAccountToken(PreferencesUtils.getCurrentAccountName(RepositoriesApplication.getAppContext())));
         }
     }
 }

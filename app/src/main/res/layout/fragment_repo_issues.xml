@@ -6,25 +6,6 @@
               android:layout_height="match_parent"
     >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/get_issues_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Sync now"/>
-
-        <Button
-            android:id="@+id/get_account_token"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Get token"/>
-    </LinearLayout>
-
     <ListView
         android:id="@+id/repo_issues_list"
         android:layout_width="match_parent"
@@ -35,6 +16,4 @@
         android:dividerHeight="1dp"
         android:clickable="true"
         tools:listitem="@layout/row_issue_list"/>
-
-
 </LinearLayout>

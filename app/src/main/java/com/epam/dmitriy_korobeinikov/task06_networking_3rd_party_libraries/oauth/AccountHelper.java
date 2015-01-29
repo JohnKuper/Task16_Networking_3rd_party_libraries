@@ -10,6 +10,8 @@ import android.util.Log;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dmitriy Korobeynikov on 28.01.2015.
@@ -41,5 +43,14 @@ public class AccountHelper {
             if (account.name.equals(accountName)) return account;
         }
         throw new IllegalArgumentException("Unknown account: " + accountName);
+    }
+
+    public List<String> getAvailableAccounts(String accountType) {
+        List<String> accNames = new ArrayList<>();
+        Account[] appAccounts = mAccountManager.getAccountsByType(accountType);
+        for (Account account : appAccounts) {
+            accNames.add(account.name);
+        }
+        return accNames;
     }
 }

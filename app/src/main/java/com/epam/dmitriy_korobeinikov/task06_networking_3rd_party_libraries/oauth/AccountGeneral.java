@@ -9,7 +9,7 @@ public class AccountGeneral {
     public static final String CLIENT_SECRET = "425df65f5d7f34bad1287dbc52cede6a3b082cad";
 
     public static final String ACCOUNT_TYPE = "com.johnkuper.epam.github.repositories.oauth";
-    public static final String ACCOUNT_NAME = "JohnKuper";
+    public static final String ACCOUNT_NAME = "RepoObserver";
     public static final String[] ACCOUNT_SCOPES = {"public_repo"};
     public static final String ACCOUNT_NOTE = "admin script";
 

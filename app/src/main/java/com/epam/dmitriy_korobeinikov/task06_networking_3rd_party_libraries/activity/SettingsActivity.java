@@ -22,6 +22,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     public static final String PREF_REPO_NAME_KEY = "prefRepoName";
     public static final String PREF_OWNER_LOGIN_KEY = "prefOwnerLogin";
     public static final String PREF_CHECK_FREQUENCY_KEY = "prefCheckFrequency";
+    public static final String PREF_CURRENT_ACCOUNT_NAME = "prefCurrentAccountName";
     private static boolean mIsPreviousValueNever;
 
     private Context mContext;

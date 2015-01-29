@@ -10,7 +10,6 @@
                 android:paddingRight="16dp"
                 android:background="@android:color/white">
 
-
     <com.makeramen.RoundedImageView
         android:id="@+id/avatar_image"
         android:layout_width="54dp"
@@ -21,15 +20,21 @@
         app:riv_border_color="@android:color/black"
         app:riv_oval="true"/>
 
+    <!--<TextView-->
+    <!--android:id="@+id/account_username"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@id/avatar_image"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--style="@style/TextAppearance.AppCompat.Body2"-->
+    <!--tools:text="JohnKuper"/>-->
 
-    <TextView
+    <Spinner
         android:id="@+id/account_username"
-        android:layout_width="wrap_content"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/avatar_image"
-        android:layout_marginTop="10dp"
-        style="@style/TextAppearance.AppCompat.Body2"
-        android:text="JohnKuper"/>
+        android:layout_alignParentLeft="true"/>
 
     <View
         android:id="@+id/drawer_header_divider"
@@ -48,5 +53,18 @@
         android:dividerHeight="0dp"
         tools:listitem="@layout/row_drawer"
         />
+
+    <com.makeramen.RoundedImageView
+        android:id="@+id/account_add_new"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignRight="@id/list_navigation_drawer_items"
+        android:src="@drawable/ic_person_add"
+        android:scaleType="centerCrop"
+        android:clickable="true"
+        tools:visibility="visible"
+        app:riv_border_width="1dp"
+        app:riv_border_color="@android:color/black"
+        app:riv_oval="true"/>
 
 </RelativeLayout>

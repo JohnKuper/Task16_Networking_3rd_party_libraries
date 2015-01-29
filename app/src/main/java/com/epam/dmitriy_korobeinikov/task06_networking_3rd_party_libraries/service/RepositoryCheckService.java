@@ -20,6 +20,7 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activ
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.GitHub;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.PreferencesUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RetrofitHelper;
 
 /**
@@ -76,22 +77,15 @@ public class RepositoryCheckService extends IntentService {
     }
 
     private void checkRepository() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String repoName = preferences.getString(SettingsActivity.PREF_REPO_NAME_KEY, "null");
-        String ownerLogin = preferences.getString(SettingsActivity.PREF_OWNER_LOGIN_KEY, "null");
+        String repoName = PreferencesUtils.getCurrentRepoName(mContext);
+        String ownerLogin = PreferencesUtils.getCurrentOwnerLogin(mContext);
         SearchResult searchResult = getUserRepository(repoName, ownerLogin);
         if (isRepositoryStargazersChanged(searchResult)) {
             Log.d(LOG_TAG, " Repository was changed!");
             Repository repository = searchResult.getSingleRepository();
             sendNotificationAboutStargazersChanged(repository);
-            updateRepositoryCurrentStargazersCount(repository);
+            PreferencesUtils.updateRepositoryCurrentStargazersCount(mContext, repository);
         }
-    }
-
-    private void updateRepositoryCurrentStargazersCount(Repository repository) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
-        editor.putInt(repository.getName(), repository.getStargazersCount());
-        editor.apply();
     }
 
     private boolean isRepositoryStargazersChanged(SearchResult searchResult) {

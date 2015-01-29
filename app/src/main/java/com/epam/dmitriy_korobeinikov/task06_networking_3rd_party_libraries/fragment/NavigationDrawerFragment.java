@@ -1,11 +1,18 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -21,13 +28,22 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.DrawerItem;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountGeneral;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountHelper;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.IssuesContract;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.PreferencesUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.IssuesContract.*;
 
 /**
  * Created by Dmitriy Korobeynikov on 12/12/2014.
@@ -45,10 +61,16 @@ public class NavigationDrawerFragment extends BaseFragment {
     private NavigationDrawerCallbacks mCallbacks;
 
     private ActionBarDrawerToggle mDrawerToggle;
+    private AccountHelper mAccountHelper;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private FrameLayout mFragmentContainerView;
+    private ImageView mAddNewAccount;
+    private Spinner mAccountNamePicker;
+    private List<String> mAvailableAccounts;
+    private ArrayAdapter<String> mSpinnerAdapter;
+    private AccountManager mAccountManager;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -69,12 +91,8 @@ public class NavigationDrawerFragment extends BaseFragment {
             mFromSavedInstanceState = true;
         }
 
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(true);
+        mAccountHelper = new AccountHelper(getActivity());
+        mAccountManager = AccountManager.get(getActivity());
     }
 
     @Override
@@ -89,10 +107,70 @@ public class NavigationDrawerFragment extends BaseFragment {
             }
         });
 
-
         mDrawerListView.setAdapter(new DrawerAdapter(getActivity(), R.layout.row_drawer, fillDrawerItems()));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        mAccountNamePicker = (Spinner) v.findViewById(R.id.account_username);
+
+        mAvailableAccounts = mAccountHelper.getAvailableAccounts(AccountGeneral.ACCOUNT_TYPE);
+        mSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mAvailableAccounts);
+        mAccountNamePicker.setAdapter(mSpinnerAdapter);
+
+        mAccountNamePicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String accountName = mSpinnerAdapter.getItem(position);
+                PreferencesUtils.setCurrentAccountName(getActivity(), accountName);
+                getActivity().getContentResolver().notifyChange(IssueContent.ISSUES_URI, null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        mAddNewAccount = (ImageView) v.findViewById(R.id.account_add_new);
+        mAddNewAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addAccount();
+            }
+        });
+
+
         return v;
+    }
+
+    private void addAccount() {
+        mAccountManager.addAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS,
+                null, null, getActivity(), new AccountManagerCallback<Bundle>() {
+                    @Override
+                    public void run(AccountManagerFuture<Bundle> future) {
+                        try {
+                            Bundle result;
+                            result = future.getResult();
+                            String accName = result.getString(AccountManager.KEY_ACCOUNT_NAME);
+                            mAvailableAccounts.add(0, accName);
+                            mSpinnerAdapter.notifyDataSetChanged();
+                            PreferencesUtils.setCurrentAccountName(getActivity(), accName);
+                            Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> Account " + accName + " was successfully created");
+                        } catch (OperationCanceledException e) {
+                            Log.e(LOG_TAG, "Account creation canceled");
+                        } catch (AuthenticatorException e) {
+                            Log.e(RepositoriesApplication.APP_NAME, LOG_TAG + "> Authentication error during creating account");
+                        } catch (IOException e) {
+                            Log.e(RepositoriesApplication.APP_NAME, LOG_TAG + "> Error during creating account");
+                        }
+                    }
+                }, null);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     private ArrayList<DrawerItem> fillDrawerItems() {
@@ -219,7 +297,6 @@ public class NavigationDrawerFragment extends BaseFragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Forward the new configuration the drawer toggle component.
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 

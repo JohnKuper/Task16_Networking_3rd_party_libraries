@@ -43,12 +43,12 @@ public class GithubSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        mUserName = PreferencesUtils.getCurrentOwnerLogin(getContext());
+        mUserName = PreferencesUtils.getCurrentAccountName(getContext());
         mRepoName = PreferencesUtils.getCurrentRepoName(getContext());
         mIssuesGitHubService = new IssuesGitHubService(getContext());
 
         try {
-            String authToken = mAccountHelper.getAccountToken(AccountGeneral.ACCOUNT_NAME);
+            String authToken = mAccountHelper.getAccountToken(mUserName);
             Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onPerformSync Account token = " + authToken);
 
             Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> Get remote issues");
