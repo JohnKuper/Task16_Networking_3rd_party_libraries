@@ -53,4 +53,8 @@ public class AccountHelper {
         }
         return accNames;
     }
+
+    public boolean isAtLeastOneAccount(String accountType) {
+        return getAvailableAccounts(accountType).size() > 0;
+    }
 }

@@ -4,12 +4,15 @@ import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.exception.NoNetworkException;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment.RepoIssuesFragment;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.issue.Issue;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.IssuesGitHubService;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountGeneral;
@@ -43,6 +46,7 @@ public class GithubSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+        sendSyncStartBroadCast();
         mUserName = PreferencesUtils.getCurrentAccountName(getContext());
         mRepoName = PreferencesUtils.getCurrentRepoName(getContext());
         mIssuesGitHubService = new IssuesGitHubService(getContext());
@@ -61,6 +65,8 @@ public class GithubSyncAdapter extends AbstractThreadedSyncAdapter {
 
         } catch (Exception e) {
             Log.e(RepositoriesApplication.APP_NAME, LOG_TAG + "> Error during onPerformSync", e);
+        } finally {
+            sendSyncStopBroadCast();
         }
     }
 
@@ -105,7 +111,11 @@ public class GithubSyncAdapter extends AbstractThreadedSyncAdapter {
         String currentState;
         if (localUpdate.compareTo(remoteUpdate) > 0) {
             currentState = localIssue.getState();
-            mIssuesGitHubService.updateIssue(mUserName, mRepoName, issueNumber, currentState);
+            try {
+                mIssuesGitHubService.updateIssue(mUserName, mRepoName, issueNumber, currentState);
+            } catch (NoNetworkException e) {
+                Log.e(RepositoriesApplication.APP_NAME, LOG_TAG + "> Error during syncIssuesState ", e);
+            }
         } else if (localUpdate.compareTo(remoteUpdate) < 0) {
             currentState = remoteIssue.getState();
             IssuesUtils.changeLocalIssueState(localIssue.getAuto_id(), currentState);
@@ -129,8 +139,23 @@ public class GithubSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private Issue updateRemoteIssuesWithNewLocal(Issue newLocalIssue) {
-        Issue newRemoteIssue = mIssuesGitHubService.createIssue(mUserName, mRepoName, newLocalIssue.getTitle(), newLocalIssue.getBody());
+        Issue newRemoteIssue = null;
+        try {
+            newRemoteIssue = mIssuesGitHubService.createIssue(mUserName, mRepoName, newLocalIssue.getTitle(), newLocalIssue.getBody());
+        } catch (NoNetworkException e) {
+            Log.e(RepositoriesApplication.APP_NAME, LOG_TAG + "> Error during updateRemoteIssuesWithNewLocal ", e);
+        }
         Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> New remote issue = " + newRemoteIssue);
         return newRemoteIssue;
+    }
+
+    private void sendSyncStartBroadCast() {
+        Intent i = new Intent(RepoIssuesFragment.SYNC_ACTION_START);
+        getContext().sendBroadcast(i);
+    }
+
+    private void sendSyncStopBroadCast() {
+        Intent i = new Intent(RepoIssuesFragment.SYNC_ACTION_STOP);
+        getContext().sendBroadcast(i);
     }
 }

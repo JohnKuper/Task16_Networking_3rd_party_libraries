@@ -71,6 +71,8 @@
     <string name="toast_internet_connection_is_not_available_service_disabled">Internet connection is not available. Repositories tracking is disabled.</string>
     <string name="toast_only_unique_tags">The repository can only have unique tags</string>
     <string name="toast_only_unique_issues">Issue with title {%1$s} and body {%2$s} already exist</string>
+    <string name="wrong_username_or_password">Wrong username or password</string>
+    <string name="please_log_in_first">Please log in first</string>
 
     <!--Repositories check service-->
     <string name="service_repository_was_changed">Repository with name %1$s was changed!</string>
@@ -79,7 +81,7 @@
     <string name="service_notification_ticker">Repository changed!</string>
 
     <!--OAuth-->
-    <string name="account_label">JohnKuper</string>
+    <string name="account_label">RepoObserver</string>
     <string name="signup_title">Create new account</string>
     <string name="login_label">Log in</string>
     <string name="add_new_issue">Add new issue</string>
@@ -87,7 +89,5 @@
     <!-- Dialog fragments-->
     <string name="dialog_fragment_create_issue_title">Create new Issue</string>
     <string name="dialog_fragment_tag_rename_title">Edit tag</string>
-
-
 
 </resources>

@@ -61,19 +61,6 @@ public class GitHubAuthenticator extends AbstractAccountAuthenticator {
         String authToken = am.peekAuthToken(account, authTokenType);
         Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> peekAuthToken returned - " + authToken);
 
-        // Lets give another try to authenticate the user
-        if (TextUtils.isEmpty(authToken)) {
-            final String password = am.getPassword(account);
-            if (password != null) {
-                try {
-                    Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> re-authenticating with the existing password");
-                   // authToken = sServerAuthenticate.userSignIn(account.name, password, authTokenType);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
         // If we get an authToken - we return it
         if (!TextUtils.isEmpty(authToken)) {
             final Bundle result = new Bundle();

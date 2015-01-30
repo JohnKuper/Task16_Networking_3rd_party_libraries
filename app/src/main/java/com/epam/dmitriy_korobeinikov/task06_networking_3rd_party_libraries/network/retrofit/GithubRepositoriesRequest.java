@@ -2,6 +2,7 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.netw
 
 import android.util.Log;
 
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.exception.NoNetworkException;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
@@ -23,7 +24,7 @@ public class GithubRepositoriesRequest extends RetrofitSpiceRequest<SearchResult
     }
 
     @Override
-    public SearchResult loadDataFromNetwork() {
+    public SearchResult loadDataFromNetwork() throws NoNetworkException {
         Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> loadDataFromNetwork");
         return getService().getRepos(mKeyword, mPerPage);
     }

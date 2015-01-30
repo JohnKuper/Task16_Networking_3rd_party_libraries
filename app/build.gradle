@@ -51,6 +51,7 @@ android {
         compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
         compile 'com.makeramen:roundedimageview:1.5.0'
         compile 'com.j256.ormlite:ormlite-android:4.45'
+        compile 'com.google.android.gms:play-services-maps:6.5.87'
 
     }
 }

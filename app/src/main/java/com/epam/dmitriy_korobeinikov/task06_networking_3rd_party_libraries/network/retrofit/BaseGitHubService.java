@@ -18,6 +18,7 @@ public class BaseGitHubService {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setLog(new AndroidLog(RepositoriesApplication.APP_NAME))
                 .setConverter(new JacksonConverter())
+                .setErrorHandler(new GitHubErrorHandler())
                 .build();
         mGithub = restAdapter.create(GitHub.class);
     }

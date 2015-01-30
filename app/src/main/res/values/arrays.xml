@@ -18,9 +18,11 @@
     <string-array name="nav_drawer_titles">
         <item>Repositories</item>
         <item>Issues</item>
+        <item>My location</item>
     </string-array>
     <string-array name="nav_drawer_icons">
         <item>@drawable/ic_book</item>
         <item>@drawable/ic_issue</item>
+        <item>@drawable/ic_my_location</item>
     </string-array>
 </resources>

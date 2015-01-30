@@ -1,14 +1,20 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,15 +23,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.CursorLoaderListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.listener.RepoIssueCreateListener;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountGeneral;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountHelper;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.IssuesContract;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.IssuesUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.PreferencesUtils;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.ViewsUtils;
 
 import static com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.IssuesContract.IssueContent;
 
@@ -35,11 +46,16 @@ import static com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_librarie
 public class RepoIssuesFragment extends BaseFragment {
 
     public static final String LOG_TAG = RepoIssuesFragment.class.getSimpleName();
+    public static final String SYNC_ACTION_START = "com.johnkuper.epam.action.SYNC_START";
+    public static final String SYNC_ACTION_STOP = "com.johnkuper.epam.action.SYNC_STOP";
 
     private static final int ISSUES_LOADER = 3;
 
     private RepoIssueCreateListener mIssueCreateListener;
     private IssuesCursorAdapter mIssuesCursorAdapter;
+    private AccountHelper mAccountHelper;
+    private ProgressDialog mDialog;
+
     private String mOwnerLogin;
     private String mRepoName;
 
@@ -53,6 +69,7 @@ public class RepoIssuesFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mAccountHelper = new AccountHelper(getActivity());
     }
 
     @Override
@@ -72,8 +89,23 @@ public class RepoIssuesFragment extends BaseFragment {
     @Override
     public void onResume() {
         getActionBar().setTitle(getString(R.string.fragment_repo_issues_title));
+        registerBroadcastSyncListener();
         super.onResume();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(syncListenerReceiver);
+    }
+
+    private void registerBroadcastSyncListener() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SYNC_ACTION_START);
+        filter.addAction(SYNC_ACTION_STOP);
+        getActivity().registerReceiver(syncListenerReceiver, filter);
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -85,16 +117,25 @@ public class RepoIssuesFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_issue:
-                mIssueCreateListener.onIssueCreate();
+                if (mAccountHelper.isAtLeastOneAccount(AccountGeneral.ACCOUNT_TYPE)) {
+                    mIssueCreateListener.onIssueCreate();
+                } else {
+                    ViewsUtils.showToast(getActivity(), getString(R.string.please_log_in_first), Toast.LENGTH_LONG);
+                }
                 return true;
             case R.id.action_sync:
-                startSync();
+                if (mAccountHelper.isAtLeastOneAccount(AccountGeneral.ACCOUNT_TYPE)) {
+                    startSync();
+                } else {
+                    ViewsUtils.showToast(getActivity(), getString(R.string.please_log_in_first), Toast.LENGTH_LONG);
+                }
                 return true;
             default:
                 break;
         }
         return false;
     }
+
 
     @Override
     public void onDetach() {
@@ -103,11 +144,12 @@ public class RepoIssuesFragment extends BaseFragment {
     }
 
     private void startSync() {
+
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
 
-        Account account = new Account(AccountGeneral.ACCOUNT_NAME, AccountGeneral.ACCOUNT_TYPE);
+        Account account = new Account(PreferencesUtils.getCurrentAccountName(getActivity()), AccountGeneral.ACCOUNT_TYPE);
         ContentResolver.requestSync(account, IssuesContract.AUTHORITY, bundle);
     }
 
@@ -125,6 +167,17 @@ public class RepoIssuesFragment extends BaseFragment {
         } else {
             getLoaderManager().initLoader(ISSUES_LOADER, null, new CursorLoaderListener<>(getActivity(), IssueContent.ISSUES_URI, mIssuesCursorAdapter, selection, selectionArgs));
         }
+    }
+
+    private void dismissProgressDialog() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+    }
+
+    private void showProgressDialog() {
+        mDialog = ProgressDialog.show(getActivity(), null, null, true, false);
+        mDialog.setContentView(new ProgressBar(getActivity()));
     }
 
     /**
@@ -173,4 +226,20 @@ public class RepoIssuesFragment extends BaseFragment {
             public ImageButton closeIssueBtn;
         }
     }
+
+    private BroadcastReceiver syncListenerReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(SYNC_ACTION_START)) {
+                Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> Sync started");
+                showProgressDialog();
+            } else if (intent.getAction().equals(SYNC_ACTION_STOP)) {
+                Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> Sync finished");
+                dismissProgressDialog();
+            }
+        }
+
+
+    };
 }

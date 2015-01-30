@@ -8,6 +8,8 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RetrofitHelper;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
+import retrofit.RestAdapter;
+
 /**
  * Created by Dmitriy Korobeynikov on 1/23/2015.
  * Authorization to GitHub for later retrieval the token from the response.
@@ -29,7 +31,7 @@ public class GitHubAuthorizationRequest extends RetrofitSpiceRequest<AuthRespons
     @Override
     public AuthResponse loadDataFromNetwork() throws Exception {
         Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> loadDataFromNetwork");
-        GitHub gitHub = RetrofitHelper.getGitHubBaseRestAdapter();
-        return gitHub.authorization(mClientId, mAuthBody, mAuthorizationHeader);
+        BaseGitHubService gitHubService = new BaseGitHubService(new RestAdapter.Builder());
+        return gitHubService.getService().authorization(mClientId, mAuthBody, mAuthorizationHeader);
     }
 }

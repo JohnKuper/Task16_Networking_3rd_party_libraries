@@ -1,5 +1,7 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit;
 
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.exception.NoNetworkException;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.exception.UnauthorizedException;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.AuthBody;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.AuthResponse;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.issue.Issue;
@@ -26,17 +28,17 @@ public interface GitHub {
 
     @GET("/search/repositories?sort=stars")
     SearchResult getRepos(@Query(value = "q", encodeValue = false) String keyword,
-                          @Query("per_page") int resultOnPage);
+                          @Query("per_page") int resultOnPage) throws NoNetworkException;
 
     @PUT("/authorizations/clients/{clientId}")
-    AuthResponse authorization(@Path(value = "clientId", encode = false) String clientId, @Body AuthBody authBody, @Header("Authorization") String str);
+    AuthResponse authorization(@Path(value = "clientId", encode = false) String clientId, @Body AuthBody authBody, @Header("Authorization") String str) throws NoNetworkException, UnauthorizedException;
 
     @GET("/repos/{userName}/{repoName}/issues?state=all")
-    List<Issue> getRepoIssues(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName);
+    List<Issue> getRepoIssues(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName) throws NoNetworkException;
 
     @POST("/repos/{userName}/{repoName}/issues")
-    Issue createIssue(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName, @Body IssueCreateRequest issueCreateRequest);
+    Issue createIssue(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName, @Body IssueCreateRequest issueCreateRequest) throws NoNetworkException;
 
     @PATCH("/repos/{userName}/{repoName}/issues/{issueNumber}")
-    Issue updateIssue(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName, @Path(value = "issueNumber") int issueNumber, @Body IssueUpdateRequest issueEditRequest);
+    Issue updateIssue(@Path(value = "userName", encode = false) String userName, @Path(value = "repoName", encode = false) String repoName, @Path(value = "issueNumber") int issueNumber, @Body IssueUpdateRequest issueEditRequest) throws NoNetworkException;
 }

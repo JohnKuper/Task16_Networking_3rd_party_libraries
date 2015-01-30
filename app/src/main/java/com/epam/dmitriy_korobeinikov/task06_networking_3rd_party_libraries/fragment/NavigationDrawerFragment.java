@@ -1,6 +1,5 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
@@ -12,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -35,7 +33,6 @@ import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.DrawerItem;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountGeneral;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oauth.AccountHelper;
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.IssuesContract;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.PreferencesUtils;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 
@@ -43,7 +40,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.IssuesContract.*;
+import static com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.provider.IssuesContract.IssueContent;
 
 /**
  * Created by Dmitriy Korobeynikov on 12/12/2014.
@@ -66,8 +63,6 @@ public class NavigationDrawerFragment extends BaseFragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private FrameLayout mFragmentContainerView;
-    private ImageView mAddNewAccount;
-    private Spinner mAccountNamePicker;
     private List<String> mAvailableAccounts;
     private ArrayAdapter<String> mSpinnerAdapter;
     private AccountManager mAccountManager;
@@ -93,6 +88,10 @@ public class NavigationDrawerFragment extends BaseFragment {
 
         mAccountHelper = new AccountHelper(getActivity());
         mAccountManager = AccountManager.get(getActivity());
+
+        if (!mAccountHelper.isAtLeastOneAccount(AccountGeneral.ACCOUNT_TYPE)) {
+            PreferencesUtils.eraseCurrentAccountName(getActivity());
+        }
     }
 
     @Override
@@ -110,13 +109,14 @@ public class NavigationDrawerFragment extends BaseFragment {
         mDrawerListView.setAdapter(new DrawerAdapter(getActivity(), R.layout.row_drawer, fillDrawerItems()));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
-        mAccountNamePicker = (Spinner) v.findViewById(R.id.account_username);
+        Spinner accountNamePicker = (Spinner) v.findViewById(R.id.account_username);
 
         mAvailableAccounts = mAccountHelper.getAvailableAccounts(AccountGeneral.ACCOUNT_TYPE);
         mSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mAvailableAccounts);
-        mAccountNamePicker.setAdapter(mSpinnerAdapter);
+        mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        accountNamePicker.setAdapter(mSpinnerAdapter);
 
-        mAccountNamePicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        accountNamePicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String accountName = mSpinnerAdapter.getItem(position);
@@ -130,17 +130,20 @@ public class NavigationDrawerFragment extends BaseFragment {
             }
         });
 
-
-        mAddNewAccount = (ImageView) v.findViewById(R.id.account_add_new);
-        mAddNewAccount.setOnClickListener(new View.OnClickListener() {
+        ImageView addNewAccount = (ImageView) v.findViewById(R.id.account_add_new);
+        addNewAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addAccount();
             }
         });
 
-
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void addAccount() {
@@ -187,16 +190,6 @@ public class NavigationDrawerFragment extends BaseFragment {
         return drawerItems;
     }
 
-    public boolean isDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
-    }
-
-    /**
-     * Users of this fragment must call this method to set up the navigation drawer interactions.
-     *
-     * @param fragmentId   The android:id of this fragment in its activity's layout.
-     * @param drawerLayout The DrawerLayout containing this fragment's UI.
-     */
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
         mFragmentContainerView = (FrameLayout) getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
@@ -205,12 +198,11 @@ public class NavigationDrawerFragment extends BaseFragment {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the navigation drawer and the action bar app icon.
+
         mDrawerToggle = new ActionBarDrawerToggle(
-                getActivity(),                    /* host Activity */
-                mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                getActivity(),
+                mDrawerLayout,
+                R.drawable.ic_drawer,
                 R.drawable.ic_drawer
         ) {
             @Override
@@ -219,8 +211,7 @@ public class NavigationDrawerFragment extends BaseFragment {
                 if (!isAdded()) {
                     return;
                 }
-
-                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                getActivity().supportInvalidateOptionsMenu();
             }
 
             @Override
@@ -231,20 +222,15 @@ public class NavigationDrawerFragment extends BaseFragment {
                 }
 
                 if (!mUserLearnedDrawer) {
-                    // The user manually opened the drawer; store this flag to prevent auto-showing
-                    // the navigation drawer automatically in the future.
                     mUserLearnedDrawer = true;
                     SharedPreferences sp = PreferenceManager
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
-
-                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
 
-        // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
-        // per the navigation drawer design guidelines.
+
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
             mDrawerLayout.openDrawer(mFragmentContainerView);
         }
@@ -300,38 +286,14 @@ public class NavigationDrawerFragment extends BaseFragment {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        // If the drawer is open, show the global app actions in the action bar. See also
-//        // showGlobalContextActionBar, which controls the top-left area of the action bar.
-//        if (mDrawerLayout != null && isDrawerOpen()) {
-//            inflater.inflate(R.menu.menu_with_search, menu);
-//            showGlobalContextActionBar();
-//        }
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onOptionsItemSelected");
             return true;
         }
-        // Handle your other action bar items...
-
         return super.onOptionsItemSelected(item);
 
-    }
-
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
-     */
-    private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(R.string.app_name);
     }
 
     public static interface NavigationDrawerCallbacks {

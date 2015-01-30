@@ -2,10 +2,8 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.util
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.SettingInjectorService;
 import android.preference.PreferenceManager;
 
-import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 
@@ -32,6 +30,10 @@ public class PreferencesUtils {
 
     public static String getCurrentAccountName(Context context) {
         return getSharedPreferences(context).getString(SettingsActivity.PREF_CURRENT_ACCOUNT_NAME, "");
+    }
+
+    public static void eraseCurrentAccountName(Context context) {
+        getSharedPreferences(context).edit().putString(SettingsActivity.PREF_CURRENT_ACCOUNT_NAME, "").commit();
     }
 
     public static void updateRepositoryCurrentStargazersCount(Context context, Repository repository) {

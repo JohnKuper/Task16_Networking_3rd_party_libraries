@@ -9,7 +9,6 @@ public class AccountGeneral {
     public static final String CLIENT_SECRET = "425df65f5d7f34bad1287dbc52cede6a3b082cad";
 
     public static final String ACCOUNT_TYPE = "com.johnkuper.epam.github.repositories.oauth";
-    public static final String ACCOUNT_NAME = "RepoObserver";
     public static final String[] ACCOUNT_SCOPES = {"public_repo"};
     public static final String ACCOUNT_NOTE = "admin script";
 
@@ -17,5 +16,5 @@ public class AccountGeneral {
      * Auth token types
      */
     public static final String AUTHTOKEN_TYPE_FULL_ACCESS = "com.johnkuper.epam.github.repositories.oauth.general";
-    public static final String AUTHTOKEN_TYPE_FULL_ACCESS_LABEL = "Full access to an JohnKuper account";
+    public static final String AUTHTOKEN_TYPE_FULL_ACCESS_LABEL = "Full access to an RepoObserver account";
 }

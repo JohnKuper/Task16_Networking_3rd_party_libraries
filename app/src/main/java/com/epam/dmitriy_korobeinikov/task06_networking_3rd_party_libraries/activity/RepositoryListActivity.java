@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,20 +36,13 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
     private RepoTagRenameDialogFragment mRepoTagRenameDialogFragment;
     private RepoDetailFragment mRepoDetailFragment;
     private RepoIssuesFragment mRepoIssuesFragment;
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-
     private FragmentManager mFragmentManager;
-
-    private ActionBar mActionBar;
-
-    private CharSequence mAppTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo_list);
         mFragmentManager = getSupportFragmentManager();
-        mActionBar = getSupportActionBar();
 
         if (savedInstanceState != null) {
             mRepoListFragment = (RepoListFragment) mFragmentManager.getFragment(savedInstanceState, RepoListFragment.LOG_TAG);
@@ -217,10 +209,10 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
     }
 
     private void setupNavigationDrawer() {
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
+        NavigationDrawerFragment navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-        mNavigationDrawerFragment.setUp(
+        navigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
@@ -259,6 +251,10 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
                     mFragmentManager.executePendingTransactions();
                     hideRepoDetailContainerInappropriateViews();
                 }
+                break;
+            case 2:
+                Intent intent = new Intent(this, MapActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;

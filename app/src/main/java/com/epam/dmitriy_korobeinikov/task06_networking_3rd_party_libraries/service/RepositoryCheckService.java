@@ -17,10 +17,12 @@ import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.activity.SettingsActivity;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.exception.NoNetworkException;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.Repository;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.SearchResult;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.GitHub;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.PreferencesUtils;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RetrofitHelper;
 
 /**
@@ -54,18 +56,15 @@ public class RepositoryCheckService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(LOG_TAG, "onHandleIntent");
         if (isOnline()) {
-            checkRepository();
+            try {
+                checkRepository();
+            } catch (NoNetworkException e) {
+                Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> Internet connection error", e);
+            }
         } else {
-            Log.d(LOG_TAG, "Internet connection error");
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
             editor.putString(SettingsActivity.PREF_CHECK_FREQUENCY_KEY, "0").apply();
             SettingsActivity.setPreviousValueNever(true);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(mContext, getString(R.string.toast_internet_connection_is_not_available_service_disabled), Toast.LENGTH_LONG).show();
-                }
-            });
         }
     }
 
@@ -76,7 +75,7 @@ public class RepositoryCheckService extends IntentService {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    private void checkRepository() {
+    private void checkRepository() throws NoNetworkException {
         String repoName = PreferencesUtils.getCurrentRepoName(mContext);
         String ownerLogin = PreferencesUtils.getCurrentOwnerLogin(mContext);
         SearchResult searchResult = getUserRepository(repoName, ownerLogin);
@@ -101,7 +100,6 @@ public class RepositoryCheckService extends IntentService {
                 @Override
                 public void run() {
                     Toast.makeText(mContext, getString(R.string.toast_more_than_one_repository_found_by_check_service), Toast.LENGTH_LONG).show();
-
                 }
             });
         }
@@ -127,7 +125,7 @@ public class RepositoryCheckService extends IntentService {
         mNotificationManager.notify(REPOSITORY_CHANGE_NOTIFICATION_ID, notification);
     }
 
-    private SearchResult getUserRepository(String repoName, String ownerLogin) {
+    private SearchResult getUserRepository(String repoName, String ownerLogin) throws NoNetworkException {
         GitHub gitHub = RetrofitHelper.getGitHubBaseRestAdapter();
         String qualifiersPath = repoName + "+user:" + ownerLogin;
         return gitHub.getRepos(qualifiersPath, 10);

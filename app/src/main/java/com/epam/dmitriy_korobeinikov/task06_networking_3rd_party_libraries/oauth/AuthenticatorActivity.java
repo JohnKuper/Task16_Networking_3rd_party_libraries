@@ -3,19 +3,24 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.oaut
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.R;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.exception.UnauthorizedException;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.AuthBody;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.model.AuthResponse;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.retrofit.GitHubAuthorizationRequest;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.network.spiceservice.BaseGitHubSpiceService;
 import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.RepositoriesApplication;
+import com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.utils.ViewsUtils;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -37,10 +42,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
     public final static String PARAM_USER_PASS = "USER_PASS";
     private final static String PREFIX_BASIC_AUTHORIZATION = "basic ";
-    private final static String PREFIX_TOKEN_AUTHORIZATION = "token ";
 
     private AccountManager mAccountManager;
     private SpiceManager mSpiceManager = new SpiceManager(BaseGitHubSpiceService.class);
+    private ProgressDialog mDialog;
+
     private String mAccountType;
     private String mAuthTokenType;
     private String mUserName;
@@ -102,18 +108,35 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         String authHeader = PREFIX_BASIC_AUTHORIZATION + getEncodedUserDetails(mUserName, mUserPass);
 
         GitHubAuthorizationRequest authorizationRequest = new GitHubAuthorizationRequest(CLIENT_ID, authBody, authHeader);
+        showProgressDialog();
         mSpiceManager.execute(authorizationRequest, new AuthResponseListener());
+    }
+
+    private void dismissProgressDialog() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+    }
+
+    private void showProgressDialog() {
+        mDialog = ProgressDialog.show(this, null, null, true, false);
+        mDialog.setContentView(new ProgressBar(this));
     }
 
     private class AuthResponseListener implements RequestListener<AuthResponse> {
         @Override
         public void onRequestFailure(SpiceException e) {
-            Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onRequestFailure ", e);
+            Log.e(RepositoriesApplication.APP_NAME, LOG_TAG + "> onRequestFailure ", e);
+            dismissProgressDialog();
+            if (e.getCause() instanceof UnauthorizedException) {
+                ViewsUtils.showToast(AuthenticatorActivity.this, getString(R.string.wrong_username_or_password), Toast.LENGTH_LONG);
+            }
         }
 
         @Override
         public void onRequestSuccess(AuthResponse authResponse) {
             Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onRequestSuccess");
+            dismissProgressDialog();
 
             String authToken = authResponse.getToken();
             Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> token - " + authToken);
