@@ -76,6 +76,16 @@ public class NavigationDrawerFragment extends BaseFragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (NavigationDrawerCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -140,14 +150,61 @@ public class NavigationDrawerFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (!mAccountHelper.isAtLeastOneAccount(AccountGeneral.ACCOUNT_TYPE)) {
             mAccountNamePicker.setVisibility(View.GONE);
-            PreferencesUtils.eraseCurrentAccountName(getActivity());
         } else {
             mAccountNamePicker.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onOptionsItemSelected");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    private ArrayList<DrawerItem> fillDrawerItems() {
+        Resources resources = getActivity().getResources();
+        String[] drawerTitles = resources.getStringArray(R.array.nav_drawer_titles);
+        TypedArray drawerIcons = resources.obtainTypedArray(R.array.nav_drawer_icons);
+
+        ArrayList<DrawerItem> drawerItems = new ArrayList<>();
+        for (int i = 0; i < drawerTitles.length; i++) {
+            drawerItems.add(new DrawerItem(drawerTitles[i], drawerIcons.getResourceId(i, -1)));
+        }
+
+        drawerIcons.recycle();
+        return drawerItems;
     }
 
     private void addAccount() {
@@ -172,26 +229,6 @@ public class NavigationDrawerFragment extends BaseFragment {
                         }
                     }
                 }, null);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    private ArrayList<DrawerItem> fillDrawerItems() {
-        Resources resources = getActivity().getResources();
-        String[] drawerTitles = resources.getStringArray(R.array.nav_drawer_titles);
-        TypedArray drawerIcons = resources.obtainTypedArray(R.array.nav_drawer_icons);
-
-        ArrayList<DrawerItem> drawerItems = new ArrayList<>();
-        for (int i = 0; i < drawerTitles.length; i++) {
-            drawerItems.add(new DrawerItem(drawerTitles[i], drawerIcons.getResourceId(i, -1)));
-        }
-
-        drawerIcons.recycle();
-        return drawerItems;
     }
 
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
@@ -262,43 +299,6 @@ public class NavigationDrawerFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (NavigationDrawerCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallbacks = null;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            Log.d(RepositoriesApplication.APP_NAME, LOG_TAG + "> onOptionsItemSelected");
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-
-    }
 
     public static interface NavigationDrawerCallbacks {
         void onNavigationDrawerItemSelected(int position);

@@ -31,7 +31,7 @@
             android:id="@+id/detail_main_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/repo_details_title"
+            tools:text="@string/repo_details_title"
             android:layout_toRightOf="@id/detail_repo_image"
             android:layout_centerInParent="true"
             android:paddingLeft="10dp"
@@ -95,22 +95,6 @@
                 android:layout_height="wrap_content"
                 style="@style/TextViewRepoDetailContent"
                 tools:text="15693" />
-
-            <include layout="@layout/dividing_line" />
-
-            <!-- Repository name-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/TextViewRepoDetailTitle"
-                android:text="@string/repo_name_title" />
-
-            <TextView
-                android:id="@+id/detail_repo_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/TextViewRepoDetailContent"
-                tools:text="material-design-icons" />
 
             <include layout="@layout/dividing_line" />
 

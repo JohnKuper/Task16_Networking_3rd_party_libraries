@@ -3,9 +3,6 @@ package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.frag
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,42 +66,42 @@ public class RepoDetailFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_repo_details, container, false);
 
-        ImageView mAvatarImage = (ImageView) v.findViewById(R.id.detail_repo_image);
-        Picasso.with(getActivity()).load(mRepository.getAvatarUrl()).into(mAvatarImage);
+        TextView repoName = (TextView) v.findViewById(R.id.detail_main_title);
+        repoName.setText(mRepository.getName());
 
-        TextView mRepoLanguage = (TextView) v.findViewById(R.id.detail_repo_language);
-        mRepoLanguage.setText(mRepository.getLanguage());
+        ImageView avatarImage = (ImageView) v.findViewById(R.id.detail_repo_image);
+        Picasso.with(getActivity()).load(mRepository.getAvatarUrl()).into(avatarImage);
 
-        TextView mRepoName = (TextView) v.findViewById(R.id.detail_repo_name);
-        mRepoName.setText(mRepository.getName());
+        TextView repoLanguage = (TextView) v.findViewById(R.id.detail_repo_language);
+        repoLanguage.setText(mRepository.getLanguage());
 
-        TextView mRepoFullName = (TextView) v.findViewById(R.id.detail_repo_full_name);
-        mRepoFullName.setText(mRepository.getFullName());
+        TextView repoFullName = (TextView) v.findViewById(R.id.detail_repo_full_name);
+        repoFullName.setText(mRepository.getFullName());
 
-        TextView mRepoDescription = (TextView) v.findViewById(R.id.detail_repo_description);
-        mRepoDescription.setText(mRepository.getDescription());
+        TextView repoDescription = (TextView) v.findViewById(R.id.detail_repo_description);
+        repoDescription.setText(mRepository.getDescription());
 
-        TextView mCreatedAt = (TextView) v.findViewById(R.id.detail_repo_created_at);
-        mCreatedAt.setText(mRepository.getCreatedAt());
+        TextView createdAt = (TextView) v.findViewById(R.id.detail_repo_created_at);
+        createdAt.setText(mRepository.getCreatedAt());
 
-        TextView mUpdatedAt = (TextView) v.findViewById(R.id.detail_repo_updated_at);
-        mUpdatedAt.setText(mRepository.getUpdateAt());
+        TextView updatedAt = (TextView) v.findViewById(R.id.detail_repo_updated_at);
+        updatedAt.setText(mRepository.getUpdateAt());
 
-        TextView mRepoStars = (TextView) v.findViewById(R.id.detail_repo_stargazer);
-        mRepoStars.setText(String.valueOf(mRepository.getStargazersCount()));
+        TextView repoStars = (TextView) v.findViewById(R.id.detail_repo_stargazer);
+        repoStars.setText(String.valueOf(mRepository.getStargazersCount()));
 
-        TextView mRepoOwnerLogin = (TextView) v.findViewById(R.id.detail_repo_login);
-        mRepoOwnerLogin.setText(mRepository.getLogin());
+        TextView repoOwnerLogin = (TextView) v.findViewById(R.id.detail_repo_login);
+        repoOwnerLogin.setText(mRepository.getLogin());
 
-        TextView mRepoOwnerAvatarUrl = (TextView) v.findViewById(R.id.detail_repo_avatar_url);
-        mRepoOwnerAvatarUrl.setText(mRepository.getAvatarUrl());
-        mRepoOwnerAvatarUrl.setSelected(true);
+        TextView repoOwnerAvatarUrl = (TextView) v.findViewById(R.id.detail_repo_avatar_url);
+        repoOwnerAvatarUrl.setText(mRepository.getAvatarUrl());
+        repoOwnerAvatarUrl.setSelected(true);
 
-        TextView mRepoOwnerType = (TextView) v.findViewById(R.id.detail_repo_type);
-        mRepoOwnerType.setText(mRepository.getType());
+        TextView repoOwnerType = (TextView) v.findViewById(R.id.detail_repo_type);
+        repoOwnerType.setText(mRepository.getType());
 
-        ImageButton mRepoEditTags = (ImageButton) v.findViewById(R.id.edit_tags_btn);
-        mRepoEditTags.setOnClickListener(new View.OnClickListener() {
+        ImageButton repoEditTags = (ImageButton) v.findViewById(R.id.edit_tags_btn);
+        repoEditTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tagsOpenListener.openRepositoryTags(mRepository.getRepositoryId());

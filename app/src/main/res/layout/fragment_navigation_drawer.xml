@@ -5,9 +5,9 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:paddingTop="@dimen/activity_padding"
+                android:paddingLeft="@dimen/activity_padding"
+                android:paddingRight="@dimen/activity_padding"
                 android:background="@android:color/white">
 
     <com.makeramen.RoundedImageView
@@ -19,15 +19,6 @@
         app:riv_border_width="1dp"
         app:riv_border_color="@android:color/black"
         app:riv_oval="true"/>
-
-    <!--<TextView-->
-    <!--android:id="@+id/account_username"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@id/avatar_image"-->
-    <!--android:layout_marginTop="10dp"-->
-    <!--style="@style/TextAppearance.AppCompat.Body2"-->
-    <!--tools:text="JohnKuper"/>-->
 
     <Spinner
         android:id="@+id/account_username"

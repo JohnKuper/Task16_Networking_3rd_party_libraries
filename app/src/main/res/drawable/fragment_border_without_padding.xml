@@ -2,5 +2,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
        android:shape="rectangle">
     <corners android:radius="20dp"/>
-    <solid android:color="@color/list_view_state_pressed_false"/>
+    <solid android:color="@color/fragment_border"/>
 </shape>

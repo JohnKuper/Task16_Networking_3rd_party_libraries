@@ -40,12 +40,14 @@
     <string name="enter_new_tag_name">Enter new tag name</string>
     <string name="enter_issue_title">Enter title</string>
     <string name="enter_issue_description">Enter description</string>
+    <string name="enter_email_address">Email address</string>
+    <string name="enter_password">Password</string>
 
     <!--Button's values-->
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
 
-    <!--Settings activity-->
+    <!--Activity settings-->
     <string name="pref_service_setting_category_title">Checking service settings</string>
     <string name="pref_repo_name">Set repository name</string>
     <string name="pref_repo_name_summary">Set tracked repository name</string>
@@ -63,6 +65,10 @@
     <string name="check_frequency_ten_minutes">10 minutes</string>
     <string name="check_frequency_never">Never</string>
     <string name="check_frequency_summary_in_minutes">%1$s minute(s)</string>
+
+    <!-- Activity login-->
+    <string name="btn_sign_in">Sign in</string>
+    <string name="btn_cancel">Cancel</string>
 
     <!--Toast messages-->
     <string name="toast_search_complete_without_results">"Search is complete. There are no results to display"</string>
@@ -89,5 +95,7 @@
     <!-- Dialog fragments-->
     <string name="dialog_fragment_create_issue_title">Create new Issue</string>
     <string name="dialog_fragment_tag_rename_title">Edit tag</string>
+
+
 
 </resources>

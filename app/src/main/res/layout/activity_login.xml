@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:paddingLeft="17dp"
-              android:paddingRight="17dp"
+              android:paddingLeft="@dimen/activity_padding"
+              android:paddingRight="@dimen/activity_padding"
     >
 
     <EditText
@@ -13,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:hint="Email address"
+        android:hint="@string/enter_email_address"
         android:inputType="textEmailAddress"
         android:padding="10dp"
         />
@@ -24,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:inputType="textPassword"
-        android:hint="Password"
+        android:hint="@string/enter_password"
         android:padding="10dp"
         />
 
@@ -41,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginTop="10dp"
-            android:text="Sign in"
+            android:text="@string/btn_sign_in"
             android:padding="10dp"/>
 
         <Button
@@ -51,10 +50,7 @@
             android:layout_weight="1"
             android:layout_marginTop="10dp"
             android:padding="10dp"
-            android:text="Cancel"/>
-
+            android:text="@string/btn_cancel"/>
 
     </LinearLayout>
-
-
 </LinearLayout>

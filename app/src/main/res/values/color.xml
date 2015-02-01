@@ -3,6 +3,7 @@
     <color name="text_view_dividing_line">#C4C4C4</color>
     <color name="app_color_primary_dark">#1976D2</color>
     <color name="app_color_primary">#2196F3</color>
-    <color name="list_view_state_pressed_false">#E0E0E0</color>
+    <color name="fragment_border">#E0E0E0</color>
     <color name="search_view_hint_color">#BBDEFB</color>
+    <color name="list_divider">#b5b5b5</color>
 </resources>

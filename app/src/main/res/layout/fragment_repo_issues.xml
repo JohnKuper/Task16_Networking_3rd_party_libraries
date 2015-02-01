@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:divider="#b5b5b5"
+        android:divider="@color/list_divider"
         android:dividerHeight="1dp"
         android:clickable="true"
         tools:listitem="@layout/row_issue_list"/>
