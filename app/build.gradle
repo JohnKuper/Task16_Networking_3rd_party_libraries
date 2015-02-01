@@ -12,10 +12,27 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            proguardFile 'proguard-rules.pro'
+            proguardFile 'proguard-jackson-2.pro'
+            proguardFile 'proguard-square-otto.pro'
+            proguardFile 'proguard-square-picasso.pro'
+            proguardFile 'proguard-square-retrofit.pro'
+            proguardFile 'proguard-prettytime.pro'
+            signingConfig signingConfigs.release
         }
     }
     packagingOptions {
@@ -36,7 +53,7 @@ android {
 
     dependencies {
         compile fileTree(dir: 'libs', include: ['*.jar'])
-        compile 'com.android.support:appcompat-v7:21.0.2'
+        compile 'com.android.support:appcompat-v7:21.0.3'
         compile 'com.squareup.retrofit:retrofit:1.8.0'
         compile 'com.squareup.picasso:picasso:2.3.3'
         compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'

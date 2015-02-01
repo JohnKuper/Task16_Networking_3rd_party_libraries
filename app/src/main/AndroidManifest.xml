@@ -4,10 +4,7 @@
 
     <!--Base-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <!--Authenticator-->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -56,7 +53,6 @@
         <activity
             android:name=".oauth.AuthenticatorActivity"
             android:label="@string/login_label"/>
-        <activity android:name=".activity.MapActivity"/>
 
         <service
             android:name=".network.spiceservice.DBCacheSpiceService"
@@ -105,11 +101,6 @@
             </intent-filter>
         </receiver>
 
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyD_2FW_10EwvgHEu1eM9AGJVXh3fisxcr4"/>
+
     </application>
 </manifest>

@@ -5,10 +5,10 @@
 -dontskipnonpubliclibraryclassmembers
 -dontpreverify
 -verbose
--dump build\outputs\mapping\release\class_files.txt 
--printseeds build\outputs\mapping\release\seeds.txt 
--printusage build\outputs\mapping\release\unused.txt 
--printmapping build\outputs\mapping\release\mapping.txt 
+-dump class_files.txt 
+-printseeds seeds.txt 
+-printusage unused.txt 
+-printmapping mapping.txt 
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
 -allowaccessmodification
@@ -86,9 +86,9 @@
 
 ##---------------End: proguard configuration for Gson  ----------
 
-##---------------Begin: proguard configuration for Parceler  ----------
--keep interface org.parceler.Parcel
--keep @org.parceler.Parcel class * { *; }
--keep class **$$Parcelable { *; }
--keep class org.parceler.Parceler$$Parcels
-##---------------End: proguard configuration for Parceler  ----------
+-dontwarn com.ocpsoft.**
+-dontwarn retrofit.**
+-dontwarn com.fasterxml.jackson.**
+-dontwarn com.squareup.okhttp.**
+-dontwarn okio.**
+-dontwarn org.codehaus.jackson.**

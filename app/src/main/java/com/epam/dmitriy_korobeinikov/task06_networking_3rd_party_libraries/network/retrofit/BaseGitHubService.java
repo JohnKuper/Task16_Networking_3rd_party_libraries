@@ -15,7 +15,7 @@ public class BaseGitHubService {
     public BaseGitHubService(RestAdapter.Builder builder) {
         RestAdapter restAdapter = builder
                 .setEndpoint(RepositoriesApplication.GITHUB_API_URL)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLogLevel(RestAdapter.LogLevel.NONE)
                 .setLog(new AndroidLog(RepositoriesApplication.APP_NAME))
                 .setConverter(new JacksonConverter())
                 .setErrorHandler(new GitHubErrorHandler())

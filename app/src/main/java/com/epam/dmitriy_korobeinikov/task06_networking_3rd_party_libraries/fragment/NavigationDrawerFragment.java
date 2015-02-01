@@ -70,6 +70,7 @@ public class NavigationDrawerFragment extends BaseFragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private Spinner mAccountNamePicker;
 
     public NavigationDrawerFragment() {
     }
@@ -88,10 +89,6 @@ public class NavigationDrawerFragment extends BaseFragment {
 
         mAccountHelper = new AccountHelper(getActivity());
         mAccountManager = AccountManager.get(getActivity());
-
-        if (!mAccountHelper.isAtLeastOneAccount(AccountGeneral.ACCOUNT_TYPE)) {
-            PreferencesUtils.eraseCurrentAccountName(getActivity());
-        }
     }
 
     @Override
@@ -109,14 +106,15 @@ public class NavigationDrawerFragment extends BaseFragment {
         mDrawerListView.setAdapter(new DrawerAdapter(getActivity(), R.layout.row_drawer, fillDrawerItems()));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
-        Spinner accountNamePicker = (Spinner) v.findViewById(R.id.account_username);
+        mAccountNamePicker = (Spinner) v.findViewById(R.id.account_username);
 
         mAvailableAccounts = mAccountHelper.getAvailableAccounts(AccountGeneral.ACCOUNT_TYPE);
         mSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mAvailableAccounts);
         mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        accountNamePicker.setAdapter(mSpinnerAdapter);
+        mAccountNamePicker.setAdapter(mSpinnerAdapter);
 
-        accountNamePicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        mAccountNamePicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String accountName = mSpinnerAdapter.getItem(position);
@@ -144,6 +142,12 @@ public class NavigationDrawerFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (!mAccountHelper.isAtLeastOneAccount(AccountGeneral.ACCOUNT_TYPE)) {
+            mAccountNamePicker.setVisibility(View.GONE);
+            PreferencesUtils.eraseCurrentAccountName(getActivity());
+        } else {
+            mAccountNamePicker.setVisibility(View.VISIBLE);
+        }
     }
 
     private void addAccount() {

@@ -1,7 +1,6 @@
 package com.epam.dmitriy_korobeinikov.task06_networking_3rd_party_libraries.fragment;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;

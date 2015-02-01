@@ -252,10 +252,6 @@ public class RepositoryListActivity extends ActionBarActivity implements RepoSel
                     hideRepoDetailContainerInappropriateViews();
                 }
                 break;
-            case 2:
-                Intent intent = new Intent(this, MapActivity.class);
-                startActivity(intent);
-                break;
             default:
                 break;
         }
